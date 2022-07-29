@@ -1,8 +1,8 @@
 The timeout of 100 ms triggers when enabling the regulator of
 the goodix touchscreen.
 
---- src/linux/drivers/bus/sunxi-rsb.c
-+++ src/linux/drivers/bus/sunxi-rsb.c
+--- a/drivers/bus/sunxi-rsb.c
++++ b/drivers/bus/sunxi-rsb.c
 @@ -284,7 +284,7 @@
  	       rsb->regs + RSB_CTRL);
  
