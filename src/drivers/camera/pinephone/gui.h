@@ -33,9 +33,9 @@ struct genode_gui;  /* definition is private to the implementation */
 
 struct genode_gui_args
 {
-        char const *label;
-		unsigned    width;
-		unsigned    height;
+	char const *label;
+	unsigned    width;
+	unsigned    height;
 };
 
 struct genode_gui *genode_gui_create(struct genode_gui_args const *);
