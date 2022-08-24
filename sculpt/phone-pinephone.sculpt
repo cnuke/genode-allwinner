@@ -8,6 +8,12 @@ build:        app/phone_manager server/nitpicker app/menu_view server/wm
 build:        drivers/modem/pinephone drivers/uart/ns16550 drivers/sd_card/a64
 build:        drivers/audio_control/pinephone drivers/usb_net
 build:        server/event_filter server/nic_router
+build:        drivers/rtc/dummy
 import:       pkg/drivers_interactive-pinephone
 import:       src/terminal_crosslink src/a64_usb_host_drv
 import:       raw/pinephone-devices
+import:       src/mesa
+deploy:       morph_browser
+launcher:     sticks_blue_backdrop direct_nano3d direct_system_shell
+launcher:     touch_keyboard morph_browser camera
+depot:        nfeske_test cproc_pinephone cnuke
