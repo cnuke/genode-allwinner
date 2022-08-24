@@ -1,0 +1,6 @@
+_/pkg/camera-pinephone
+_/pkg/touch_keyboard
+_/pkg/fonts_fs
+_/pkg/system_shell
+_/pkg/black_hole
+_/pkg/trace_logger
