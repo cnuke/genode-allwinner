@@ -119,7 +119,7 @@
 				<binary name="phone_manager"/>
 				<resource name="RAM" quantum="3M"/>
 				<provides> <service name="Gui"/> </provides>
-				<config ld_verbose="yes" verbose_modem="no"/>
+				<config ld_verbose="yes" verbose_modem="yes"/>
 				<route>
 					<service name="Report" label="runtime_config">
 						<child name="config_fs_report" label="managed -> runtime"/> </service>
