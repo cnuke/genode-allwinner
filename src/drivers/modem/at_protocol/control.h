@@ -562,6 +562,9 @@ class At_protocol::Control : Noncopyable
 			if (currently_submitted(_hang_up))
 				return 90*1000; /* according to the Quectel documentation */
 
+			if (currently_submitted(_query_qcfg))
+				return 4*1000;
+
 			return 600;
 		}
 
