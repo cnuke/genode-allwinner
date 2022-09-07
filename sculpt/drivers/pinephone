@@ -159,6 +159,7 @@
 			<service name="Capture">     <parent/> </service>
 			<service name="Platform">    <child name="platform_drv"/> </service>
 			<service name="Pin_control"> <child name="a64_pio_drv"/>  </service>
+			<service name="Pin_state">   <child name="a64_pio_drv"/>  </service>
 		</route>
 	</start>
 
@@ -175,6 +176,7 @@
 			<service name="Timer">       <parent/> </service>
 			<service name="Platform">    <child name="platform_drv"/> </service>
 			<service name="Pin_control"> <child name="a64_pio_drv"/>  </service>
+			<service name="Pin_state">   <child name="a64_pio_drv"/>  </service>
 			<service name="IRQ">
 				<child name="a64_pio_drv" label="goodix_touch_drv -> PH4"/> </service>
 			<service name="Event">
