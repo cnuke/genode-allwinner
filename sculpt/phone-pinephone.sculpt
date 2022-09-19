@@ -16,4 +16,5 @@ import:       src/mesa
 deploy:       morph_browser
 launcher:     sticks_blue_backdrop direct_nano3d direct_system_shell
 launcher:     touch_keyboard morph_browser camera
-depot:        nfeske_test cproc_pinephone cnuke
+depot:        cproc_pinephone cnuke
+ram_fs:       depot
