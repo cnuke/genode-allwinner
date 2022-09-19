@@ -41,9 +41,12 @@ proc run_image {elf_img} {
 
 	set image_load_addr [get_cmd_arg --image-load-address "0x42000000"]
 
-	exec echo "bootcmd=usb start; fastboot usb 0\n" \
+#	exec echo "bootcmd=usb start; fastboot usb 0\n" \
+#	          "bootdelay=0\n" \
+#	          "fastboot_bootcmd=bootm 0x42000800\n" \
+	exec echo "bootcmd=usb start; fastboot -l 0x52000000 -s 0x10000000 usb 0\n" \
 	          "bootdelay=0\n" \
-	          "fastboot_bootcmd=bootm 0x42000800\n" \
+	          "fastboot_bootcmd=bootm 0x52000800\n" \
 	   | $mkenvimage -s 0x20000 -o [run_dir]/ext2/uboot.env -
 
 #	exec echo "bootcmd=ext2load mmc 0:1 $image_load_addr /uImage; bootm $image_load_addr\n" \
@@ -72,7 +75,7 @@ proc run_image {elf_img} {
 	exec dd if=/dev/zero of=$img_file bs=1K count=$disk_size_kb 2> /dev/null
 
 	# create ext2 file system with content copied from [run_dir]/ext2
-	exec mkfs.ext2 -q -F -L 'GENODE' -N 0 -E offset=$part_start_bytes \
+	exec mkfs.ext2 -q -F -L 'DUMMY' -N 0 -E offset=$part_start_bytes \
 	               -m 5 -r 1 -t ext2 -d [run_dir]/ext2 \
 	               $img_file ${part_size_kb}K
 
@@ -80,7 +83,7 @@ proc run_image {elf_img} {
 	exec $sgdisk -z $img_file
 	exec $sgdisk -j $gpt_start_blocks $img_file
 	exec $sgdisk --new=1:$part_first_block:$part_last_block $img_file
-	exec $sgdisk --change-name=1:GENODE $img_file
+	exec $sgdisk --change-name=1:DUMMY $img_file
 	exec $sgdisk --hybrid $img_file
 
 	# install boot loader
