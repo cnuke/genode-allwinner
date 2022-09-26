@@ -132,9 +132,11 @@ install_config {
 		<config>
 			<select name="lcd-pwm"   bank="L" index="10" function="2"/>
 			<out    name="backlight" bank="H" index="10" default="0"/>
+			<in     name="backlight-in" bank="H" index="10"/>
 			<out    name="lcd-reset" bank="D" index="23" default="0"/>
 
 			<policy label="fb_drv -> PH10" pin="backlight"/>
+			<policy label="fb_drv -> PH10-in" pin="backlight-in"/>
 			<policy label="fb_drv -> PD23" pin="lcd-reset"/>
 		</config>
 	</start>
@@ -155,6 +157,7 @@ install_config {
 							<service name="Timer"/>
 							<service name="Capture"/>
 							<service name="Pin_control"/>
+							<service name="Pin_state"/>
 						</parent-provides>
 						<start name="fb_drv" caps="250">
 							<binary name="de_fb_drv"/>
@@ -177,6 +180,7 @@ install_config {
 							<service name="Timer"/>
 							<service name="Capture"/>
 							<service name="Pin_control"/>
+							<service name="Pin_state"/>
 						</parent-provides>
 					</config>
 				</inline>
@@ -195,8 +199,8 @@ install_config {
 				<parent label="de-pinephone.dtb"/> </service>
 			<service name="Platform">
 				<child name="platform_drv" label="fb_drv -> "/> </service>
-			<service name="Pin_control" label_last="PH10">
-				<child name="a64_pio_drv" label="fb_drv -> PH10"/> </service>
+			<service name="Pin_control" label_last="PH10"> <child name="a64_pio_drv" label="fb_drv -> PH10"/> </service>
+			<service name="Pin_state"   label_last="PH10"> <child name="a64_pio_drv" label="fb_drv -> PH10-in"/> </service>
 			<service name="Pin_control" label_last="PD23">
 				<child name="a64_pio_drv" label="fb_drv -> PD23"/> </service>
 			<service name="Timer">       <child name="timer"/>            </service>
