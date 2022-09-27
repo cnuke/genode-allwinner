@@ -196,6 +196,7 @@ struct Pio_driver::Main : Pin::Driver<Pin_id>, Irq_handler::Fn
 
 	void acquire_pin(Pin_id id, Pin::Direction dir) override
 	{
+
 		_with_pin_declaration(id, dir, [&] (Pin_declaration &pin) {
 
 			pin.ref_count++;
@@ -206,6 +207,9 @@ struct Pio_driver::Main : Pin::Driver<Pin_id>, Irq_handler::Fn
 				else
 					_pio.state(id, pin.attr.default_state);
 			}
+
+			if (pin.attr.input())
+				_pio.configure(id, pin.attr);
 
 			if (pin.attr.irq())
 				_pio.configure(id, pin.attr);
@@ -225,6 +229,9 @@ struct Pio_driver::Main : Pin::Driver<Pin_id>, Irq_handler::Fn
 				else
 					_pio.state(id, pin.attr.default_state);
 			}
+
+			if (pin.attr.input())
+				_pio.configure(id, Attr::disabled());
 
 			if (pin.attr.irq())
 				_pio.configure(id, Attr::disabled());
