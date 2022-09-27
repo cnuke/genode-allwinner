@@ -229,6 +229,7 @@ struct Pio_driver::Attr
 	Attr() = delete;
 
 	bool output() const { return function.value == Function::OUTPUT; }
+	bool input()  const { return function.value == Function::INPUT; }
 	bool irq()    const { return function.value == Function::IRQ; }
 
 	static Attr from_xml(Xml_node const &node)
