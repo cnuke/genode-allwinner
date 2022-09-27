@@ -207,6 +207,9 @@ struct Pio_driver::Main : Pin::Driver<Pin_id>, Irq_handler::Fn
 					_pio.state(id, pin.attr.default_state);
 			}
 
+			if (pin.attr.input())
+				_pio.configure(id, pin.attr);
+
 			if (pin.attr.irq())
 				_pio.configure(id, pin.attr);
 		});
@@ -225,6 +228,9 @@ struct Pio_driver::Main : Pin::Driver<Pin_id>, Irq_handler::Fn
 				else
 					_pio.state(id, pin.attr.default_state);
 			}
+
+			if (pin.attr.input())
+				_pio.configure(id, Attr::disabled());
 
 			if (pin.attr.irq())
 				_pio.configure(id, Attr::disabled());
