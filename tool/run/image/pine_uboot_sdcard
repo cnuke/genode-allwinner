@@ -41,14 +41,9 @@ proc run_image {elf_img} {
 
 	set image_load_addr [get_cmd_arg --image-load-address "0x42000000"]
 
-	exec echo "bootcmd=usb start; fastboot usb 0\n" \
-	          "bootdelay=0\n" \
-	          "fastboot_bootcmd=bootm 0x42000800\n" \
+	exec echo "bootcmd=ext2load mmc 0:1 $image_load_addr /uImage; bootm $image_load_addr\n" \
+	          "bootdelay=0" \
 	   | $mkenvimage -s 0x20000 -o [run_dir]/ext2/uboot.env -
-
-#	exec echo "bootcmd=ext2load mmc 0:1 $image_load_addr /uImage; bootm $image_load_addr\n" \
-#	          "bootdelay=0" \
-#	   | $mkenvimage -s 0x20000 -o [run_dir]/ext2/uboot.env -
 
 	#
 	# Create GPT partitioning scheme with an ext2 file system in partition 1
