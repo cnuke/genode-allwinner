@@ -76,6 +76,10 @@
 				<device name="gpu"/>
 			</policy>
 
+			<policy label="runtime -> camera" info="yes">
+				<device name="csi"/>
+			</policy>
+
 		</config>
 		<route> <any-service> <parent/> </any-service> </route>
 	</start>
@@ -100,12 +104,14 @@
 			<out    name="touchscreen-int"      bank="H" index="4"/>
 			<in     name="touchscreen-int"      bank="H" index="4" irq="falling"/>
 			<out    name="touchscreen-reset"    bank="H" index="11"/>
+			<in     name="touchscreen-reset"    bank="H" index="11"/>
 
 			<policy label="goodix_touch_drv -> PH11" pin="touchscreen-reset"/>
 			<policy label="goodix_touch_drv -> PH4"  pin="touchscreen-int"/>
 
 			<select name="lcd-pwm"   bank="L" index="10" function="2"/>
 			<out    name="backlight" bank="H" index="10" default="0"/>
+			<in     name="backlight" bank="H" index="10" default="0"/>
 			<out    name="lcd-reset" bank="D" index="23" default="0"/>
 
 			<policy label="fb_drv -> PH10" pin="backlight"/>
@@ -161,6 +167,7 @@
 			<service name="Capture">     <parent/> </service>
 			<service name="Platform">    <child name="platform_drv"/> </service>
 			<service name="Pin_control"> <child name="a64_pio_drv"/>  </service>
+			<service name="Pin_state">   <child name="a64_pio_drv"/>  </service>
 		</route>
 	</start>
 
@@ -177,6 +184,7 @@
 			<service name="Timer">       <parent/> </service>
 			<service name="Platform">    <child name="platform_drv"/> </service>
 			<service name="Pin_control"> <child name="a64_pio_drv"/>  </service>
+			<service name="Pin_state">   <child name="a64_pio_drv"/>  </service>
 			<service name="IRQ">
 				<child name="a64_pio_drv" label="goodix_touch_drv -> PH4"/> </service>
 			<service name="Event">

@@ -16,6 +16,7 @@
 		</route>
 	</start>
 
+<!--
 	<start name="touch_keyboard"/>
 
 	<start name="system_clock-dummy" pkg="cproc_pinephone/pkg/system_clock-dummy/2022-08-29">
@@ -38,5 +39,8 @@
 			<service name="Platform"> <parent label="gpu"/> </service>
 		</route>
 	</start>
+	-->
+
+	<start name="camera"/>
 
 </config>

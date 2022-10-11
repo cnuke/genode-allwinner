@@ -6,6 +6,7 @@
 		<pin_state/>
 		<pin_control/>
 		<timer/>
+		<pd/>
 	</requires>
 
 	<content>
