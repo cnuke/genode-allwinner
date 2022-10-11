@@ -128,7 +128,16 @@ static int sunxi_pinctrl_gpio_get(struct gpio_chip *chip,
 	char name[16];
 	sunxi_pinctrl_pin_name(name, sizeof(name), offset);
 
-	return lx_emul_pin_sense(name);
+	/* for now only allow CSI related pins */
+	if (strcmp(name, "PE12") == 0
+	  ||strcmp(name, "PE13") == 0
+	  ||strcmp(name, "PE16") == 0
+	  ||strcmp(name, "PE17") == 0
+	  ||strcmp(name, "PC0" ) == 0
+	  ||strcmp(name, "PD3" ) == 0)
+		return lx_emul_pin_sense(name);
+
+	return 0;
 }
 
 
