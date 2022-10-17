@@ -27,4 +27,4 @@ vpath % $(dir $(GENODE_C_API_SRC_DIR))
 BOARDS := pine_a64lts pinephone
 
 DTS_EXTRACT(pine_a64lts)  := --select ehci1
-DTS_EXTRACT(pinephone)    := --select ehci1
+DTS_EXTRACT(pinephone)    := --select axp803 --select ehci1
