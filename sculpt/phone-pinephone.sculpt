@@ -18,3 +18,4 @@ launcher:     sticks_blue_backdrop direct_nano3d direct_system_shell
 launcher:     touch_keyboard morph_browser camera
 launcher:     trace_logger
 depot:        nfeske_test cproc_pinephone cnuke
+ram_fs:       depot

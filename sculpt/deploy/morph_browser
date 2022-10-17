@@ -18,10 +18,70 @@
 
 	<start name="touch_keyboard"/>
 
-	<start name="system_clock-dummy" pkg="cproc_pinephone/pkg/system_clock-dummy/2022-08-29">
+<!--
+	<start name="trace_logger" caps="1400" pkg="trace_logger">
+
+		<route>
+			<service name="TRACE"> <parent/> </service>
+		</route>
+
+		<config verbose="yes"
+	        	session_ram="90M"
+	        	session_arg_buffer="1M"
+	        	session_parent_levels="3"
+	        	period_sec="10"
+	        	default_policy="null"
+	        	default_buffer="4K">
+
+			<!- -<policy label_prefix="init -> runtime -> "/>- ->
+			<policy label_prefix="kernel"/>
+			<!- -<default-policy/>- ->
+
+		</config>
+
+	</start>
+-->
+
+	<start name="mmcblk0.part_block" pkg="part_block">
+		<route>
+			<service name="Block">
+				<parent label="sd_card_drv"/>
+			</service>
+			<service name="Report" label="partitions">
+				<parent/>
+			</service>
+		</route>
+	</start>
+
+	<start name="mmcblk0.1.fs" pkg="ext2_fs">
+		<route>
+			<service name="Block"> <child name="mmcblk0.part_block" label="1"/> </service>
+			<service name="RM"> <parent/> </service>
+		</route>
+	</start>
+
+<!--
+	<start name="trace_recorder" pkg="trace_recorder">
+		<config period_ms="5000" enable="yes">
+			<vfs> <fs/> </vfs>
+			<policy label_suffix="morph-browser" policy="ctf0" buffer="16M">
+				<ctf/>
+			</policy>
+		</config>
+		<route>
+			<service name="RM"> <parent/> </service>
+			<service name="TRACE"> <parent/> </service>
+			<service name="Rtc"> <child name="system_clock-dummy"/>	</service>
+			<service name="File_system"> <child name="mmcblk0.1.fs"/> </service>
+		</route>
+	</start>
+-->
+	<start name="system_clock-dummy" pkg="system_clock-dummy">
+<!--
 		<route>
 			<service name="ROM" label_last="dummy_rtc_drv"> <parent label="dummy_rtc_drv"/> </service>
 		</route>
+-->
 	</start>
 
 	<start name="black_hole" pkg="black_hole">
@@ -33,9 +93,58 @@
 	</start>
 
 	<start name="gpu_drv" pkg="cnuke/pkg/a64_lima_gpu_drv-pinephone/2022-09-07-a">
-		<affinity xpos="1" width="2"/>
+		<affinity xpos="3" width="1"/>
 		<route>
 			<service name="Platform"> <parent label="gpu"/> </service>
+		</route>
+	</start>
+
+	<!--<start name="morph_browser" pkg="cproc_pinephone/pkg/morph_browser-jemalloc/2022-11-07-a">-->
+	<start name="morph_browser" pkg="morph_browser">
+		<affinity xpos="2" width="1"/>
+		<route>
+			<service name="Nic">
+				<child name="nic_router"/>
+			</service>
+			<service name="File_system" label="config">
+				<child name="ram_fs"/>
+			</service>
+			<service name="File_system" label="downloads">
+				<child name="ram_fs"/>
+			</service>
+			<service name="Gui">
+				<parent label="focus"/>
+			</service>
+			<service name="Report" label="morph_browser -> shape">
+				<parent label="shape"/>
+			</service>
+			<service name="Report" label="clipboard">
+				<parent/>
+			</service>
+			<service name="ROM" label="clipboard">
+				<parent/>
+			</service>
+			<service name="Report" label="shape">
+				<parent/>
+			</service>
+			<service name="Rtc">
+				<child name="system_clock-dummy"/>
+			</service>
+			<service name="Audio_out">
+				<child name="black_hole"/>
+			</service>
+			<service name="Audio_in">
+				<child name="black_hole"/>
+			</service>
+			<service name="Capture">
+				<child name="black_hole"/>
+			</service>
+			<service name="Gpu">
+				<child name="gpu_drv"/>
+			</service>
+			<service name="ROM" label="mesa_gpu_drv.lib.so">
+				<parent label="mesa_gpu-lima.lib.so"/>
+			</service>
 		</route>
 	</start>
 

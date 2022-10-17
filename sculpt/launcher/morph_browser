@@ -1,4 +1,5 @@
-<launcher name="morph_browser" pkg="cproc_pinephone/pkg/morph_browser-jemalloc/2022-11-07">
+<!--<launcher name="morph_browser" pkg="cproc_pinephone/pkg/morph_browser-jemalloc/2022-11-07">-->
+<launcher name="morph_browser" pkg="black_hole">
 	<affinity xpos="1" width="2"/>
 	<route>
 		<service name="Nic">
