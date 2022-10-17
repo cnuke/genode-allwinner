@@ -257,7 +257,10 @@ install_config {
 					<device name="usb_phy"/>
 				</policy>
 			</config>
-			<route> <any-service> <parent/> </any-service> </route>
+			<route>
+				<service name="Timer"> <child name="timer"/> </service>
+				<any-service> <parent/> </any-service>
+			</route>
 		</start>
 
 		<start name="a64_pio_drv">
