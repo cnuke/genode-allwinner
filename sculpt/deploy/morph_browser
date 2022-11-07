@@ -74,8 +74,7 @@
 		</route>
 	</start>
 
-	<start name="morph_browser" pkg="cproc_pinephone/pkg/morph_browser/2022-10-17-a">
-	<!--<start name="morph_browser" pkg="morph_browser">-->
+	<start name="morph_browser" pkg="morph_browser">
 		<affinity xpos="3" width="1"/>
 		<route>
 			<service name="Nic">

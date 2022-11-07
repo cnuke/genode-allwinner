@@ -1,4 +1,4 @@
-<launcher name="morph_browser" pkg="cproc_pinephone/pkg/morph_browser/2022-10-17-a">
+<launcher name="morph_browser" pkg="cnuke/pkg/morph_browser/2022-11-07">
 <!--<launcher name="morph_browser" pkg="cproc_pinephone/pkg/morph_browser">-->
 	<affinity xpos="1" width="2"/>
 	<route>
