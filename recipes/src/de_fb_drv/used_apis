@@ -1,6 +1,7 @@
 a64_linux
 capture_session
 pin_control_session
+pin_state_session
 platform_session
 base
 blit
