@@ -234,9 +234,13 @@ struct Gpu::Buffer_space : Genode::Id_space<Buffer>
 	void *local_addr(Gpu::Buffer_id id)
 	{
 		void *local_addr = nullptr;
-		apply<Buffer>(id, [&] (Buffer &b) {
-			local_addr = b.attached_ds.local_addr<void>();
-		});
+
+		try {
+			apply<Buffer>(id, [&] (Buffer &b) {
+				local_addr = b.attached_ds.local_addr<void>();
+			});
+		}
+		catch (Genode::Id_space<Buffer>::Unknown_id) { }
 
 		return local_addr;
 	}
@@ -253,14 +257,17 @@ struct Gpu::Buffer_space : Genode::Id_space<Buffer>
 	{
 		Lx_handle result { 0, false };
 
-		apply<Buffer>(id, [&] (Buffer &b) {
+		try {
+			apply<Buffer>(id, [&] (Buffer &b) {
 
-			if (flush)
-				lx_emul_mem_cache_clean_invalidate(b.attached_ds.local_addr<void>(),
-				                                   b.attached_ds.size());
+				if (flush)
+					lx_emul_mem_cache_clean_invalidate(b.attached_ds.local_addr<void>(),
+					                                   b.attached_ds.size());
 
-			result = { b.handle, true };
-		});
+				result = { b.handle, true };
+			});
+		}
+		catch (Genode::Id_space<Buffer>::Unknown_id) { }
 
 		return result;
 	}
@@ -276,10 +283,13 @@ struct Gpu::Buffer_space : Genode::Id_space<Buffer>
 	void remove(Gpu::Buffer_id id)
 	{
 		bool removed = false;
-		apply<Buffer>(id, [&] (Buffer &b) {
-			destroy(_alloc, &b);
-			removed = true;
-		});
+		try {
+			apply<Buffer>(id, [&] (Buffer &b) {
+				destroy(_alloc, &b);
+				removed = true;
+			});
+		}
+		catch (Genode::Id_space<Buffer>::Unknown_id) { }
 
 		if (!removed)
 			Genode::warning("could not remove buffer with id: ", id.value,
@@ -289,34 +299,46 @@ struct Gpu::Buffer_space : Genode::Id_space<Buffer>
 	Dataspace_capability lookup_buffer(Gpu::Buffer_id id)
 	{
 		Dataspace_capability cap { };
-		apply<Buffer>(id, [&] (Buffer const &b) {
-			cap = b.cap;
-		});
+		try {
+			apply<Buffer>(id, [&] (Buffer const &b) {
+				cap = b.cap;
+			});
+		}
+		catch (Genode::Id_space<Buffer>::Unknown_id) { }
 		return cap;
 	}
 
 	template <typename FN>
 	void with_va(Gpu::Buffer_id id, FN const &fn)
 	{
-		apply<Buffer>(id, [&] (Buffer const &b) {
-			fn(b.va);
-		});
+		try {
+			apply<Buffer>(id, [&] (Buffer const &b) {
+				fn(b.va);
+			});
+		}
+		catch (Genode::Id_space<Buffer>::Unknown_id) { }
 	}
 
 	template <typename FN>
 	void with_handle(Gpu::Buffer_id id, FN const &fn)
 	{
-		apply<Buffer>(id, [&] (Buffer const &b) {
-			fn(b.handle);
-		});
+		try {
+			apply<Buffer>(id, [&] (Buffer const &b) {
+				fn(b.handle);
+			});
+		}
+		catch (Genode::Id_space<Buffer>::Unknown_id) { }
 	}
 
 	bool managed(Gpu::Buffer_id id)
 	{
 		bool result = false;
-		apply<Buffer>(id, [&] (Buffer const &) {
-			result = true;
-		});
+		try {
+			apply<Buffer>(id, [&] (Buffer const &) {
+				result = true;
+			});
+		}
+		catch (Genode::Id_space<Buffer>::Unknown_id) { }
 		return result;
 	}
 };
