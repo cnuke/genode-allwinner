@@ -1,0 +1,104 @@
+<config arch="">
+
+	<common_routes>
+		<service name="ROM" label_last="ld.lib.so"> <parent/> </service>
+		<service name="ROM" label_last="init">      <parent/> </service>
+		<service name="CPU">   <parent/> </service>
+		<service name="PD">    <parent/> </service>
+		<service name="LOG">   <parent/> </service>
+		<service name="Timer"> <parent/> </service>
+	</common_routes>
+
+	<start name="fonts_fs" pkg="fonts_fs">
+		<route>
+			<service name="ROM" label="config">
+				<parent label="config -> managed/fonts"/> </service>
+		</route>
+	</start>
+
+	<start name="touch_keyboard"/>
+
+	<start name="system_clock-dummy" pkg="cproc_pinephone/pkg/system_clock-dummy/2022-08-29">
+		<route>
+			<service name="ROM" label_last="dummy_rtc_drv"> <parent label="dummy_rtc_drv"/> </service>
+		</route>
+	</start>
+
+	<start name="audio_drv" pkg="a64_audio_drv">
+		<route>
+			<service name="Platform"> <parent label="audio_drv"/> </service>
+		</route>
+	</start>
+
+	<start name="gpu_drv" pkg="a64_lima_gpu_drv-pinephone">
+		<affinity xpos="3" width="1"/>
+		<route>
+			<service name="Platform"> <parent label="gpu"/> </service>
+		</route>
+	</start>
+
+	<start name="mesa_gpu-lima" pkg="mesa_gpu-lima">
+		<route>
+			<service name="RM"> <parent/> </service>
+		</route>
+	</start>
+
+	<start name="camera" pkg="camera-pinephone">
+		<route>
+			<service name="Timer">       <parent/> </service>
+			<service name="Gui">         <parent label="camera"/> </service>
+			<service name="Platform">    <parent label="camera"/> </service>
+			<service name="Pin_state">   <parent label="camera"/> </service>
+			<service name="Pin_control"> <parent label="camera"/> </service>
+		</route>
+	</start>
+
+	<start ram="800M" name="morph_browser" pkg="cproc_pinephone/pkg/morph_browser-jemalloc/2022-11-08-b">
+		<affinity xpos="1" width="2"/>
+		<route>
+			<service name="Nic">
+				<child name="nic_router"/>
+			</service>
+			<service name="File_system" label="config">
+				<child name="ram_fs"/>
+			</service>
+			<service name="File_system" label="downloads">
+				<child name="ram_fs"/>
+			</service>
+			<service name="Gui">
+				<parent label="focus"/>
+			</service>
+			<service name="Report" label="morph_browser -> shape">
+				<parent label="shape"/>
+			</service>
+			<service name="Report" label="clipboard">
+				<parent/>
+			</service>
+			<service name="ROM" label="clipboard">
+				<parent/>
+			</service>
+			<service name="Report" label="shape">
+				<parent/>
+			</service>
+			<service name="Rtc">
+				<child name="system_clock-dummy"/>
+			</service>
+			<service name="Audio_out">
+				<child name="audio_drv"/>
+			</service>
+			<service name="Audio_in">
+				<child name="audio_drv"/>
+			</service>
+			<service name="Capture">
+				<child name="camera"/>
+			</service>
+			<service name="Gpu">
+				<child name="gpu_drv"/>
+			</service>
+			<service name="ROM" label="mesa_gpu_drv.lib.so">
+				<child name="mesa_gpu-lima"/>
+			</service>
+		</route>
+	</start>
+
+</config>
