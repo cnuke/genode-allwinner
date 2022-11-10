@@ -67,12 +67,13 @@ void Driver::Main::_load_scp_firmware()
 	char const *firmware[] = {
 
 		/* utilities */
-		": /        0 swap um/mod swap drop ;",
-		": invert   not ;",
-		": lshift   FOR AFT dup + THEN NEXT ;",
-		": rshift   FOR AFT 2 / THEN NEXT ;",
-		": bitmask  1 swap lshift 1 - ;",
-		": delay    1000 * FOR 1 drop NEXT ;",
+		": /        0 swap um/mod swap drop ; "
+		": invert   not ; "
+		": lshift   FOR AFT dup + THEN NEXT ; "
+		": rshift   FOR AFT 2 / THEN NEXT ; "
+		": bitmask  1 swap lshift 1 - ; "
+		": mdelay   1ab * FOR NEXT ; "
+		": udelay   1 rshift FOR NEXT ;",
 
 		/* bitfield access */
 		": bf!  bitmask rot >r over lshift >r lshift r@ and r> invert r@ @ and or r> ! ;",
