@@ -4,6 +4,7 @@ nitpicker:    phone
 fonts:        phone-720px
 event_filter: phone
 system:       phone
+ram_fs:       depot
 build:        app/phone_manager app/menu_view
 build:        drivers/modem/pinephone drivers/uart/ns16550 drivers/platform/a64
 build:        drivers/audio_control/pinephone drivers/power/pinephone
