@@ -56,15 +56,15 @@ struct Driver::Pmic : private Noncopyable
 	                  /* ALDO1, set bit 5 in output control 3 */
 	                  "b 28 pmic! "
 	                  "13 pmic@ 20 or 13 pmic! "
-	                  "50 delay "
+	                  "32 udelay "
 	                  /* ELDO3, set bit 2 in output control 2 */
 	                  "10 1b pmic! "
 	                  "12 pmic@ 4 or 12 pmic! "
-	                  "10 delay "
+	                  "a udelay "
 	                  /* DLDO3, set bit 5 in output control 2 */
 	                  "15 17 pmic! "
 	                  "12 pmic@ 20 or 12 pmic! "
-	                  "10 delay "
+	                  "a udelay "
 	                  ,
 	                  /* DLDO3, clear bit 5 in output control 2 */
 	                  "12 pmic@ df and 12 pmic! "
