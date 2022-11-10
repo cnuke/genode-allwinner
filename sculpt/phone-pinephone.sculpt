@@ -5,7 +5,7 @@ fonts:        phone-720px
 event_filter: phone
 system:       phone
 build:        app/phone_manager app/menu_view
-build:        drivers/modem/pinephone drivers/uart/ns16550
+build:        drivers/modem/pinephone drivers/uart/ns16550 drivers/platform/a64
 build:        drivers/audio_control/pinephone drivers/power/pinephone
 import:       src/terminal_crosslink
 import:       pkg/drivers_interactive-pinephone raw/pinephone-devices
