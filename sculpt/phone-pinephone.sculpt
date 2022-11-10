@@ -15,3 +15,4 @@ presets:      empty nano3d system_shell gpu_test osci camera_test
 presets:      morph_browser
 launcher:     screenshot report_dump
 depot:        nfeske cproc cnuke jschlatow
+depot:        nfeske_test cproc_pinephone
