@@ -14,3 +14,4 @@ launcher:     sticks_blue_backdrop direct_nano3d direct_system_shell
 launcher:     touch_keyboard camera trace_logger gpu_drv
 launcher:     screenshot
 depot:        nfeske cproc cnuke jschlatow
+depot:        nfeske_test cproc_pinephone
