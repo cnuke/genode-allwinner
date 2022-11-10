@@ -12,4 +12,5 @@ import:       pkg/drivers_interactive-pinephone raw/pinephone-devices
 import:       src/a64_usb_host_drv src/usb_net_drv src/a64_sd_card_drv
 launcher:     sticks_blue_backdrop direct_nano3d direct_system_shell
 launcher:     touch_keyboard camera_test trace_logger gpu_drv
+launcher:     screenshot
 depot:        nfeske cproc cnuke jschlatow
