@@ -1,0 +1,44 @@
+<launcher ram="1350M" pkg="cproc_pinephone/pkg/morph_browser-jemalloc/2022-12-14">
+	<affinity xpos="1" width="2"/>
+	<route>
+		<service name="Nic">
+			<child name="nic_router"/>
+		</service>
+		<service name="File_system" label="config">
+			<child name="ram_fs"/>
+		</service>
+		<service name="File_system" label="downloads">
+			<child name="ram_fs"/>
+		</service>
+		<service name="Gui">
+			<parent label="focus"/>
+		</service>
+		<service name="Report" label_last="shape">
+			<parent label="shape"/>
+		</service>
+		<service name="Report" label="clipboard">
+			<parent/>
+		</service>
+		<service name="ROM" label="clipboard">
+			<parent/>
+		</service>
+		<service name="Rtc">
+			<child name="system_clock-dummy"/>
+		</service>
+		<service name="Audio_out">
+			<child name="black_hole"/>
+		</service>
+		<service name="Audio_in">
+			<child name="black_hole"/>
+		</service>
+		<service name="Capture">
+			<child name="black_hole"/>
+		</service>
+		<service name="Gpu">
+			<child name="gpu_drv"/>
+		</service>
+		<service name="ROM" label="mesa_gpu_drv.lib.so">
+			<child name="mesa_gpu-lima"/>
+		</service>
+	</route>
+</launcher>
