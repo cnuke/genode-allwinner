@@ -1,0 +1,8 @@
+<launcher name="screenshot" pkg="jschlatow/pkg/screenshot/2022-11-10" priority="-2">
+	<route>
+		<service name="Gui"> <parent/> </service>
+		<service name="Capture"> <parent label="global"/> </service>
+		<service name="File_system" label="target"> <child name="default_fs_rw"/> </service>
+		<service name="Rtc"> <child name="system_clock-dummy"/> </service>
+	</route>
+</launcher>
