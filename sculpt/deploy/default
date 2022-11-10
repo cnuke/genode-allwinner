@@ -16,8 +16,9 @@
 		</route>
 	</start>
 
-	<start name="system_clock-dummy" pkg="system_clock-dummy">
-	</start>
+	<start name="system_clock-dummy" pkg="system_clock-dummy"/>
+
+	<start name="gpu_drv"/>
 
 	<start name="black_hole" pkg="black_hole">
 		<config>
