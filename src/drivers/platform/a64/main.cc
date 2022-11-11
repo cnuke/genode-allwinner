@@ -122,6 +122,10 @@ void Driver::Main::_load_scp_firmware()
 
 		/* ( value reg -- ) write PMIC register */
 		": pmic!  setup_rw  4e cmd !  data !  start_trans ;",
+
+		/* increase DCDC2/3 voltage, CPU frequency to 1392 MHz */
+		": pllcpux 1c20000 ; "
+		"60 dup 21 pmic! 22 pmic!  40 udelay  90001c31 pllcpux ! "
 	};
 
 	for (char const *command : firmware) {
