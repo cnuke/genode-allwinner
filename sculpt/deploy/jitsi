@@ -30,11 +30,22 @@
 		</route>
 	</start>
 
+	<start name="mixer" pkg="mixer">
+		<config>
+			<default out_volume="100" volume="100"/>
+		</config>
+		<route>
+			<service name="Report"> <child name="black_hole"/> </service>
+			<service name="Audio_out"> <child name="audio_drv"/> </service>
+		</route>
+	</start>
+
 	<start name="black_hole" pkg="black_hole">
 		<config>
 			<audio_in/>
 			<audio_out/>
 			<capture/>
+			<report/>
 		</config>
 	</start>
 
@@ -62,7 +73,7 @@
 		</route>
 	</start>
 
-	<start ram="1650M" name="morph_browser" pkg="cnuke/pkg/morph_browser-jemalloc/2022-11-11">
+	<start ram="1350M" name="morph_browser" pkg="cnuke/pkg/morph_browser/2022-11-15-k">
 		<affinity xpos="1" width="2"/>
 		<route>
 			<service name="Nic">
@@ -93,7 +104,7 @@
 				<child name="system_clock-dummy"/>
 			</service>
 			<service name="Audio_out">
-				<child name="audio_drv"/>
+				<child name="mixer"/>
 			</service>
 			<service name="Audio_in">
 				<child name="audio_drv"/>
