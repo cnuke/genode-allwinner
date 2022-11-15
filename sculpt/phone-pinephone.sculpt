@@ -1,6 +1,7 @@
 drivers:      pinephone
 leitzentrale: phone
-nitpicker:    phone
+nitpicker:    many_nano3d
+deploy:       many_nano3d
 fonts:        phone-720px
 event_filter: phone
 system:       phone
@@ -8,11 +9,11 @@ ram_fs:       depot
 build:        app/phone_manager app/menu_view
 build:        drivers/modem/pinephone drivers/uart/ns16550 drivers/platform/a64
 build:        drivers/audio_control/pinephone drivers/power/pinephone
+build:        core
 import:       src/terminal_crosslink
 import:       pkg/drivers_interactive-pinephone raw/pinephone-devices
 import:       src/a64_usb_host_drv src/usb_net_drv src/a64_sd_card_drv
-launcher:     sticks_blue_backdrop direct_nano3d direct_system_shell
-launcher:     touch_keyboard camera trace_logger gpu_drv
+launcher:     trace_logger
 launcher:     screenshot
 depot:        nfeske cproc cnuke jschlatow
 depot:        nfeske_test cproc_pinephone
