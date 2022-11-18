@@ -57,8 +57,6 @@ struct Power::Scp : Noncopyable
 
 			[&] (char const *result, size_t len) {
 				response = Response(Cstring(result, len));
-				if (len > 0)
-					log("SCP responded: ", response);
 			},
 
 			[&] (Execute_error e) {
@@ -244,52 +242,10 @@ struct Power::Main
 		/*
 		 * Interactive debug utilities
 		 */
-//		_scp.execute(": .pmicreg dup space . pmic@ dup .hex space .bits ;");
-//		_scp.execute(": .pmicregs  FOR AFT dup space .pmicreg cr 1 + THEN NEXT drop ;");
-//		_scp.execute(": o 0 pmic@ .bits space 1 pmic@ .bits ;");
-//		_scp.execute(": p power_info ;");
-
-		_scp.execute(
-			": cpucfg 1700000 ; "
-			": ccr cpucfg 80 + ; "   /* cluster-control register */
-			": vec0 cpucfg a0 + ; "  /* reset vector of CPU 0 */
-			": rcpucfg 1f01c00 ; "
-			": rprcm   1f01400 ; "
-			": c0pwr0  rcpucfg 30 + ; "   /* C0_CPU0 power-on reset register */
-			": cpu0psr rprcm 140 + ; "    /* CPUX power switch register(s) */
-			": cpuxgat rprcm 100 + ; "    /* CPUX power off gating register */
-			": vddsysrst rprcm 120 + ; "  /* VDD-SYS power domain reset register */
-
-			/* ( n val -- n )  set power-switch register of CPU n to val */
-			": pwr!    over 2 lshift "  /* ( n val n*4 ) */
-			"          cpu0psr + !  a udelay ; "
-
-			": pwron   fe pwr! f8 pwr! e0 pwr! c0 pwr! 80 pwr! 0 pwr! drop ; "
-			": pwroff  ff pwr! drop ; "
-
-			": cpustop "
-				"0 ccr 0 b! "    /* core reset in cluster-control register */
-				"0 ccr c b! "    /* hreset */
-				"1f cpuxgat ! "
-				"3 FOR r@ pwroff NEXT "
-			"; "
-			": cpurun "
-				"3 FOR r@ pwron NEXT "
-				"0 cpuxgat ! "
-				"53400 vec0 ! "
-				"1 ccr c b! "    /* hreset */
-				"1 ccr 0 b! "
-			"; "
-//				"0 c0pwr0 0 b! " /* cluster 0 power */
-//				"1 c0pwr0 0 b! "
-
-//			"8f000000 cpucfg ! "
-//			"53300 vec0 ! "
-//			"0 vec0 ! "
-//			"dorst "
-		);
-
-		log("-- SCP initialization complete ---");
+		_scp.execute(": .pmicreg dup space . pmic@ dup .hex space .bits ;");
+		_scp.execute(": .pmicregs  FOR AFT dup space .pmicreg cr 1 + THEN NEXT drop ;");
+		_scp.execute(": o 0 pmic@ .bits space 1 pmic@ .bits ;");
+		_scp.execute(": p power_info ;");
 
 		_timer.sigh(_timer_handler);
 

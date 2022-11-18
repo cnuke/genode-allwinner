@@ -493,53 +493,6 @@ struct Scp::Driver : private Scheduler
 		_mbox_clock_guard(mbox_clock),
 		_mbox_reset_guard(mbox_reset)
 	{
-		/* poke 64-bit ARM code for infinite serial output loop to phys addr 0x53400 */
-		{
-			uint32_t *ptr = (uint32_t *)(_sram_mmio.local_addr<char>() + 0x10000 - 0xc00);
-			*ptr++ = 0xd2900000;   /* print 'x' at the serial */
-			*ptr++ = 0xf2a03840;
-			*ptr++ = 0xd2800f01;
-			*ptr++ = 0xf9000001;
-
-			/* redirect reset vector to 53300 */
-//			*ptr++ = 0xd2801400;   /* mov	x0, #0xa0               */
-//			*ptr++ = 0xf2a02e00;   /* movk	x0, #0x170, lsl #16*/
-////			*ptr++ = 0xd2866001;   /* mov	x1, #0x3300             */
-//			*ptr++ = 0xd2868801;   /* mov   x1, #0x3440 */
-//			*ptr++ = 0xf2a000a1;   /* movk	x1, #0x5, lsl #16 */
-//			*ptr++ = 0xf9000001;   /* str	x1, [x0] */
-//			*ptr++ = 0xd5033bbf;   /* dmb ish */
-
-//			*ptr++ = 0xd503207f;   /* wfi */
-
-//			*ptr++ = 0xd2800041;   /* mov x1, #0x2 */
-//			*ptr++ = 0xd53ec041;   /* mrs x1, rmr_el3 */
-
-			*ptr++ = 0xd2800061;   /* mov x1, #0x3 */
-//			*ptr++ = 0xd2800041;   /* mov x1, #0x2 */
-			*ptr++ = 0xd51ec041;   /* msr rmr_el3, x1 */
-			*ptr++ = 0xd5033bbf;   /* dmb ish */
-			*ptr++ = 0xd503207f;   /* wfi */
-
-			*ptr++ = 0xd2900000;   /* infinite loop printing 'U' at the serial */
-			*ptr++ = 0xf2a03840;
-			*ptr++ = 0xd2800aa1;
-			*ptr++ = 0xf9000001;
-			*ptr++ = 0x17fffffc;
-		}
-
-		/* poke 32-bit ARM code for infinite serial output loop to phys addr 0x53300 */
-		{
-			uint32_t *ptr = (uint32_t *)(_sram_mmio.local_addr<char>() + 0x10000 - 0xd00);
-			*ptr++ = 0xe52db004;
-			*ptr++ = 0xe28db000;
-			*ptr++ = 0xe59f3008;
-			*ptr++ = 0xe3a02056;
-			*ptr++ = 0xe5832000;
-			*ptr++ = 0xeafffffb;
-			*ptr++ = 0x01c28000;
-		}
-
 		_irq.sigh(_irq_handler);
 		_handle_irq();
 		_env.parent().announce(_env.ep().manage(_root));
