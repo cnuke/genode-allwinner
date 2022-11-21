@@ -15,6 +15,7 @@
 #define _SESSION_H_
 
 #include <base/allocator.h>
+#include <audio_out_session/audio_out_session.h>
 
 namespace Audio {
 	struct Session;
@@ -25,7 +26,7 @@ struct Audio::Session
 	struct Packet
 	{
 		Genode::int16_t *data { nullptr };
-		Genode::size_t   size { 2048 };
+		Genode::size_t   size { Audio_out::PERIOD * sizeof(short) * 2 };
 
 		bool valid() const { return data != nullptr; }
 	};
