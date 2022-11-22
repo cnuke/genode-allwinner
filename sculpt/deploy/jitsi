@@ -24,7 +24,9 @@
 		</route>
 	</start>
 
-	<start name="audio_drv" pkg="a64_audio_drv">
+	<start name="audio_drv" pkg="a64_audio_drv" priority="0" cpu="40">
+		<resource name="CPU" quantum="40"/>
+		<affinity xpos="3" ypos="0" width="1" height="1"/>
 		<route>
 			<service name="Platform"> <parent label="audio_drv"/> </service>
 		</route>
@@ -64,6 +66,7 @@
 		</route>
 	</start>
 
+<!--
 	<start name="camera" pkg="camera-pinephone">
 		<affinity xpos="3" width="1"/>
 		<route>
@@ -73,6 +76,7 @@
 			<service name="Pin_control"> <parent/> </service>
 		</route>
 	</start>
+-->
 
 <!--
 	<start name="test-capture" pkg="test-capture">
@@ -125,7 +129,7 @@
 				<child name="audio_drv"/>
 			</service>
 			<service name="Capture">
-				<child name="camera"/>
+				<child name="black_hole"/>
 			</service>
 			<service name="Gpu">
 				<child name="gpu_drv"/>
