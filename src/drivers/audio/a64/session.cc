@@ -125,10 +125,50 @@ class Audio_out::Out
 
 		Signal_context_capability data_avail() { return _data_avail_dispatcher; }
 
+		Genode::Attached_rom_dataspace _sample_ds { _env, "sample.raw" };
+		size_t           const _size = _sample_ds.size();
+
+		size_t _offset = 0;
+
 		Audio::Session::Packet play_packet()
 		{
 			Audio::Session::Packet packet { };
 
+			if (_offset > _size)
+				_offset = 0;
+
+			enum {
+				CHN_CNT      = 2,                      /* number of channels */
+				FRAME_SIZE   = sizeof(float),
+				PERIOD_CSIZE = FRAME_SIZE * PERIOD,    /* size of channel packet (bytes) */
+				PERIOD_FSIZE = CHN_CNT * PERIOD_CSIZE, /* size of period in file (bytes) */
+			};
+
+			size_t chunk = (_offset + PERIOD_FSIZE > _size)
+			             ? (_size - _offset) / CHN_CNT / FRAME_SIZE
+			             : PERIOD;
+			(void)chunk;
+
+			char     const * const _base = _sample_ds.local_addr<char const>();
+			float const *p = (float*)(_base + _offset);
+			(void)_base;
+			(void)p;
+
+			/* convert float to S16LE */
+			static short data[Audio_out::PERIOD * Audio_out::MAX_CHANNELS] { };
+
+			for (unsigned i = 0; i < chunk * 2; i++) {
+				data[i] = int16_t(p[i] * 32767);
+			}
+
+			packet.data = data;
+			packet.size = sizeof(data);
+
+			_offset += PERIOD_FSIZE;
+
+			return packet;
+
+#if 0
 			unsigned lpos = left()->pos();
 			unsigned rpos = right()->pos();
 
@@ -165,6 +205,7 @@ class Audio_out::Out
 			channel_right->progress_submit();
 
 			return packet;
+#endif
 		}
 };
 
@@ -441,7 +482,8 @@ struct Audio_aggregator : Audio::Session
 
 	Packet play_packet(void) override
 	{
-		return _audio_out_active() ? out.play_packet() : Packet();
+		// return _audio_out_active() ? out.play_packet() : Packet();
+		return out.play_packet();
 	}
 
 	void record_packet(Packet packet) override
