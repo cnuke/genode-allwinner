@@ -26,7 +26,7 @@ struct Audio::Session
 	struct Packet
 	{
 		Genode::int16_t *data { nullptr };
-		Genode::size_t   size { Audio_out::PERIOD * Audio_out::SAMPLE_SIZE };
+		Genode::size_t   size { Audio_out::PERIOD * sizeof(short) * 2 };
 
 		bool valid() const { return data != nullptr; }
 	};
