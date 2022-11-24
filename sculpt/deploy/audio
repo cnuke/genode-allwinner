@@ -10,9 +10,7 @@
 		<service name="Timer"> <parent/> </service>
 	</common_routes>
 
-<!--
 	<start name="trace_logger" pkg="trace_logger"/>
--->
 
 <!--
 	<start name="system_clock-dummy" pkg="system_clock-dummy">
@@ -23,10 +21,10 @@
 -->
 
 	<start name="audio_drv" pkg="a64_audio_drv" priority="0" cpu="40">
-		<resource name="CPU" quantum="40"/>
 		<affinity xpos="3" ypos="0" width="1" height="1"/>
 		<route>
 			<service name="Platform"> <parent label="audio_drv"/> </service>
+			<service name="ROM" label="sample.raw"> <parent/> </service>
 		</route>
 	</start>
 
@@ -42,14 +40,15 @@
 	</start>
 -->
 
+<!--
 	<start name="test-audio_out" pkg="test-audio_out" priority="0" cpu="40">
-		<resource name="CPU" quantum="40"/>
 		<affinity xpos="2" ypos="0" width="1" height="1"/>
 		<route>
 			<service name="ROM" label="sample.raw"> <parent/> </service>
 			<service name="Audio_out"> <child name="audio_drv"/> </service>
 		</route>
 	</start>
+-->
 
 <!--
 	<start name="cpu_burner_audio" pkg="cpu_burner">
