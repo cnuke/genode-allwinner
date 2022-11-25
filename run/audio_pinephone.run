@@ -10,6 +10,9 @@ build {
 	drivers/audio/a64
 	server/report_rom
 	test/audio_in
+	app/trace_logger
+	app/cpu_burner
+	trace/policy/null
 }
 
 create_boot_directory
@@ -36,6 +39,32 @@ install_config {
 			<resource name="RAM" quantum="1M"/>
 			<route> <any-service> <parent/> </any-service> </route>
 			<provides> <service name="Timer"/> </provides>
+		</start>
+
+		<start name="trace_logger" caps="500">
+			<resource name="RAM" quantum="100M"/>
+			<route>
+				<service name="Timer"> <child name="timer"/> </service>
+				<any-service> <parent/> </any-service>
+			</route>
+			<config verbose="no"
+			        session_ram="90M"
+			        session_arg_buffer="1M"
+			        session_parent_levels="1"
+			        period_sec="20"
+			        default_policy="null"
+			        default_buffer="512K">
+				<policy label_prefix="init -> "/>
+			</config>
+		</start>
+
+		<start name="cpu_burner" caps="100">
+			<resource name="RAM" quantum="1M"/>
+			<config percent="100"/>
+			<route>
+				<service name="Timer"> <child name="timer"/> </service>
+				<any-service> <parent/> </any-service>
+			</route>
 		</start>
 
 		<start name="report_rom">
@@ -90,8 +119,8 @@ install_config {
 			<resource name="RAM" quantum="1M"/>
 			<config>
 				<mic      volume="60"/>
-				<earpiece volume="100"/>
-				<speaker  volume="0"/>
+				<earpiece volume="0"/>
+				<speaker  volume="50"/>
 				<codec    target="soc"/>
 			</config>
 			<route>
@@ -103,6 +132,7 @@ install_config {
 		<start name="audio_drv">
 			<binary name="a64_audio_drv"/>
 			<resource name="RAM" quantum="1M"/>
+			<resource name="CPU" quantum="3"/>
 			<provides>
 				<service name="Audio_out"/>
 				<service name="Audio_in"/>
@@ -113,9 +143,11 @@ install_config {
 			</route>
 		</start>
 
+<!--
 		<start name="test-audio_in">
 			<resource name="RAM" quantum="8M"/>
 		</start>
+-->
 	</config>
 }
 
@@ -126,6 +158,12 @@ build_boot_image {
 	a64_platform_drv a64_pio_drv
 	a64_audio_drv pinephone_audio_control
 	test-audio_in
+
+	trace_logger null
+
+	sample.raw
+
+	cpu_burner
 }
 
 run_genode_until forever
