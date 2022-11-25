@@ -119,9 +119,9 @@ class Audio::I2s : Platform::Device::Mmio
 			write<Ap_format>(0);
 
 			/* setup and flush FIFOs */
-			// write<Ap_fifo::Rxom>(Ap_fifo::Rxom::SIGN_EXTENT);
+			write<Ap_fifo::Rxom>(Ap_fifo::Rxom::SIGN_EXTENT);
 			write<Ap_fifo::Txim>(Ap_fifo::Txim::LSB);
-			// write<Ap_fifo::Frx>(1);
+			write<Ap_fifo::Frx>(1);
 			write<Ap_fifo::Ftx>(1);
 
 			/* reset counter */
@@ -130,11 +130,11 @@ class Audio::I2s : Platform::Device::Mmio
 
 			/* enable FIFOs */
 			write<Ap_control::Sdo_en>(1);
-			// write<Ap_control::Rxen>(1);
+			write<Ap_control::Rxen>(1);
 			write<Ap_control::Txen>(1);
 
 			/* enable IRQs */
-			// write<Ap_int::Rx_drq>(1);
+			write<Ap_int::Rx_drq>(1);
 			write<Ap_int::Tx_drq>(1);
 		}
 
@@ -329,8 +329,6 @@ class Audio::Dma_engine : Platform::Device::Mmio
 				/* two byte aligend */
 				struct Descr_phys_addr : Register<0x8, 32> { };
 
-				struct Dma_bcnt_left : Register<0x18, 32> { };
-
 			public:
 
 				Channel(addr_t const base, uint32_t const id, Dma_engine &engine)
@@ -346,24 +344,13 @@ class Audio::Dma_engine : Platform::Device::Mmio
 					_engine.write<Irq_enable>(irq);
 				}
 
-				uint8_t pending() const
-				{
-					return (_engine.read<Irq_pending>() >> (4 * _id)) & 0x7;
-				}
-
-				void clear_pending(uint8_t pending)
-				{
-					/* clear IRQs for engine */
-					_engine.write<Irq_pending>(pending << (4 * _id));
-				}
-
 				bool irq_pending(Irq_type const type)
 				{
 					Irq_pending::access_t pending = (_engine.read<Irq_pending>() >> (4 * _id)) & 0x7;
 					if ((pending & type) == 0) return false;
 
-					// /* clear IRQs for engine */
-					// _engine.write<Irq_pending>(pending << (4 * _id));
+					/* clear IRQs for engine */
+					_engine.write<Irq_pending>(pending << (4 * _id));
 
 					return true;
 				}
@@ -384,8 +371,6 @@ class Audio::Dma_engine : Platform::Device::Mmio
 
 				template <typename FUNC>
 				void dequeue(FUNC const &func) { _queue.dequeue(func); }
-
-				uint32_t bcnt_left() const { return read<Dma_bcnt_left>(); }
 		};
 
 	private:
@@ -437,13 +422,13 @@ struct Audio::Main
 	Dma_engine _dma     { _device_dma };
 
 	Dma_engine::Channel &_tx { _dma.channel(0) };
-	// Dma_engine::Channel &_rx { _dma.channel(1) };
+	Dma_engine::Channel &_rx { _dma.channel(1) };
 
 	enum { TX = 2 };
 	Constructible<Dma_engine::Descriptor> _tx_descr[TX];
 
-	// enum { RX = 2 };
-	// Constructible<Dma_engine::Descriptor> _rx_descr[RX];
+	enum { RX = 2 };
+	Constructible<Dma_engine::Descriptor> _rx_descr[RX];
 
 	Main(Env &env) : _env(env)
 	{
@@ -463,17 +448,17 @@ struct Audio::Main
 		_tx.irq_enable(Dma_engine::Channel::HALF_PACKET);
 
 		/* setup rx channel */
-		// for (unsigned i = 0; i < RX; i++)
-		// 	_rx_descr[i].construct(_platform, Session::Packet().size);
+		for (unsigned i = 0; i < RX; i++)
+			_rx_descr[i].construct(_platform, Session::Packet().size);
 
-		// for (unsigned i = 0; i < RX; i++) {
-		// 	/* cyclic descriptors (last points to first) */
-		// 	setup_rx_descriptor(*_rx_descr[i], _rx_descr[(i + 1) % RX]->dma_addr());
-		// 	_rx.enqueue(*_rx_descr[i]);
-		// }
+		for (unsigned i = 0; i < RX; i++) {
+			/* cyclic descriptors (last points to first) */
+			setup_rx_descriptor(*_rx_descr[i], _rx_descr[(i + 1) % RX]->dma_addr());
+			_rx.enqueue(*_rx_descr[i]);
+		}
 
-		// _rx.descr_dma(_rx_descr[0]->dma_addr());
-		// _rx.irq_enable(Dma_engine::Channel::FULL_PACKET);
+		_rx.descr_dma(_rx_descr[0]->dma_addr());
+		_rx.irq_enable(Dma_engine::Channel::FULL_PACKET);
 
 		_irq_dma.sigh(_irq_handler_dma);
 		_irq_dma.ack();
@@ -481,7 +466,7 @@ struct Audio::Main
 		tx();
 
 		_tx.enable();
-		// _rx.enable();
+		_rx.enable();
 
 		_i2s.enable();
 	}
@@ -497,16 +482,16 @@ struct Audio::Main
 		descr.dma_next(dma_addr_next);
 	}
 
-	// void setup_rx_descriptor(Dma_engine::Descriptor &descr, addr_t const dma_addr_next)
-	// {
-	// 	using Descriptor = Dma_engine::Descriptor;
+	void setup_rx_descriptor(Dma_engine::Descriptor &descr, addr_t const dma_addr_next)
+	{
+		using Descriptor = Dma_engine::Descriptor;
 
-	// 	descr.mode(Descriptor::IO, Descriptor::LINEAR);
-	// 	descr.drq(Descriptor::AUDIO_CODEC, Descriptor::SDRAM);
-	// 	descr.width(Descriptor::BIT16, Descriptor::BIT32);
-	// 	descr.dma_src(_i2s_dma.rx_addr());
-	// 	descr.dma_next(dma_addr_next);
-	// }
+		descr.mode(Descriptor::IO, Descriptor::LINEAR);
+		descr.drq(Descriptor::AUDIO_CODEC, Descriptor::SDRAM);
+		descr.width(Descriptor::BIT16, Descriptor::BIT32);
+		descr.dma_src(_i2s_dma.rx_addr());
+		descr.dma_next(dma_addr_next);
+	}
 
 	void fill(addr_t buffer)
 	{
@@ -536,43 +521,26 @@ struct Audio::Main
 		_tx.dequeue(apply);
 	}
 
-	// void rx()
-	// {
-	// 	auto apply = [&](Dma_engine::Descriptor &descr)
-	// 	{
-	// 		Audio::Session::Packet packet { (int16_t *)descr.data(),
-	// 			descr.length() };
-	// 		_session.record_packet(packet);
-	// 		_rx.enqueue(descr);
-	// 	};
+	void rx()
+	{
+		auto apply = [&](Dma_engine::Descriptor &descr)
+		{
+			Audio::Session::Packet packet { (int16_t *)descr.data(),
+				descr.length() };
+			_session.record_packet(packet);
+			_rx.enqueue(descr);
+		};
 
-	// 	_rx.dequeue(apply);
-	// }
+		_rx.dequeue(apply);
+	}
 
 	void handle_dma_irq()
 	{
-		// GENODE_TRACE_TSC(1);
-		bool was_tx = false;
-		// bool was_rx = false;
+		if (_tx.irq_pending(Dma_engine::Channel::HALF_PACKET))
+			tx();
 
-		uint8_t const pending = _tx.pending();
-
-		if (_tx.irq_pending(Dma_engine::Channel::HALF_PACKET)) {
-			was_tx = true;
-			// if (_tx.bcnt_left() == 1024)
-				tx();
-		}
-
-		if (pending)
-			_tx.clear_pending(pending);
-
-		// if (_rx.irq_pending(Dma_engine::Channel::FULL_PACKET)) {
-		// 	was_rx = true;
-		// 	rx();
-		// }
-
-		// Genode::trace(__func__, ": tx: ", was_tx, " ", _tx.bcnt_left(), " rx: ", was_rx, " ", _rx.bcnt_left());
-		Genode::trace(__func__, ": tx: ", was_tx, " ", _tx.bcnt_left(), " (", Genode::Hex(pending), ")");
+		if (_rx.irq_pending(Dma_engine::Channel::FULL_PACKET))
+			rx();
 
 		_irq_dma.ack();
 	}
