@@ -159,6 +159,11 @@ class Audio::I2s : Platform::Device::Mmio
 		}
 
 		void enable() { write<Ap_control::Gen>(1); }
+
+		uint32_t status() const
+		{
+			return read<Ap_int_status>();
+		}
 };
 
 
@@ -216,6 +221,12 @@ class Audio::Dma_engine : Platform::Device::Mmio
 		struct Status : Register<0x30, 32> { };
 
 	public:
+
+		/*
+		 * This descriptor itself is stored in an uncached DMA page and
+		 * 'dma_addr' is used to chain the descriptors together. The
+		 * actual payload data is stored in the cached DMA buffer '_data'.
+		 */
 
 		class Descriptor : private Platform::Dma_buffer,
 		                   private Genode::Mmio,
@@ -309,6 +320,8 @@ class Audio::Dma_engine : Platform::Device::Mmio
 						cache_invalidate_data(data(), length());
 				}
 
+				addr_t data_dma_addr() const { return _data.dma_addr(); }
+
 				addr_t data()     const { return addr_t(_data.local_addr<addr_t>()); }
 				addr_t dma_addr() const { return Dma_buffer::dma_addr();             }
 				size_t length()   const { return read<Length>();                     }
@@ -328,6 +341,10 @@ class Audio::Dma_engine : Platform::Device::Mmio
 
 				/* two byte aligend */
 				struct Descr_phys_addr : Register<0x8, 32> { };
+
+				struct Dma_cur_src   : Register<0x10, 32> { };
+				struct Dma_cur_dest  : Register<0x14, 32> { };
+				struct Dma_bcnt_left : Register<0x18, 32> { };
 
 			public:
 
@@ -349,10 +366,18 @@ class Audio::Dma_engine : Platform::Device::Mmio
 					Irq_pending::access_t pending = (_engine.read<Irq_pending>() >> (4 * _id)) & 0x7;
 					if ((pending & type) == 0) return false;
 
-					/* clear IRQs for engine */
-					_engine.write<Irq_pending>(pending << (4 * _id));
+					// /* clear IRQs for engine */
+					// _engine.write<Irq_pending>(pending << (4 * _id));
 
 					return true;
+				}
+
+				void clear_irq()
+				{
+					Irq_pending::access_t pending = (_engine.read<Irq_pending>() >> (4 * _id)) & 0x7;
+
+					/* clear IRQs for engine */
+					_engine.write<Irq_pending>(pending << (4 * _id));
 				}
 
 				void enable()  { write<Enable>(1); };
@@ -371,6 +396,10 @@ class Audio::Dma_engine : Platform::Device::Mmio
 
 				template <typename FUNC>
 				void dequeue(FUNC const &func) { _queue.dequeue(func); }
+
+				uint32_t cur_src()   const { return read<Dma_cur_src>(); }
+				uint32_t cur_dest()  const { return read<Dma_cur_dest>(); }
+				uint32_t bcnt_left() const { return read<Dma_bcnt_left>(); }
 		};
 
 	private:
@@ -445,7 +474,7 @@ struct Audio::Main
 		}
 
 		_tx.descr_dma(_tx_descr[0]->dma_addr());
-		_tx.irq_enable(Dma_engine::Channel::HALF_PACKET);
+		_tx.irq_enable(Dma_engine::Channel::FULL_PACKET);
 
 		/* setup rx channel */
 		for (unsigned i = 0; i < RX; i++)
@@ -479,6 +508,7 @@ struct Audio::Main
 		descr.drq(Descriptor::SDRAM, Descriptor::AUDIO_CODEC);
 		descr.width(Descriptor::BIT32, Descriptor::BIT16);
 		descr.dma_dst(_i2s_dma.tx_addr());
+		Genode::log(__func__, ":", __LINE__, ": data: ", Genode::Hex(descr.data()), " data_dma_addr: ", Genode::Hex(descr.data_dma_addr()));
 		descr.dma_next(dma_addr_next);
 	}
 
@@ -490,6 +520,7 @@ struct Audio::Main
 		descr.drq(Descriptor::AUDIO_CODEC, Descriptor::SDRAM);
 		descr.width(Descriptor::BIT16, Descriptor::BIT32);
 		descr.dma_src(_i2s_dma.rx_addr());
+		Genode::log(__func__, ":", __LINE__, ": data: ", Genode::Hex(descr.data()), " data_dma_addr: ", Genode::Hex(descr.data_dma_addr()));
 		descr.dma_next(dma_addr_next);
 	}
 
@@ -506,6 +537,10 @@ struct Audio::Main
 	{
 		if (_tx.empty()) {
 			fill(_tx_descr[0]->data());
+			/*
+			 * Store in reverse so that the last descr is used first
+			 * as the first one is currently played.
+			 */
 			for (int i = TX - 1; i >= 0; i--) {
 				_tx.enqueue(*_tx_descr[i]);
 			}
@@ -514,6 +549,7 @@ struct Audio::Main
 
 		auto apply = [&](Dma_engine::Descriptor &descr)
 		{
+		Genode::trace("tx", ":", __LINE__, ": data: ", Genode::Hex(descr.data()), " data_dma_addr: ", Genode::Hex(descr.data_dma_addr()));
 			fill(descr.data());
 			_tx.enqueue(descr);
 		};
@@ -536,13 +572,33 @@ struct Audio::Main
 
 	void handle_dma_irq()
 	{
-		if (_tx.irq_pending(Dma_engine::Channel::HALF_PACKET))
-			tx();
+		bool     const was_tx      = _tx.irq_pending(Dma_engine::Channel::FULL_PACKET);
+		uint32_t const tx_bcnt     = _tx.bcnt_left();
+		uint32_t const tx_cur_src  = _tx.cur_src();
+		bool     const was_rx      = _rx.irq_pending(Dma_engine::Channel::FULL_PACKET);
+		uint32_t const rx_bcnt     = _rx.bcnt_left();
+		uint32_t const rx_cur_dest = _rx.cur_dest();
 
-		if (_rx.irq_pending(Dma_engine::Channel::FULL_PACKET))
-			rx();
+		Genode::trace(__func__, ": tx: ", was_tx, " ", tx_bcnt, " ", Genode::Hex(tx_cur_src),
+		                         " rx: ", was_rx, " ", rx_bcnt, " ", Genode::Hex(rx_cur_dest));
+
+		if (was_tx) {
+			_tx.clear_irq();
+		}
+
+		if (was_rx) {
+			_rx.clear_irq();
+		}
 
 		_irq_dma.ack();
+
+		if (was_tx) {
+			tx();
+		}
+
+		if (was_rx) {
+			rx();
+		}
 	}
 
 	/*
@@ -551,6 +607,7 @@ struct Audio::Main
 	 */
 	void handle_audio_irq()
 	{
+		Genode::trace(__func__, ": status: ", Genode::Hex(_i2s.status()));
 		if (_i2s.tx_underrun()) {
 			warning("TX underrun");
 		}
