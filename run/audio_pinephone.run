@@ -58,6 +58,7 @@ install_config {
 			</config>
 		</start>
 
+<!--
 		<start name="cpu_burner" caps="100">
 			<resource name="RAM" quantum="1M"/>
 			<config percent="100"/>
@@ -66,6 +67,7 @@ install_config {
 				<any-service> <parent/> </any-service>
 			</route>
 		</start>
+-->
 
 		<start name="report_rom">
 			<resource name="RAM" quantum="1M"/>
