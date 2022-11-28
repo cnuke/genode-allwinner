@@ -119,22 +119,22 @@ class Audio::I2s : Platform::Device::Mmio
 			write<Ap_format>(0);
 
 			/* setup and flush FIFOs */
-			write<Ap_fifo::Rxom>(Ap_fifo::Rxom::SIGN_EXTENT);
+			// write<Ap_fifo::Rxom>(Ap_fifo::Rxom::SIGN_EXTENT);
 			write<Ap_fifo::Txim>(Ap_fifo::Txim::LSB);
-			write<Ap_fifo::Frx>(1);
+			// write<Ap_fifo::Frx>(1);
 			write<Ap_fifo::Ftx>(1);
 
 			/* reset counter */
-			write<Ap_rx_counter>(0);
+			// write<Ap_rx_counter>(0);
 			write<Ap_tx_counter>(0);
 
 			/* enable FIFOs */
 			write<Ap_control::Sdo_en>(1);
-			write<Ap_control::Rxen>(1);
+			// write<Ap_control::Rxen>(1);
 			write<Ap_control::Txen>(1);
 
 			/* enable IRQs */
-			write<Ap_int::Rx_drq>(1);
+			// write<Ap_int::Rx_drq>(1);
 			write<Ap_int::Tx_drq>(1);
 		}
 
@@ -451,7 +451,7 @@ struct Audio::Main
 	Dma_engine _dma     { _device_dma };
 
 	Dma_engine::Channel &_tx { _dma.channel(0) };
-	Dma_engine::Channel &_rx { _dma.channel(1) };
+	// Dma_engine::Channel &_rx { _dma.channel(1) };
 
 	enum { TX = 2 };
 	Constructible<Dma_engine::Descriptor> _tx_descr[TX];
@@ -476,6 +476,7 @@ struct Audio::Main
 		_tx.descr_dma(_tx_descr[0]->dma_addr());
 		_tx.irq_enable(Dma_engine::Channel::FULL_PACKET);
 
+#if 0
 		/* setup rx channel */
 		for (unsigned i = 0; i < RX; i++)
 			_rx_descr[i].construct(_platform, Session::Packet().size);
@@ -488,6 +489,7 @@ struct Audio::Main
 
 		_rx.descr_dma(_rx_descr[0]->dma_addr());
 		_rx.irq_enable(Dma_engine::Channel::FULL_PACKET);
+#endif
 
 		_irq_dma.sigh(_irq_handler_dma);
 		_irq_dma.ack();
@@ -495,7 +497,7 @@ struct Audio::Main
 		tx();
 
 		_tx.enable();
-		_rx.enable();
+		// _rx.enable();
 
 		_i2s.enable();
 	}
@@ -526,11 +528,12 @@ struct Audio::Main
 
 	void fill(addr_t buffer)
 	{
-		Session::Packet packet = _session.play_packet();
-		if (packet.valid())
-			memcpy((void *)buffer, packet.data, packet.size);
-		else
-			memset((void *)buffer, 0, packet.size);
+		(void)buffer;
+		// Session::Packet packet = _session.play_packet();
+		// if (packet.valid())
+		// 	memcpy((void *)buffer, packet.data, packet.size);
+		// else
+		// 	memset((void *)buffer, 0, packet.size);
 	}
 
 	void tx()
@@ -557,38 +560,39 @@ struct Audio::Main
 		_tx.dequeue(apply);
 	}
 
-	void rx()
-	{
-		auto apply = [&](Dma_engine::Descriptor &descr)
-		{
-			Audio::Session::Packet packet { (int16_t *)descr.data(),
-				descr.length() };
-			_session.record_packet(packet);
-			_rx.enqueue(descr);
-		};
+	// void rx()
+	// {
+	// 	auto apply = [&](Dma_engine::Descriptor &descr)
+	// 	{
+	// 		Audio::Session::Packet packet { (int16_t *)descr.data(),
+	// 			descr.length() };
+	// 		_session.record_packet(packet);
+	// 		_rx.enqueue(descr);
+	// 	};
 
-		_rx.dequeue(apply);
-	}
+	// 	_rx.dequeue(apply);
+	// }
 
 	void handle_dma_irq()
 	{
 		bool     const was_tx      = _tx.irq_pending(Dma_engine::Channel::FULL_PACKET);
 		uint32_t const tx_bcnt     = _tx.bcnt_left();
 		uint32_t const tx_cur_src  = _tx.cur_src();
-		bool     const was_rx      = _rx.irq_pending(Dma_engine::Channel::FULL_PACKET);
-		uint32_t const rx_bcnt     = _rx.bcnt_left();
-		uint32_t const rx_cur_dest = _rx.cur_dest();
+		// bool     const was_rx      = _rx.irq_pending(Dma_engine::Channel::FULL_PACKET);
+		// uint32_t const rx_bcnt     = _rx.bcnt_left();
+		// uint32_t const rx_cur_dest = _rx.cur_dest();
 
-		Genode::trace(__func__, ": tx: ", was_tx, " ", tx_bcnt, " ", Genode::Hex(tx_cur_src),
-		                         " rx: ", was_rx, " ", rx_bcnt, " ", Genode::Hex(rx_cur_dest));
+		// Genode::trace(__func__, ": tx: ", was_tx, " ", tx_bcnt, " ", Genode::Hex(tx_cur_src),
+		//                          " rx: ", was_rx, " ", rx_bcnt, " ", Genode::Hex(rx_cur_dest));
+		Genode::trace(__func__, ": tx: ", was_tx, " ", tx_bcnt, " ", Genode::Hex(tx_cur_src));
 
 		if (was_tx) {
 			_tx.clear_irq();
 		}
 
-		if (was_rx) {
-			_rx.clear_irq();
-		}
+		// if (was_rx) {
+		// 	_rx.clear_irq();
+		// }
 
 		_irq_dma.ack();
 
@@ -596,9 +600,9 @@ struct Audio::Main
 			tx();
 		}
 
-		if (was_rx) {
-			rx();
-		}
+		// if (was_rx) {
+		// 	rx();
+		// }
 	}
 
 	/*
