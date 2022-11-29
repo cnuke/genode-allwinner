@@ -400,6 +400,9 @@ class Audio::Dma_engine : Platform::Device::Mmio
 				uint32_t cur_src()   const { return read<Dma_cur_src>(); }
 				uint32_t cur_dest()  const { return read<Dma_cur_dest>(); }
 				uint32_t bcnt_left() const { return read<Dma_bcnt_left>(); }
+
+				template <typename FUNC>
+				void head(FUNC const &func) { _queue.head(func); }
 		};
 
 	private:
@@ -529,11 +532,11 @@ struct Audio::Main
 	void fill(addr_t buffer)
 	{
 		(void)buffer;
-		// Session::Packet packet = _session.play_packet();
-		// if (packet.valid())
-		// 	memcpy((void *)buffer, packet.data, packet.size);
-		// else
-		// 	memset((void *)buffer, 0, packet.size);
+		Session::Packet packet = _session.play_packet();
+		if (packet.valid())
+			memcpy((void *)buffer, packet.data, packet.size);
+		else
+			memset((void *)buffer, 0, packet.size);
 	}
 
 	void tx()
@@ -545,6 +548,7 @@ struct Audio::Main
 			 * as the first one is currently played.
 			 */
 			for (int i = TX - 1; i >= 0; i--) {
+			// for (unsigned i = 0 ; i < TX; i++) {
 				_tx.enqueue(*_tx_descr[i]);
 			}
 			return;
@@ -575,6 +579,7 @@ struct Audio::Main
 
 	void handle_dma_irq()
 	{
+		GENODE_TRACE_TSC(1);
 		bool     const was_tx      = _tx.irq_pending(Dma_engine::Channel::FULL_PACKET);
 		uint32_t const tx_bcnt     = _tx.bcnt_left();
 		uint32_t const tx_cur_src  = _tx.cur_src();
@@ -587,6 +592,18 @@ struct Audio::Main
 		Genode::trace(__func__, ": tx: ", was_tx, " ", tx_bcnt, " ", Genode::Hex(tx_cur_src));
 
 		if (was_tx) {
+			bool new_packet = false;
+			_tx.head([&] (Dma_engine::Descriptor &descr) {
+				addr_t const cur = tx_cur_src & 0xfffff000u;
+				new_packet = cur != descr.data_dma_addr();
+				Genode::log("cur: ", Genode::Hex(tx_cur_src), " next: ", Genode::Hex(descr.data_dma_addr()), " ", new_packet ? "N":"");
+			});
+
+			if (new_packet)
+				tx();
+		}
+
+		if (was_tx) {
 			_tx.clear_irq();
 		}
 
@@ -595,10 +612,6 @@ struct Audio::Main
 		// }
 
 		_irq_dma.ack();
-
-		if (was_tx) {
-			tx();
-		}
 
 		// if (was_rx) {
 		// 	rx();
