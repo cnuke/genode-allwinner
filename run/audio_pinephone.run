@@ -13,6 +13,7 @@ build {
 	app/trace_logger
 	app/cpu_burner
 	trace/policy/null
+	trace/policy/rpc_name
 }
 
 create_boot_directory
@@ -41,6 +42,7 @@ install_config {
 			<provides> <service name="Timer"/> </provides>
 		</start>
 
+<!--
 		<start name="trace_logger" caps="500">
 			<resource name="RAM" quantum="100M"/>
 			<route>
@@ -54,11 +56,11 @@ install_config {
 			        period_sec="20"
 			        default_policy="null"
 			        default_buffer="512K">
-				<policy label_prefix="init -> "/>
+				<policy label_prefix="init -> audio_drv"/>
 			</config>
 		</start>
+-->
 
-<!--
 		<start name="cpu_burner" caps="100">
 			<resource name="RAM" quantum="1M"/>
 			<config percent="100"/>
@@ -67,7 +69,6 @@ install_config {
 				<any-service> <parent/> </any-service>
 			</route>
 		</start>
--->
 
 		<start name="report_rom">
 			<resource name="RAM" quantum="1M"/>
@@ -134,7 +135,7 @@ install_config {
 		<start name="audio_drv">
 			<binary name="a64_audio_drv"/>
 			<resource name="RAM" quantum="1M"/>
-			<resource name="CPU" quantum="3"/>
+			<resource name="CPU" quantum="75"/>
 			<provides>
 				<service name="Audio_out"/>
 				<service name="Audio_in"/>
@@ -161,7 +162,7 @@ build_boot_image {
 	a64_audio_drv pinephone_audio_control
 	test-audio_in
 
-	trace_logger null
+	trace_logger null rpc_name
 
 	sample.raw
 
