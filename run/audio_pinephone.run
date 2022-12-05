@@ -41,6 +41,7 @@ install_config {
 			<provides> <service name="Timer"/> </provides>
 		</start>
 
+<!--
 		<start name="trace_logger" caps="500">
 			<resource name="RAM" quantum="100M"/>
 			<route>
@@ -57,6 +58,7 @@ install_config {
 				<policy label_prefix="init -> "/>
 			</config>
 		</start>
+-->
 
 		<start name="cpu_burner" caps="100">
 			<resource name="RAM" quantum="1M"/>
@@ -132,7 +134,7 @@ install_config {
 		<start name="audio_drv">
 			<binary name="a64_audio_drv"/>
 			<resource name="RAM" quantum="1M"/>
-			<resource name="CPU" quantum="3"/>
+			<resource name="CPU" quantum="12"/>
 			<provides>
 				<service name="Audio_out"/>
 				<service name="Audio_in"/>
