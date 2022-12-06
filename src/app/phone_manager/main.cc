@@ -1050,10 +1050,10 @@ struct Sculpt::Main : Input_event_handler,
 		void generate(Xml_generator &xml) const
 		{
 			xml.node("earpiece", [&] () {
-				xml.attribute("volume", earpiece ? 100 : 0);
+				xml.attribute("volume", earpiece ? 75 : 0);
 			});
 			xml.node("speaker", [&] () {
-				xml.attribute("volume", speaker ? 100 : 0);
+				xml.attribute("volume", speaker ? 75 : 0);
 			});
 			xml.node("mic", [&] () {
 				xml.attribute("volume", mic ? 80 : 0);
@@ -1076,7 +1076,7 @@ struct Sculpt::Main : Input_event_handler,
 			.speaker  = !_current_call.active() || _current_call.speaker,
 
 			/* enable microphone during call */
-			.mic = _current_call.active(),
+			.mic = true,//_current_call.active(),
 
 			/* set codec target during call */
 			.modem = _current_call.active()
