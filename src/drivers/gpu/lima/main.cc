@@ -136,6 +136,8 @@ struct Gpu::Operation
 
 struct Gpu::Request
 {
+	void const *session;
+
 	struct Tag { unsigned long value; };
 
 	Operation operation;
@@ -151,16 +153,18 @@ struct Gpu::Request
 
 	void print(Genode::Output &out) const
 	{
-		Genode::print(out, "tag=",       tag.value, " "
+		Genode::print(out, "session=", session, " "
+		                   "tag=",       tag.value, " "
 		                   "success=",   success,   " "
 		                   "operation=", operation);
 	}
 
-	static Gpu::Request create(Operation::Type type)
+	static Gpu::Request create(void *session, Operation::Type type)
 	{
 		static unsigned long tag_counter = 0;
 
 		return Gpu::Request {
+			.session = session,
 			.operation = Operation {
 				.type = type,
 				.size = 0,
@@ -364,6 +368,8 @@ struct Gpu::Worker_args
 			return;
 		}
 
+		Genode::error(__func__, ":", __LINE__, " pending_request: ", *pending_request);
+
 		/*
  		 * Reset first to prevent _schedule_request from picking up
 		 * unfinished requests, e.g. SYNCOBJ_WAIT.
@@ -526,11 +532,14 @@ extern "C" int run_lx_user_task(void *p)
 			{
 				unsigned int  const handle = r.operation.syncobj_id[0].value;
 
+				Genode::error("SYNCOBJ_WAIT");
 				/* results < 0 denotes errors, == 0 success and > 0 timeouts */
 				int err =
 					lx_drm_ioctl_syncobj_wait(args.drm, handle);
 
 				notify_client = true;
+
+				Genode::error("SYNCOBJ_WAIT: ", err);
 
 				if (err < 0) {
 					error("lx_drm_ioctl_syncobj_wait ", handle, " failed: ", err);
@@ -642,8 +651,10 @@ extern "C" int run_lx_user_task(void *p)
 			{
 				buffers.with_handle(r.operation.id, [&] (uint32_t const handle) {
 
+					Genode::error("WAIT");
 					int const err = lx_drm_ioctl_lima_gem_wait(args.drm, handle,
 					                                           r.operation.op);
+					Genode::error("WAIT: ", err);
 					notify_client = true;
 					if (err)
 						return;
@@ -670,7 +681,7 @@ extern "C" int run_lx_user_task(void *p)
 }
 
 
-static void request_already_pending(Gpu::Request const&, Gpu::Request const&) __attribute__((noreturn));
+// static void request_already_pending(Gpu::Request const&, Gpu::Request const&) __attribute__((noreturn));
 static void request_already_pending(Gpu::Request const &p,
                                     Gpu::Request const &r)
 {
@@ -728,14 +739,18 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 		                       FAIL_FN const &fail_fn,
 		                       Blocking_request block = Blocking_request::YES)
 		{
-			if (_pending_request.valid())
+			if (_pending_request.valid()) {
 				request_already_pending(_pending_request, request);
+				fail_fn();
+				return;
+			}
 
 			/*
 			 * Requests referencing not managed handles will be
 			 * treated as scheduled but failed.
 			 */
 			if (!_managed_id(request)) {
+				Genode::error(__func__, ":", __LINE__, " not managed: ", request);
 				fail_fn();
 				return;
 			}
@@ -744,8 +759,10 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 			_lx_task_args.pending_request   = &_pending_request;
 			_lx_task_args.completed_request = &_completed_request;
 
+			Genode::error(__func__, ":", __LINE__, ": pending: ", _pending_request);
 			lx_emul_task_unblock(_lx_task);
 			Lx_kit::env().scheduler.schedule();
+			Genode::error(__func__, ":", __LINE__, ": completed: ", _completed_request);
 
 			if (block == Blocking_request::YES)
 				for (;;) {
@@ -786,7 +803,7 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 		{
 			Gpu::Ctx_id ctx_id { 0 };
 
-			Gpu::Request r = Gpu::Request::create(Gpu::Operation::Type::CTX_CREATE);
+			Gpu::Request r = Gpu::Request::create(this, Gpu::Operation::Type::CTX_CREATE);
 
 			auto success = [&] (Gpu::Request const &request) {
 				ctx_id = request.operation.ctx_id;
@@ -799,7 +816,7 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 
 		void _free_ctx(Gpu::Ctx_id ctx_id)
 		{
-			Gpu::Request r = Gpu::Request::create(Gpu::Operation::Type::CTX_FREE);
+			Gpu::Request r = Gpu::Request::create(this, Gpu::Operation::Type::CTX_FREE);
 			r.operation.ctx_id = ctx_id;
 
 			auto success = [&] (Gpu::Request const &) { };
@@ -813,7 +830,7 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 		{
 			Gpu::Syncobj_id syncobj_id { 0 };
 
-			Gpu::Request r = Gpu::Request::create(Gpu::Operation::Type::SYNCOBJ_CREATE);
+			Gpu::Request r = Gpu::Request::create(this, Gpu::Operation::Type::SYNCOBJ_CREATE);
 
 			auto success = [&] (Gpu::Request const &request) {
 				syncobj_id = request.operation.syncobj_id[0];
@@ -826,7 +843,7 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 
 		void _destroy_syncobj(Gpu::Syncobj_id syncobj_id)
 		{
-			Gpu::Request r = Gpu::Request::create(Gpu::Operation::Type::SYNCOBJ_DESTROY);
+			Gpu::Request r = Gpu::Request::create(this, Gpu::Operation::Type::SYNCOBJ_DESTROY);
 			r.operation.syncobj_id[0] = syncobj_id;
 
 			auto success = [&] (Gpu::Request const &) { };
@@ -908,7 +925,13 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 		bool operation_pending() const
 		{
 			/* only notify sessions with pending operations */
-			return _pending_syncobj_wait || _pending_wait;
+			bool const v = _pending_syncobj_wait || _pending_wait;
+			if (v) {
+				Genode::error(__func__, ": ", this,
+				                        " _pending_wait: ", _pending_wait,
+				                        " _pending_syncobj_wait: ", _pending_syncobj_wait);
+			}
+			return v;
 		}
 
 		/***************************
@@ -923,7 +946,7 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 		Gpu::Sequence_number exec_buffer(Gpu::Buffer_id id,
 		                                 Genode::size_t) override
 		{
-			Gpu::Request r = Gpu::Request::create(Gpu::Operation::Type::EXEC);
+			Gpu::Request r = Gpu::Request::create(this, Gpu::Operation::Type::EXEC);
 			r.operation.id = id;
 			r.operation.ctx_id = _ctx_id;
 			r.operation.syncobj_id[0] = _sync_id[0];
@@ -954,30 +977,38 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 			if (!valid)
 				return false;
 
+			/* handle previous interrupted call */
 			if (_pending_syncobj_wait) {
 				Gpu::Request *pr = _lx_task_args.pending_request;
+				Genode::error(__func__, ": resume ", this, " p: ", pr ? *pr : Gpu::Request());
 				if (pr && pr->operation.type == Gpu::Operation::Type::SYNCOBJ_WAIT) {
 					return false;
 				}
 
 				Gpu::Request *cr = _lx_task_args.completed_request;
+				Genode::error(__func__, ": resume ", this, " c: ", cr ? *cr : Gpu::Request());
 				if (cr && cr->operation.type == Gpu::Operation::Type::SYNCOBJ_WAIT) {
 					_pending_syncobj_wait = false;
 					return cr->success;
 				}
 			}
 
-			Gpu::Request r = Gpu::Request::create(Gpu::Operation::Type::SYNCOBJ_WAIT);
+			Gpu::Request r = Gpu::Request::create(this, Gpu::Operation::Type::SYNCOBJ_WAIT);
 			r.operation.syncobj_id[0] =
 				Gpu::Syncobj_id { .value = (uint32_t)seqno.value };
+
+			Genode::error(__func__, ": ", this, " ", r);
+
 
 			bool completed = false;
 			_pending_syncobj_wait = false;
 
 			auto success = [&] (Gpu::Request const &request) {
+				Genode::error("complete: completed: ", request);
 				completed = request.success;
 			};
 			auto fail = [&] () {
+				Genode::error("complete: failed: ", r);
 				_pending_syncobj_wait = true;
 			};
 			_schedule_request(r, success, fail, Blocking_request::NO);
@@ -1000,7 +1031,7 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 				return cap;
 			}
 
-			Gpu::Request r = Gpu::Request::create(Gpu::Operation::Type::ALLOC);
+			Gpu::Request r = Gpu::Request::create(this, Gpu::Operation::Type::ALLOC);
 			r.operation.id   = id;
 			r.operation.size = (uint32_t) size;
 
@@ -1015,7 +1046,7 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 
 		void free_buffer(Gpu::Buffer_id id) override
 		{
-			Gpu::Request r = Gpu::Request::create(Gpu::Operation::Type::FREE);
+			Gpu::Request r = Gpu::Request::create(this, Gpu::Operation::Type::FREE);
 			r.operation.id = id;
 
 			auto success = [&] (Gpu::Request const &) { };
@@ -1059,30 +1090,37 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 
 		bool set_tiling(Gpu::Buffer_id id, unsigned mode) override
 		{
+			/* handle previous interrupted call */
 			if (_pending_wait) {
 				Gpu::Request *pr = _lx_task_args.pending_request;
+				Genode::error(__func__, ": resume ", this, " p: ", pr ? *pr : Gpu::Request());
 				if (pr && pr->operation.type == Gpu::Operation::Type::WAIT) {
 					return false;
 				}
 
 				Gpu::Request *cr = _lx_task_args.completed_request;
+				Genode::error(__func__, ": resume ", this, " c: ", cr ? *cr : Gpu::Request());
 				if (cr && cr->operation.type == Gpu::Operation::Type::WAIT) {
 					_pending_wait = false;
 					return cr->success;
 				}
 			}
 
-			Gpu::Request r = Gpu::Request::create(Gpu::Operation::Type::WAIT);
+			Gpu::Request r = Gpu::Request::create(this, Gpu::Operation::Type::WAIT);
 			r.operation.id = id;
 			r.operation.op = mode;
+
+			Genode::error(__func__, ": ", this, " ", r);
 
 			bool completed = false;
 			_pending_wait = false;
 
 			auto success = [&] (Gpu::Request const &request) {
+				Genode::error("set_tiling: completed: ", request);
 				completed = request.success;
 			};
 			auto fail = [&] () {
+				Genode::error("set_tiling: failed: ", r);
 				_pending_wait = true;
 			};
 			_schedule_request(r, success, fail, Blocking_request::NO);
