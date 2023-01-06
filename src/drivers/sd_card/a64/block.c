@@ -130,6 +130,7 @@ static void bio_end_io(struct bio *bio)
 
 static inline int block_sync(struct block_device * const bdev)
 {
+	printk("%s:%d\n", __func__, __LINE__);
 	if (blkdev_issue_flush(bdev)) {
 		printk("blkdev_issue_flush failed!\n");
 		return 0;
