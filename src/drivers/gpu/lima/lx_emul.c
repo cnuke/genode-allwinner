@@ -74,6 +74,79 @@ struct inode *alloc_anon_inode(struct super_block *s)
 }
 
 
+void inode_set_bytes(struct inode *inode, loff_t bytes)
+{
+	if (!inode)
+		return;
+
+	// inode->i_blocks = bytes >> 9;
+	// inode->i_bytes = bytes & 511;
+	inode->i_bytes = bytes;
+}
+
+
+#include <linux/file.h>
+
+struct file * alloc_file_pseudo(struct inode * inode,
+                                struct vfsmount * mnt,
+                                const char * name,
+                                int flags,
+                                const struct file_operations * fops)
+{
+	struct file *file;
+	struct dentry *dentry;
+
+	file = kzalloc(sizeof(struct file), 0);
+	if (!file)
+		goto err_file;
+
+	dentry = kzalloc(sizeof(struct dentry), 0);
+	if (!dentry)
+		goto err_dentry;
+
+	file->f_op    = fops;
+	file->f_inode = inode;
+	file->f_path.dentry = dentry;
+	return file;
+
+err_dentry:
+	kfree(file);
+err_file:
+	return (struct file*)ERR_PTR(-ENOMEM);
+}
+
+
+static unsigned long _get_next_unused_fd(void)
+{
+    static unsigned long count = 0;
+    return ++count;
+}
+
+
+int get_unused_fd_flags(unsigned flags)
+{
+	return _get_next_unused_fd();
+}
+
+
+extern void  emul_store_opaque(unsigned int id, void *p);
+extern void  emul_delete_opaque(unsigned int id);
+extern void *emul_retrieve_opaque(unsigned int id);
+
+
+void fd_install(unsigned int fd,struct file * file)
+{
+	emul_store_opaque(fd, file);
+}
+
+
+struct file * fget(unsigned int fd)
+{
+	void *ptr = emul_retrieve_opaque(fd);
+	return (struct file*)ptr;
+}
+
+
 #include <linux/dma-mapping.h>
 
 int dma_supported(struct device *dev, u64 mask)
@@ -610,6 +683,62 @@ int lx_drm_ioctl_gem_close(void *lx_drm_prv, unsigned int handle)
 }
 
 
+int lx_drm_gem_prime_handle_to_fd(void *p, unsigned int handle,
+                                  int *fd)
+{
+	struct lx_drm_private *lx_drm_prv;
+	struct file *file;
+	struct drm_file *drm_file;
+	struct drm_device *dev;
+
+	lx_drm_prv = (struct lx_drm_private*)p;
+	if (!lx_drm_prv)
+		return -1;
+
+	file = lx_drm_prv->file;
+	if (!file)
+		return -1;
+
+	drm_file = file->private_data;
+	if (!drm_file)
+		return -1;
+
+	dev = drm_file->minor->dev;
+	if (!dev)
+		return -1;
+
+	return drm_gem_prime_handle_to_fd(dev, drm_file, handle, 0, fd);
+}
+
+
+int lx_drm_gem_prime_fd_to_handle(void *p, int fd,
+                                  unsigned int *handle)
+{
+	struct lx_drm_private *lx_drm_prv;
+	struct file *file;
+	struct drm_file *drm_file;
+	struct drm_device *dev;
+
+	lx_drm_prv = (struct lx_drm_private*)p;
+	if (!lx_drm_prv)
+		return -1;
+
+	file = lx_drm_prv->file;
+	if (!file)
+		return -1;
+
+	drm_file = file->private_data;
+	if (!drm_file)
+		return -1;
+
+	dev = drm_file->minor->dev;
+	if (!dev)
+		return -1;
+
+	return drm_gem_prime_fd_to_handle(dev, drm_file, fd, handle);
+}
+
+
 #include <linux/shmem_fs.h>
 
 struct shmem_file_buffer
@@ -720,13 +849,17 @@ static void _free_file(struct file *file)
 
 	mapping      = file->f_mapping;
 	inode        = file->f_inode;
-	private_data = mapping->private_data;
 
-	lx_emul_forget_pages(private_data->addr, mapping->nrpages << 12);
-	emul_free_shmem_file_buffer(private_data->addr);
+	if (mapping) {
+		private_data = mapping->private_data;
 
-	kfree(private_data);
-	kfree(mapping);
+		lx_emul_forget_pages(private_data->addr, mapping->nrpages << 12);
+		emul_free_shmem_file_buffer(private_data->addr);
+
+		kfree(private_data);
+		kfree(mapping);
+	}
+
 	kfree(inode);
 	kfree(file->f_path.dentry);
 	kfree(file);
