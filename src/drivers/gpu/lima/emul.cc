@@ -14,6 +14,7 @@
 /* Genode includes */
 #include <base/attached_dataspace.h>
 #include <base/attached_ram_dataspace.h>
+#include <base/id_space.h>
 #include <base/registry.h>
 #include <dataspace/client.h>
 #include <util/list.h>
@@ -26,6 +27,62 @@
 #include "emul.h"
 
 using size_t = Genode::size_t;
+
+struct Opaque
+{
+	Opaque(Opaque const&) = delete;
+	Opaque& operator=(Opaque const&) = delete;
+
+	Genode::Id_space<Opaque>::Element const _elem;
+
+	void *ptr;
+
+	Opaque(Genode::Id_space<Opaque> &space, unsigned int id, void *p)
+	:
+		_elem { *this, space, Genode::Id_space<Opaque>::Id { .value = id } },
+		ptr { p }
+	{ }
+};
+
+static Genode::Id_space<Opaque> _opaque_space { };
+
+extern "C" void emul_store_opaque(unsigned int id, void *p)
+{
+	new (Lx_kit::env().heap) Opaque(_opaque_space, id, p);
+}
+
+
+extern "C" void emul_delete_opaque(unsigned int id)
+{
+	Genode::Id_space<Opaque>::Id const oid { .value = id };
+	_opaque_space.apply<Opaque>(oid, [&] (Opaque &o) {
+		Genode::destroy(Lx_kit::env().heap, &o);
+	});
+}
+
+
+extern "C" void *emul_retrieve_opaque(unsigned int id)
+{
+	void *ptr = nullptr;
+	Genode::Id_space<Opaque>::Id const oid { .value = id };
+	_opaque_space.apply<Opaque>(oid, [&] (Opaque &o) {
+		ptr = o.ptr;
+	});
+	return ptr;
+}
+
+
+extern "C" void emul_delete_opaque_by_ptr(void *ptr)
+{
+	Opaque *optr = nullptr;
+	_opaque_space.for_each<Opaque>([&] (Opaque &o) {
+		if (o.ptr == ptr)
+			optr = &o;
+	});
+
+	if (optr)
+		Genode::destroy(Lx_kit::env().heap, optr);
+}
 
 
 void *emul_alloc_shmem_file_buffer(unsigned long size)
