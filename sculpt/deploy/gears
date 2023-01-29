@@ -23,4 +23,14 @@
 		</route>
 	</start>
 
+<!--
+	<start name="mesa_gears2" pkg="mesa_gears">
+		<route>
+			<service name="Gui"> <parent label="focus"/> </service>
+			<service name="Gpu"> <child name="gpu_drv"/> </service>
+			<service name="ROM" label="mesa_gpu_drv.lib.so"> <parent label="mesa_gpu-lima.lib.so"/> </service>
+		</route>
+	</start>
+-->
+
 </config>
