@@ -1,4 +1,4 @@
-<runtime ram="256M" caps="500" binary="lima_gpu_drv">
+<runtime ram="256M" caps="2000" binary="lima_gpu_drv">
 
 	<requires>
 		<timer/>
