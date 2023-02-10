@@ -712,8 +712,6 @@ struct shmem_file_buffer
 	struct page *pages;
 };
 
-// static unsigned _file_alloc_count = 0;
-
 struct file *shmem_file_setup(char const *name, loff_t size,
                                unsigned long flags)
 {
@@ -807,8 +805,6 @@ void __pagevec_release(struct pagevec * pvec)
 
 
 #include <linux/file.h>
-
-// static unsigned _file_free_count = 0;
 
 static void _free_file(struct file *file)
 {
