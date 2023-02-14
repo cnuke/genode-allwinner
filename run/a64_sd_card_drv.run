@@ -1,6 +1,7 @@
 build {
 	core init timer
 	drivers/platform/a64
+	drivers/pin/a64
 	drivers/sd_card/a64
 	app/block_tester
 }
@@ -28,9 +29,17 @@ install_config {
 
 		<start name="platform_drv" caps="150" managing_system="yes">
 			<binary name="a64_platform_drv"/>
-			<resource name="RAM" quantum="1M"/>
+			<resource name="RAM" quantum="2M"/>
 			<provides> <service name="Platform"/> <service name="Scp"/> </provides>
 			<config devices_rom="config">
+				<device name="pio" type="allwinner,sun50i-a64-pinctrl">
+					<io_mem address="0x1c20800" size="0x400"/> <!-- Ports A-H -->
+					<io_mem address="0x1f02c00" size="0x400"/> <!-- Port L -->
+					<irq number="43"/> <!-- Port B -->
+					<irq number="49"/> <!-- Port G -->
+					<irq number="53"/> <!-- Port H -->
+					<irq number="77"/> <!-- Port L -->
+				</device>
 				<device name="sd_card" type="allwinner,sun50i-a64-mmc">
 					<io_mem address="0x01c0f000" size="0x1000"/>
 					<irq number="92"/>
@@ -45,12 +54,45 @@ install_config {
 					<clock name="mmc2" driver_name="mmc"/>
 					<reset-domain name="mmc2"/>
 				</device>
+				<policy label="a64_pio_drv -> ">
+					<device name="pio"/>
+				</policy>
 				<policy label="a64_sd_card_drv -> " info="yes">
 					<device name="sd_card"/>
 					<device name="emmc"/>
 				</policy>
 			</config>
 			<route> <any-service> <parent/> </any-service> </route>
+		</start>
+
+		<start name="a64_pio_drv">
+			<resource name="RAM" quantum="1M"/>
+			<provides>
+				<service name="Pin_state"/>
+				<service name="Pin_control"/>
+				<service name="IRQ"/>
+			</provides>
+			<route>
+				<service name="ROM"> <parent/> </service>
+				<service name="CPU"> <parent/> </service>
+				<service name="PD">  <parent/> </service>
+				<service name="LOG"> <parent/> </service>
+				<service name="Platform"> <child name="platform_drv"/> </service>
+			</route>
+			<config>
+				<select name="nand-ale" bank="C" index="0"  function="2"/>
+				<select name="nand-re"  bank="C" index="5"  function="2"/>
+				<select name="nand-rb0" bank="C" index="6"  function="2"/>
+				<select name="nand-dq0" bank="C" index="8"  function="2"/>
+				<select name="nand-dq1" bank="C" index="9"  function="2"/>
+				<select name="nand-dq2" bank="C" index="10" function="2"/>
+				<select name="nand-dq3" bank="C" index="11" function="2"/>
+				<select name="nand-dq4" bank="C" index="12" function="2"/>
+				<select name="nand-dq5" bank="C" index="13" function="2"/>
+				<select name="nand-dq6" bank="C" index="14" function="2"/>
+				<select name="nand-dq7" bank="C" index="15" function="2"/>
+				<select name="nand-dqs" bank="C" index="16" function="2"/>
+			</config>
 		</start>
 
 		<start name="a64_sd_card_drv" caps="500">
@@ -93,7 +135,7 @@ install_config {
 }
 
 set build_components {
-	core ld.lib.so init timer a64_platform_drv
+	core ld.lib.so init timer a64_platform_drv a64_pio_drv
 	a64_sd_card_drv block_tester
 }
 
