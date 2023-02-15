@@ -22,8 +22,30 @@ SRC_C   += lx_emul.c
 SRC_C   += lx_user.c
 SRC_C   += uplink.c
 SRC_C   += lx_socket_call.c
-SRC_C   += $(notdir $(wildcard $(REP_DIR)/src/lib/wifi/generated_dummies.c))
+SRC_C   += $(notdir $(wildcard $(REP_DIR)/src/lib/a64_wifi/generated_dummies.c))
 SRC_C   += lx_emul/shadow/lib/kobject_uevent.c
+
+SRC_C   += lx_emul/shadow/fs/sysfs/dir.c
+SRC_C   += lx_emul/shadow/fs/sysfs/file.c
+SRC_C   += lx_emul/shadow/fs/sysfs/group.c
+SRC_C   += lx_emul/shadow/fs/sysfs/symlink.c
+
+SRC_C   += lx_emul/shadow/mm/page_alloc.c
+
+#
+# The following block of compilation units is so far part of the
+# '*_lx_emul' library. Some parts could be merged into the generic
+# DDE Linux part.
+#
+
+SRC_C   += lx_emul/mapping.c
+SRC_C   += lx_emul/page_alloc.c
+SRC_C   += lx_emul/sched_core.c
+SRC_C   += lx_emul/vmalloc.c
+SRC_C   += lx_emul/delay.c
+SRC_C   += lx_emul/shadow/fs/libfs.c
+SRC_C   += lx_emul/shadow/drivers/char/random.c
+SRC_C   += lx_emul/shadow/mm/dmapool.c
 
 #
 # RTL8723cs extra flags obtained by instrumenting 'rtl8723cs/Makefile'
@@ -73,6 +95,8 @@ CC_C_OPT += \
             -DRTW_USE_CFG80211_STA_EVENT \
             -DCONFIG_RTW_80211R \
             -DCONFIG_RESUME_IN_WORKQUEUE
+
+CC_C_OPT += -DCONFIG_RFKILL_INPUT
 
 CC_OPT_lx_socket_call     += -DKBUILD_MODNAME='"lx_socket_call"'
 CC_OPT_dummies            += -DKBUILD_MODNAME='"dummies"'
