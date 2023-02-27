@@ -14,3 +14,6 @@ INC_DIR += $(PC_SRC_DIR)
 CC_CXX_WARN_STRICT :=
 
 vpath %.cc $(PC_SRC_DIR)
+
+BOARDS                 := pinephone
+DTS_EXTRACT(pinephone) := --select mmc1
