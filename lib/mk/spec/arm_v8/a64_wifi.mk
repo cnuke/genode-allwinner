@@ -4,6 +4,11 @@ PC_REPO_DIR := $(call select_from_repositories,src/lib/pc)
 ORIGINAL_LIB_DIR := $(PC_REPO_DIR)/../wifi
 TARGET_LIB_DIR   := $(REP_DIR)/src/lib/a64_wifi
 
+DRIVER := wifi
+BOARDS                 := pinephone
+DTS_EXTRACT(pinephone) := --select mmc1
+
+
 SHARED_LIB := yes
 
 LD_OPT  += --version-script=$(ORIGINAL_LIB_DIR)/symbol.map
@@ -23,12 +28,15 @@ SRC_C   += lx_user.c
 SRC_C   += uplink.c
 SRC_C   += lx_socket_call.c
 SRC_C   += $(notdir $(wildcard $(REP_DIR)/src/lib/a64_wifi/generated_dummies.c))
-SRC_C   += lx_emul/shadow/lib/kobject_uevent.c
 
-SRC_C   += lx_emul/shadow/fs/sysfs/dir.c
-SRC_C   += lx_emul/shadow/fs/sysfs/file.c
-SRC_C   += lx_emul/shadow/fs/sysfs/group.c
-SRC_C   += lx_emul/shadow/fs/sysfs/symlink.c
+
+SRC_C += lx_emul/shadow/mm/page_alloc.c
+SRC_C += lx_emul/a64/common_dummies.c
+SRC_C += lx_emul/a64/pmic.c
+
+vpath lx_emul/a64/common_dummies.c $(REP_DIR)/src/lib
+vpath lx_emul/a64/pmic.c           $(REP_DIR)/src/lib
+vpath lx_emul/a64/sched.c          $(REP_DIR)/src/lib
 
 SRC_C   += lx_emul/shadow/mm/page_alloc.c
 
@@ -87,7 +95,6 @@ CC_C_OPT += \
             -DCONFIG_TDLS \
             -DCONFIG_WIFI_MONITOR \
             -DCONFIG_RTW_NETIF_SG \
-            -DCONFIG_PROC_DEBUG \
             -DCONFIG_RTW_UP_MAPPING_RULE=0 \
             -DDM_ODM_SUPPORT_TYPE=0x04 \
             -DCONFIG_LITTLE_ENDIAN \

@@ -1,7 +1,7 @@
 TARGET  := a64_wifi_drv
+DRIVER  := wifi 
 SRC_CC  := main.cc wpa.cc
-LIBS    := base a64_wifi
-$(info a64_wifi_firmware not yet available)
+LIBS    := base a64_wifi a64_wifi_firmware
 LIBS    += libc
 LIBS    += wpa_supplicant
 LIBS    += libcrypto libssl wpa_driver_nl80211

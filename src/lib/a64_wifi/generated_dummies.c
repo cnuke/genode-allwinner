@@ -1,7 +1,7 @@
 /*
  * \brief  Dummy definitions of Linux Kernel functions
  * \author Automatically generated file - do no edit
- * \date   2023-02-15
+ * \date   2023-02-28
  */
 
 #include <lx_emul.h>
@@ -29,6 +29,24 @@ const char * __clk_get_name(const struct clk * clk)
 {
 	lx_emul_trace_and_stop(__func__);
 }
+
+
+#include <linux/reset.h>
+
+struct reset_control * __devm_reset_control_get(struct device * dev,const char * id,int index,bool shared,bool optional,bool acquired)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/serial_core.h>
+
+const struct earlycon_id __earlycon_table[] = {};
+
+
+#include <linux/serial_core.h>
+
+const struct earlycon_id __earlycon_table_end[] = {};
 
 
 #include <linux/ethtool.h>
@@ -108,9 +126,41 @@ void * __vmalloc_node(unsigned long size,unsigned long align,gfp_t gfp_mask,int 
 }
 
 
+#include <linux/random.h>
+
+void add_bootloader_randomness(const void * buf,unsigned int size)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/kobject.h>
 
 int add_uevent_var(struct kobj_uevent_env * env,const char * format,...)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/amba/bus.h>
+
+int amba_device_add(struct amba_device * dev,struct resource * parent)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/amba/bus.h>
+
+struct amba_device * amba_device_alloc(const char * name,resource_size_t base,size_t size)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/amba/bus.h>
+
+void amba_device_put(struct amba_device * dev)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -130,6 +180,11 @@ void async_synchronize_full(void)
 {
 	lx_emul_trace_and_stop(__func__);
 }
+
+
+#include <linux/init.h>
+
+char __initdata boot_command_line[] = {};
 
 
 #include <linux/filter.h>
@@ -159,6 +214,78 @@ void bpf_warn_invalid_xdp_action(u32 act)
 #include <linux/kernel.h>
 
 void bust_spinlocks(int yes)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/clk.h>
+
+void clk_disable(struct clk * clk)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/clk.h>
+
+int clk_enable(struct clk * clk)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/clk.h>
+
+struct clk * clk_get(struct device * dev,const char * con_id)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/clk.h>
+
+int clk_prepare(struct clk * clk)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/clk.h>
+
+void clk_put(struct clk * clk)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/clk.h>
+
+long clk_round_rate(struct clk * clk,unsigned long rate)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/clk.h>
+
+int clk_set_phase(struct clk * clk,int degrees)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/clk.h>
+
+int clk_set_rate(struct clk * clk,unsigned long rate)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/clk.h>
+
+void clk_unprepare(struct clk * clk)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -212,6 +339,38 @@ __sum16 csum_ipv6_magic(const struct in6_addr * saddr,const struct in6_addr * da
 #include <linux/netdevice.h>
 
 int dev_ifconf(struct net * net,struct ifconf * ifc,int size)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/gpio/consumer.h>
+
+struct gpio_desc * __must_check devm_gpiod_get(struct device * dev,const char * con_id,enum gpiod_flags flags)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/gpio/consumer.h>
+
+struct gpio_descs * __must_check devm_gpiod_get_array(struct device * dev,const char * con_id,enum gpiod_flags flags)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/gpio/consumer.h>
+
+struct gpio_desc * __must_check devm_gpiod_get_index(struct device * dev,const char * con_id,unsigned int idx,enum gpiod_flags flags)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/regulator/consumer.h>
+
+struct regulator * devm_regulator_get_optional(struct device * dev,const char * id)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -289,6 +448,125 @@ int fasync_helper(int fd,struct file * filp,int on,struct fasync_struct ** fapp)
 }
 
 
+extern int fdt_check_header(const void * fdt);
+int fdt_check_header(const void * fdt)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern int fdt_first_property_offset(const void * fdt,int nodeoffset);
+int fdt_first_property_offset(const void * fdt,int nodeoffset)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern int fdt_first_subnode(const void * fdt,int offset);
+int fdt_first_subnode(const void * fdt,int offset)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern int fdt_get_mem_rsv(const void * fdt,int n,uint64_t * address,uint64_t * size);
+int fdt_get_mem_rsv(const void * fdt,int n,uint64_t * address,uint64_t * size)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern const char * fdt_get_name(const void * fdt,int nodeoffset,int * len);
+const char * fdt_get_name(const void * fdt,int nodeoffset,int * len)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern uint32_t fdt_get_phandle(const void * fdt,int nodeoffset);
+uint32_t fdt_get_phandle(const void * fdt,int nodeoffset)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern const void * fdt_getprop(const void * fdt,int nodeoffset,const char * name,int * lenp);
+const void * fdt_getprop(const void * fdt,int nodeoffset,const char * name,int * lenp)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern const void * fdt_getprop_by_offset(const void * fdt,int offset,const char ** namep,int * lenp);
+const void * fdt_getprop_by_offset(const void * fdt,int offset,const char ** namep,int * lenp)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern int fdt_next_node(const void * fdt,int offset,int * depth);
+int fdt_next_node(const void * fdt,int offset,int * depth)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern int fdt_next_property_offset(const void * fdt,int offset);
+int fdt_next_property_offset(const void * fdt,int offset)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern int fdt_next_subnode(const void * fdt,int offset);
+int fdt_next_subnode(const void * fdt,int offset)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern int fdt_node_check_compatible(const void * fdt,int nodeoffset,const char * compatible);
+int fdt_node_check_compatible(const void * fdt,int nodeoffset,const char * compatible)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern int fdt_nop_property(void * fdt,int nodeoffset,const char * name);
+int fdt_nop_property(void * fdt,int nodeoffset,const char * name)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern int fdt_path_offset(const void * fdt,const char * path);
+int fdt_path_offset(const void * fdt,const char * path)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern int fdt_path_offset_namelen(const void * fdt,const char * path,int namelen);
+int fdt_path_offset_namelen(const void * fdt,const char * path,int namelen)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern int fdt_setprop(void * fdt,int nodeoffset,const char * name,const void * val,int len);
+int fdt_setprop(void * fdt,int nodeoffset,const char * name,const void * val,int len)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern int fdt_subnode_offset(const void * fdt,int parentoffset,const char * name);
+int fdt_subnode_offset(const void * fdt,int parentoffset,const char * name)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/sched.h>
 
 struct task_struct * find_task_by_vpid(pid_t vnr)
@@ -303,6 +581,11 @@ struct pid * find_vpid(int nr)
 {
 	lx_emul_trace_and_stop(__func__);
 }
+
+
+#include <linux/kobject.h>
+
+struct kobject *firmware_kobj;
 
 
 #include <net/flow_dissector.h>
@@ -397,6 +680,86 @@ int gnet_stats_copy_queue(struct gnet_dump * d,struct gnet_stats_queue __percpu 
 }
 
 
+#include <linux/gpio/consumer.h>
+
+int gpiod_cansleep(const struct gpio_desc * desc)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/gpio/consumer.h>
+
+int gpiod_get_value(const struct gpio_desc * desc)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/gpio/consumer.h>
+
+int gpiod_get_value_cansleep(const struct gpio_desc * desc)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/gpio/consumer.h>
+
+int gpiod_is_active_low(const struct gpio_desc * desc)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/gpio/consumer.h>
+
+int gpiod_set_array_value_cansleep(unsigned int array_size,struct gpio_desc ** desc_array,struct gpio_array * array_info,unsigned long * value_bitmap)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/gpio/consumer.h>
+
+int gpiod_set_debounce(struct gpio_desc * desc,unsigned int debounce)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/gpio/consumer.h>
+
+void gpiod_set_value(struct gpio_desc * desc,int value)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/gpio/consumer.h>
+
+void gpiod_set_value_cansleep(struct gpio_desc * desc,int value)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/gpio/consumer.h>
+
+int gpiod_to_irq(const struct gpio_desc * desc)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/gpio/consumer.h>
+
+void gpiod_toggle_active_low(struct gpio_desc * desc)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/uuid.h>
 
 const u8 guid_index[16] = {};
@@ -473,14 +836,6 @@ struct sk_buff * ip_check_defrag(struct net * net,struct sk_buff * skb,u32 user)
 }
 
 
-#include <linux/of_irq.h>
-
-unsigned int irq_of_parse_and_map(struct device_node * dev,int index)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 extern bool irq_wait_for_poll(struct irq_desc * desc);
 bool irq_wait_for_poll(struct irq_desc * desc)
 {
@@ -535,7 +890,7 @@ void kernel_sigaction(int sig,__sighandler_t action)
 
 #include <linux/kernfs.h>
 
-void kernfs_put(struct kernfs_node * kn)
+struct kernfs_node * kernfs_find_and_get_ns(struct kernfs_node * parent,const char * name,const void * ns)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -621,9 +976,89 @@ int kobject_synth_uevent(struct kobject * kobj,const char * buf,size_t count)
 }
 
 
+#include <linux/logic_pio.h>
+
+unsigned long logic_pio_trans_hwaddr(struct fwnode_handle * fwnode,resource_size_t addr,resource_size_t size)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/delay.h>
 
 unsigned long lpj_fine;
+
+
+#include <linux/memblock.h>
+
+int __init_memblock memblock_add(phys_addr_t base,phys_addr_t size)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/memblock.h>
+
+int __init_memblock memblock_clear_nomap(phys_addr_t base,phys_addr_t size)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/memblock.h>
+
+phys_addr_t __init_memblock memblock_find_in_range(phys_addr_t start,phys_addr_t end,phys_addr_t size,phys_addr_t align)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/memblock.h>
+
+int __init_memblock memblock_free(phys_addr_t base,phys_addr_t size)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/memblock.h>
+
+bool __init_memblock memblock_is_region_reserved(phys_addr_t base,phys_addr_t size)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/memblock.h>
+
+int __init_memblock memblock_mark_hotplug(phys_addr_t base,phys_addr_t size)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/memblock.h>
+
+int __init_memblock memblock_mark_nomap(phys_addr_t base,phys_addr_t size)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/memblock.h>
+
+int __init_memblock memblock_reserve(phys_addr_t base,phys_addr_t size)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/string.h>
+
+ssize_t memory_read_from_buffer(void * to,size_t count,loff_t * ppos,const void * from,size_t available)
+{
+	lx_emul_trace_and_stop(__func__);
+}
 
 
 #include <linux/preempt.h>
@@ -676,78 +1111,9 @@ int of_clk_set_defaults(struct device_node * node,bool clk_supplier)
 }
 
 
-#include <linux/of_device.h>
+#include <linux/serial_core.h>
 
-ssize_t of_device_modalias(struct device * dev,char * str,ssize_t len)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/of_device.h>
-
-void of_device_uevent(struct device * dev,struct kobj_uevent_env * env)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/of_device.h>
-
-int of_device_uevent_modalias(struct device * dev,struct kobj_uevent_env * env)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/of_device.h>
-
-int of_dma_configure_id(struct device * dev,struct device_node * np,bool force_dma,const u32 * id)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/of.h>
-
-struct property * of_find_property(const struct device_node * np,const char * name,int * lenp)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/of.h>
-
-const struct fwnode_operations of_fwnode_ops;
-
-
-#include <linux/of.h>
-
-const void * of_get_property(const struct device_node * np,const char * name,int * lenp)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/of_device.h>
-
-const struct of_device_id * of_match_device(const struct of_device_id * matches,const struct device * dev)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/of.h>
-
-const char * of_prop_next_string(struct property * prop,const char * cur)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/of.h>
-
-int of_property_read_string(const struct device_node * np,const char * propname,const char ** out_string)
+int __init of_setup_earlycon(const struct earlycon_id * match,unsigned long node,const char * options)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -792,9 +1158,14 @@ const struct kernel_param_ops param_ops_int;
 const struct kernel_param_ops param_ops_uint;
 
 
-#include <linux/genhd.h>
+#include <linux/initrd.h>
 
-struct device_type part_type;
+unsigned long phys_initrd_size;
+
+
+#include <linux/initrd.h>
+
+phys_addr_t phys_initrd_start;
 
 
 #include <linux/pinctrl/devinfo.h>
@@ -829,33 +1200,9 @@ void printk_safe_flush_on_panic(void)
 }
 
 
-#include <linux/proc_fs.h>
-
-struct proc_dir_entry * proc_create_data(const char * name,umode_t mode,struct proc_dir_entry * parent,const struct proc_ops * proc_ops,void * data)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/proc_ns.h>
 
 void proc_free_inum(unsigned int inum)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/proc_fs.h>
-
-void * proc_get_parent_data(const struct inode * inode)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/proc_fs.h>
-
-struct proc_dir_entry * proc_mkdir_data(const char * name,umode_t mode,struct proc_dir_entry * parent,void * data)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -906,17 +1253,65 @@ void rcu_irq_exit_irqson(void)
 enum reboot_mode reboot_mode;
 
 
-#include <net/addrconf.h>
+#include <linux/reboot.h>
 
-int register_inet6addr_notifier(struct notifier_block * nb)
+int register_restart_handler(struct notifier_block * nb)
 {
 	lx_emul_trace_and_stop(__func__);
 }
 
 
-#include <linux/inetdevice.h>
+#include <linux/regulator/consumer.h>
 
-int register_inetaddr_notifier(struct notifier_block * nb)
+int regulator_count_voltages(struct regulator * regulator)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/regulator/consumer.h>
+
+int regulator_disable(struct regulator * regulator)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/regulator/consumer.h>
+
+int regulator_enable(struct regulator * regulator)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/regulator/consumer.h>
+
+int regulator_get_voltage(struct regulator * regulator)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/regulator/consumer.h>
+
+int regulator_is_supported_voltage(struct regulator * regulator,int min_uV,int max_uV)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/regulator/consumer.h>
+
+int regulator_list_voltage(struct regulator * regulator,unsigned selector)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/regulator/consumer.h>
+
+int regulator_set_voltage(struct regulator * regulator,int min_uV,int max_uV)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -925,6 +1320,22 @@ int register_inetaddr_notifier(struct notifier_block * nb)
 #include <linux/proc_fs.h>
 
 void remove_proc_entry(const char * name,struct proc_dir_entry * parent)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/reset.h>
+
+int reset_control_assert(struct reset_control * rstc)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/reset.h>
+
+int reset_control_reset(struct reset_control * rstc)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -946,169 +1357,17 @@ void reuseport_detach_sock(struct sock * sk)
 }
 
 
+#include <linux/sched.h>
+
+void sched_set_fifo_low(struct task_struct * p)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <net/scm.h>
 
 void scm_detach_fds(struct msghdr * msg,struct scm_cookie * scm)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/mmc/sdio_func.h>
-
-void sdio_claim_host(struct sdio_func * func)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/mmc/sdio_func.h>
-
-int sdio_claim_irq(struct sdio_func * func,sdio_irq_handler_t * handler)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/mmc/sdio_func.h>
-
-int sdio_disable_func(struct sdio_func * func)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/mmc/sdio_func.h>
-
-int sdio_enable_func(struct sdio_func * func)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/mmc/sdio_func.h>
-
-unsigned char sdio_f0_readb(struct sdio_func * func,unsigned int addr,int * err_ret)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/mmc/sdio_func.h>
-
-void sdio_f0_writeb(struct sdio_func * func,unsigned char b,unsigned int addr,int * err_ret)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/mmc/sdio_func.h>
-
-mmc_pm_flag_t sdio_get_host_pm_caps(struct sdio_func * func)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/mmc/sdio_func.h>
-
-int sdio_memcpy_fromio(struct sdio_func * func,void * dst,unsigned int addr,int count)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/mmc/sdio_func.h>
-
-int sdio_memcpy_toio(struct sdio_func * func,unsigned int addr,void * src,int count)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/mmc/sdio_func.h>
-
-u8 sdio_readb(struct sdio_func * func,unsigned int addr,int * err_ret)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/mmc/sdio_func.h>
-
-u32 sdio_readl(struct sdio_func * func,unsigned int addr,int * err_ret)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/mmc/sdio_func.h>
-
-int sdio_readsb(struct sdio_func * func,void * dst,unsigned int addr,int count)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/mmc/sdio_func.h>
-
-int sdio_register_driver(struct sdio_driver * drv)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/mmc/sdio_func.h>
-
-void sdio_release_host(struct sdio_func * func)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/mmc/sdio_func.h>
-
-int sdio_release_irq(struct sdio_func * func)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/mmc/sdio_func.h>
-
-int sdio_set_block_size(struct sdio_func * func,unsigned blksz)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/mmc/sdio_func.h>
-
-int sdio_set_host_pm_flags(struct sdio_func * func,mmc_pm_flag_t flags)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/mmc/sdio_func.h>
-
-void sdio_writeb(struct sdio_func * func,u8 b,unsigned int addr,int * err_ret)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/mmc/sdio_func.h>
-
-void sdio_writel(struct sdio_func * func,u32 b,unsigned int addr,int * err_ret)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/mmc/sdio_func.h>
-
-int sdio_writesb(struct sdio_func * func,unsigned int addr,void * src,int count)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -1156,22 +1415,6 @@ struct list_head * seq_list_start_head(struct list_head * head,loff_t pos)
 
 #include <linux/seq_file.h>
 
-loff_t seq_lseek(struct file * file,loff_t offset,int whence)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/seq_file.h>
-
-int seq_open(struct file * file,const struct seq_operations * op)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/seq_file.h>
-
 void seq_printf(struct seq_file * m,const char * f,...)
 {
 	lx_emul_trace_and_stop(__func__);
@@ -1189,22 +1432,6 @@ void seq_putc(struct seq_file * m,char c)
 #include <linux/seq_file.h>
 
 void seq_puts(struct seq_file * m,const char * s)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/seq_file.h>
-
-ssize_t seq_read(struct file * file,char __user * buf,size_t size,loff_t * ppos)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/seq_file.h>
-
-int seq_release(struct inode * inode,struct file * file)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -1269,30 +1496,6 @@ int simple_setattr(struct user_namespace * mnt_userns,struct dentry * dentry,str
 #include <linux/fs.h>
 
 int simple_statfs(struct dentry * dentry,struct kstatfs * buf)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/seq_file.h>
-
-int single_open(struct file * file,int (* show)(struct seq_file *,void *),void * data)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/seq_file.h>
-
-int single_open_size(struct file * file,int (* show)(struct seq_file *,void *),void * data,size_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/seq_file.h>
-
-int single_release(struct inode * inode,struct file * file)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -1407,6 +1610,22 @@ int string_escape_mem(const char * src,size_t isz,char * dst,size_t osz,unsigned
 }
 
 
+#include <linux/clk/sunxi-ng.h>
+
+int sunxi_ccu_get_mmc_timing_mode(struct clk * clk)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/clk/sunxi-ng.h>
+
+int sunxi_ccu_set_mmc_timing_mode(struct clk * clk,bool new_mode)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/printk.h>
 
 int suppress_printk;
@@ -1467,17 +1686,16 @@ void unregister_handler_proc(unsigned int irq,struct irqaction * action)
 }
 
 
-#include <net/addrconf.h>
-
-int unregister_inet6addr_notifier(struct notifier_block * nb)
+extern void unregister_irq_proc(unsigned int irq,struct irq_desc * desc);
+void unregister_irq_proc(unsigned int irq,struct irq_desc * desc)
 {
 	lx_emul_trace_and_stop(__func__);
 }
 
 
-#include <linux/inetdevice.h>
+#include <linux/reboot.h>
 
-int unregister_inetaddr_notifier(struct notifier_block * nb)
+int unregister_restart_handler(struct notifier_block * nb)
 {
 	lx_emul_trace_and_stop(__func__);
 }

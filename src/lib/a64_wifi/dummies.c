@@ -224,52 +224,11 @@ char * get_options(const char * str,int nints,int * ints)
 }
 
 
-#include <linux/of_fdt.h>
-
-bool __init early_init_dt_scan(void * params)
-{
-	lx_emul_trace(__func__);
-	return false;
-}
-
-
-#include <linux/of_fdt.h>
-
-void __init unflatten_device_tree(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/of_irq.h>
-
-void __init of_irq_init(const struct of_device_id * matches)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/of.h>
-
-void __init of_core_init(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
 #include <linux/rcutree.h>
 
 void rcu_barrier(void)
 {
 	lx_emul_trace(__func__);
-}
-
-
-#include <linux/srcu.h>
-
-void synchronize_srcu(struct srcu_struct * ssp)
-{
-	lx_emul_trace_and_stop(__func__);
 }
 
 
@@ -286,29 +245,6 @@ void __init of_clk_init(const struct of_device_id * matches)
 void add_device_randomness(const void * buf,unsigned int size)
 {
 	lx_emul_trace(__func__);
-}
-
-
-extern void register_irq_proc(unsigned int irq,struct irq_desc * desc);
-void register_irq_proc(unsigned int irq,struct irq_desc * desc)
-{
-	lx_emul_trace(__func__);
-}
-
-
-extern void register_handler_proc(unsigned int irq,struct irqaction * action);
-void register_handler_proc(unsigned int irq,struct irqaction * action)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/of.h>
-
-bool of_device_is_available(const struct device_node * device)
-{
-	lx_emul_trace(__func__);
-	return false;
 }
 
 
@@ -335,102 +271,7 @@ bool __skb_flow_dissect(const struct net * net,const struct sk_buff * skb,struct
 bool dma_default_coherent = false;
 
 
-/***********************************
- ** Common dummies from repos/imx **
- ***********************************/
-
-unsigned long __must_check __arch_copy_from_user(void *to, const void __user *from, unsigned long n);
-unsigned long __must_check __arch_copy_from_user(void *to, const void __user *from, unsigned long n)
-{
-	memcpy(to, from, n);
-	return 0;
-}
-
-
-unsigned long __must_check __arch_copy_to_user(void __user *to, const void *from, unsigned long n);
-unsigned long __must_check __arch_copy_to_user(void __user *to, const void *from, unsigned long n)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/cpuhotplug.h>
-
-int __cpuhp_setup_state(enum cpuhp_state state,const char * name,bool invoke,int (* startup)(unsigned int cpu),int (* teardown)(unsigned int cpu),bool multi_instance)
-{
-	lx_emul_trace(__func__);
-	return 0;
-}
-
-
-#include <asm-generic/sections.h>
-
-char __end_rodata[]   = {};
-
-
-#include <asm-generic/sections.h>
-
-char __start_rodata[] = {};
-
-
-#include <linux/kernel_stat.h>
-
-void account_process_tick(struct task_struct * p,int user_tick)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/random.h>
-
-int add_random_ready_callback(struct random_ready_callback * rdy)
-{
-	lx_emul_trace(__func__);
-	return 0;
-}
-
-
-#include <linux/sched/loadavg.h>
-
-void calc_global_load(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/tracepoint-defs.h>
-
-const struct trace_print_flags gfpflag_names[]  = { {0,NULL}};
-
-
-#include <linux/sched/signal.h>
-
-void ignore_signals(struct task_struct * t)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/kernfs.h>
-
-void kernfs_get(struct kernfs_node * kn) { }
-
-
 unsigned long net_rand_noise;
-
-
-#include <linux/tracepoint-defs.h>
-
-const struct trace_print_flags pageflag_names[] = { {0,NULL}};
-
-
-#include <linux/kernel.h>
-
-bool parse_option_str(const char *str, const char *option)
-{
-	lx_emul_trace(__func__);
-	return false;
-}
 
 
 #include <linux/proc_fs.h>
@@ -451,48 +292,6 @@ struct proc_dir_entry * proc_create_seq_private(const char * name,umode_t mode,s
 	lx_emul_trace(__func__);
 	return &ret;
 }
-
-
-#include <linux/rcupdate.h>
-
-void rcu_sched_clock_irq(int user)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/syscore_ops.h>
-
-void register_syscore_ops(struct syscore_ops * ops)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/property.h>
-
-int software_node_notify(struct device * dev,unsigned long action)
-{
-	lx_emul_trace(__func__);
-	return 0;
-}
-
-
-#include <linux/timekeeper_internal.h>
-
-void update_vsyscall(struct timekeeper * tk)
-{
-	lx_emul_trace(__func__);
-}
-
-
-u64 vabits_actual;
-EXPORT_SYMBOL(vabits_actual);
-
-
-#include <linux/tracepoint-defs.h>
-
-const struct trace_print_flags vmaflag_names[]  = { {0,NULL}};
 
 
 int __pm_runtime_resume(struct device *dev, int rpmflags)
@@ -621,4 +420,40 @@ int dpm_sysfs_add(struct device *dev)
 void dpm_sysfs_remove(struct device *dev)
 {
 	lx_emul_trace(__func__);
+}
+
+
+#include <net/addrconf.h>
+
+int register_inet6addr_notifier(struct notifier_block * nb)
+{
+	lx_emul_trace(__func__);
+	return -1;
+}
+
+
+#include <linux/inetdevice.h>
+
+int register_inetaddr_notifier(struct notifier_block * nb)
+{
+	lx_emul_trace(__func__);
+	return -1;
+}
+
+
+#include <net/addrconf.h>
+
+int unregister_inet6addr_notifier(struct notifier_block * nb)
+{
+	lx_emul_trace(__func__);
+	return -1;
+}
+
+
+#include <linux/inetdevice.h>
+
+int unregister_inetaddr_notifier(struct notifier_block * nb)
+{
+	lx_emul_trace(__func__);
+	return -1;
 }
