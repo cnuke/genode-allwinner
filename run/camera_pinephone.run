@@ -13,6 +13,7 @@ build {
 	drivers/pin/a64
 	test/framebuffer
 	app/dummy
+	app/top
 }
 
 install_config {
@@ -25,6 +26,7 @@ install_config {
 		<service name="RM"/>
 		<service name="CPU"/>
 		<service name="LOG"/>
+		<service name="TRACE"/>
 	</parent-provides>
 	<default-route>
 		<any-service> <parent/> <any-child/> </any-service>
@@ -35,6 +37,11 @@ install_config {
 		<resource name="RAM" quantum="1M"/>
 		<provides><service name="Timer"/></provides>
 	</start>
+	<start name="top">
+		<resource name="RAM" quantum="1M"/>
+		<config period_ms="1000"/>
+	</start>
+
 
 	<start name="platform_drv" caps="200" managing_system="yes">
 		<resource name="RAM" quantum="2M"/>
@@ -259,7 +266,7 @@ install_config {
 						<start name="camera_drv" caps="250">
 							<binary name="pinephone_camera_drv"/>
 							<resource name="RAM" quantum="80M"/>
-							<config width="640" height="480" fps="15" format="yuv" camera="front"/>
+							<config width="640" height="480" fps="1" format="yuv" camera="front"/>
 							<route>
 								<service name="ROM" label="dtb"> <parent label="camera.dtb"/> </service>
 								<any-service> <parent/> </any-service>
@@ -267,7 +274,7 @@ install_config {
 						</start>
 					</config>
 				</inline>
-				<sleep milliseconds="10000"/>
+				<sleep milliseconds="10000000"/>
 				<inline description="camera back present 640x480@15">
 					<config>
 						<parent-provides>
@@ -338,6 +345,7 @@ build_boot_image {
 	camera-pinephone.dtb
 
 	dummy
+top
 }
 
 run_genode_until forever
