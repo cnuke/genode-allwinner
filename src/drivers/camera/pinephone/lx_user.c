@@ -814,6 +814,8 @@ static int capture_task_function(void *p)
 		gui_display_image(gui, b, &camera->config);
 
 		put_buffer(camera, b);
+
+		msleep(100);
 	}
 
 	(void)control_camera(camera, false);
