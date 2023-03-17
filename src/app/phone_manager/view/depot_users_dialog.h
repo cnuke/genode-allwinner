@@ -222,13 +222,25 @@ struct Sculpt::Depot_users_dialog
 
 		bool unfolded() const { return _unfolded; }
 
-		bool selected_user_has_download_url() const
+		struct User_properties
 		{
-			bool result = false;
+			bool exists;
+			bool download_url;
+			bool public_key;
+		};
+
+		User_properties selected_user_properties() const
+		{
+			User_properties result { };
 			_depot_users.xml().for_each_sub_node([&] (Xml_node const &user) {
-				if (_selected == user.attribute_value("name", User()))
-					if (Depot_url::from_string(_url(user)).valid())
-						result = true; });
+				if (_selected == user.attribute_value("name", User())) {
+					result = {
+						.exists       = true,
+						.download_url = Depot_url::from_string(_url(user)).valid(),
+						.public_key   = user.attribute_value("known_pubkey", false)
+					};
+				}
+			});
 			return result;
 		}
 
@@ -276,6 +288,8 @@ struct Sculpt::Depot_users_dialog
 				_button.match(hover, "frame", "vbox", "hbox", "hbox", "float", "button", "name")
 			);
 		}
+
+		void reset_hover() { _user._hovered = { }; }
 
 		bool hovered() const { return _user._hovered.valid();  }
 

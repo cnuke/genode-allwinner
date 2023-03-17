@@ -14,6 +14,7 @@
 #ifndef _VIEW__SOFTWARE_UPDATE_DIALOG_H_
 #define _VIEW__SOFTWARE_UPDATE_DIALOG_H_
 
+#include <model/nic_state.h>
 #include <model/build_info.h>
 #include <model/download_queue.h>
 #include <model/index_update_queue.h>
@@ -24,14 +25,16 @@ namespace Sculpt { struct Software_update_dialog; }
 
 struct Sculpt::Software_update_dialog
 {
-	using Depot_users = Depot_users_dialog::Depot_users;
-	using User        = Depot_users_dialog::User;
-	using Image_index = Attached_rom_dataspace;
-	using Url         = Depot_users_dialog::Url;
-	using Version     = String<16>;
+	using Depot_users     = Depot_users_dialog::Depot_users;
+	using User            = Depot_users_dialog::User;
+	using Image_index     = Attached_rom_dataspace;
+	using Url             = Depot_users_dialog::Url;
+	using Version         = String<16>;
+	using User_properties = Depot_users_dialog::User_properties;
 
 	Build_info const _build_info;
 
+	Nic_state            const &_nic_state;
 	Download_queue       const &_download_queue;
 	Index_update_queue   const &_index_update_queue;
 	File_operation_queue const &_file_operation_queue;
@@ -83,6 +86,7 @@ struct Sculpt::Software_update_dialog
 	using Hover_result = Hoverable_item::Hover_result;
 
 	Software_update_dialog(Build_info           const &build_info,
+	                       Nic_state            const &nic_state,
 	                       Download_queue       const &download_queue,
 	                       Index_update_queue   const &index_update_queue,
 	                       File_operation_queue const &file_operation_queue,
@@ -91,7 +95,7 @@ struct Sculpt::Software_update_dialog
 	                       Depot_users_dialog::Action &depot_users_action,
 	                       Action &action)
 	:
-		_build_info(build_info),
+		_build_info(build_info), _nic_state(nic_state),
 		_download_queue(download_queue),
 		_index_update_queue(index_update_queue),
 		_file_operation_queue(file_operation_queue),
@@ -275,10 +279,23 @@ struct Sculpt::Software_update_dialog
 				if (_users.unfolded())
 					return;
 
-				if (!_users.selected_user_has_download_url())
+				User_properties const properties = _users.selected_user_properties();
+
+				bool const pubkey_warning = properties.exists
+				                        && !properties.public_key;
+				if (pubkey_warning) {
+					_gen_vspacer(xml, "spacer1");
+					xml.node("label", [&] {
+						xml.attribute("font", "annotation/regular");
+						xml.attribute("text", "missing public key for verification"); });
+					_gen_vspacer(xml, "spacer2");
+				}
+
+				if (!_nic_state.ready() || !properties.download_url)
 					return;
 
-				_gen_vspacer(xml, "spacer1");
+				if (!pubkey_warning)
+					_gen_vspacer(xml, "spacer2");
 
 				gen_named_node(xml, "float", "check", [&] {
 					gen_named_node(xml, "button", "check", [&] {
@@ -287,11 +304,14 @@ struct Sculpt::Software_update_dialog
 							xml.attribute("style", "unimportant");
 						}
 						xml.node("label", [&] {
-							xml.attribute("text", "  Check for Updates  "); });
+							auto const text = properties.public_key
+							                ? "  Check for Updates  "
+							                : "  Check for unverified Updates  ";
+							xml.attribute("text", text); });
 					});
 				});
 
-				_gen_vspacer(xml, "spacer2");
+				_gen_vspacer(xml, "spacer3");
 			});
 		});
 
@@ -306,14 +326,8 @@ struct Sculpt::Software_update_dialog
 
 	Hover_result hover(Xml_node const &hover)
 	{
-		Hover_result users_hover = Hover_result::UNMODIFIED;
-		hover.with_optional_sub_node("vbox", [&] (Xml_node const &vbox) {
-			vbox.with_optional_sub_node("frame", [&] (Xml_node const &frame) {
-				frame.with_optional_sub_node("vbox", [&] (Xml_node const &vbox) {
-					users_hover = _users.hover(vbox); }); }); });
-
 		return Dialog::any_hover_changed(
-			users_hover,
+			match_sub_dialog(hover, _users, "vbox", "frame", "vbox"),
 			_check    .match(hover, "vbox", "frame", "vbox", "float", "button", "name"),
 			_version  .match(hover, "vbox", "frame", "name"),
 			_operation.match(hover, "vbox", "frame", "vbox", "float", "float", "hbox", "button", "name")
