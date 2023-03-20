@@ -754,7 +754,7 @@ struct Sculpt::Main : Input_event_handler,
 			 */
 			if (touch_keyboard_needed())
 				gen_named_node(xml, "vbox", "keyboard space", [&] {
-					for (unsigned i = 0; i < 15; i++)
+					for (unsigned i = 0; i < 15 + 5; i++)
 						gen_named_node(xml, "label", String<10>(i), [&] {
 							xml.attribute("text", " "); }); });
 		});
