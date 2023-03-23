@@ -1757,6 +1757,10 @@ struct Sculpt::Main : Input_event_handler,
 
 	Main(Env &env) : _env(env)
 	{
+		/* XXX debug tweaks */
+		_software_section_dialog.detail = Software_section_dialog::Detail::SELECTED;
+		_software_tabs_dialog.dialog._choice = Software_tabs_dialog::Choice::ADD;
+
 		_config.sigh(_config_handler);
 		_leitzentrale_rom.sigh(_leitzentrale_handler);
 		_manual_deploy_rom.sigh(_manual_deploy_handler);
