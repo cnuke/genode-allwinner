@@ -1408,8 +1408,6 @@ struct Sculpt::Main : Input_event_handler,
 
 		_file_operation_queue.new_small_file(Path("/rw/depot/", depot_url.user, "/download"),
 		                                     Content { depot_url.download });
-		_file_operation_queue.new_small_file(Path("/rw/depot/", depot_url.user, "/pubkey"),
-		                                     Content { "" });
 
 		if (!_file_operation_queue.any_operation_in_progress())
 			_file_operation_queue.schedule_next_operations();
