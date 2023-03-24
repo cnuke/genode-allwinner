@@ -192,9 +192,15 @@ struct Sculpt::Depot_users_dialog
 
 			remain_count++; /* account for '_gen_add_entry' */
 
+			bool known_pubkey = false;
+
 			gen_named_node(xml, "frame", "user_selection", [&] () {
 				xml.node("vbox", [&] () {
 					depot_users.for_each_sub_node("user", [&] (Xml_node user) {
+
+						if (_selected == user.attribute_value("name", User()))
+							known_pubkey = user.attribute_value("known_pubkey", false);
+
 						bool const last = (--remain_count == 0);
 						_gen_entry(xml, user, last); });
 
@@ -202,6 +208,15 @@ struct Sculpt::Depot_users_dialog
 						_gen_add_entry(xml, depot_users);
 				});
 			});
+
+			if (!_unfolded && !known_pubkey) {
+				gen_named_node(xml, "button", "pubkey warning", [&] {
+					xml.attribute("style", "invisible");
+					xml.node("label", [&] {
+						xml.attribute("font", "annotation/regular");
+						xml.attribute("text", "missing public key for verification"); });
+				});
+			}
 		}
 
 	public:
@@ -306,6 +321,8 @@ struct Sculpt::Depot_users_dialog
 
 			_url_edit_field.apply(c);
 		}
+
+		bool one_selected() const { return !_unfolded && _selected.length() > 1; }
 };
 
 #endif /* _VIEW__DEPOT_USERS_DIALOG_H_ */

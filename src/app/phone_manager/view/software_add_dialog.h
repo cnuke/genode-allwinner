@@ -190,46 +190,29 @@ struct Sculpt::Software_add_dialog : private Index_menu_dialog::Policy
 			xml.node("vbox", [&] {
 				_users.generate(xml);
 
-				if (_users.unfolded())
-					return;
-
 				User_properties const properties = _users.selected_user_properties();
 
-				bool const pubkey_warning = properties.exists
-				                        && !properties.public_key;
-				if (pubkey_warning) {
-					_gen_vspacer(xml, "spacer1");
-					xml.node("label", [&] {
-						xml.attribute("font", "annotation/regular");
-						xml.attribute("text", "missing public key for verification"); });
-					_gen_vspacer(xml, "spacer2");
-				}
-
-				if (!_nic_state.ready() || !properties.download_url)
-					return;
-
-				/* hide update-index button while browsing index sub menu */
-				if (!_menu.top_level())
-					return;
-
-				if (!pubkey_warning)
-					_gen_vspacer(xml, "spacer2");
-
-				gen_named_node(xml, "float", "check", [&] {
-					gen_named_node(xml, "button", "check", [&] {
-						if (_index_update_in_progress()) {
-							xml.attribute("selected", "yes");
-							xml.attribute("style", "unimportant");
-						}
-						xml.node("label", [&] {
-							auto const text = properties.public_key
-							                ? "  Update Index  "
-							                : "  Update unverfied Index  ";
-							xml.attribute("text", text); });
+				bool const offer_index_update = _users.one_selected()
+				                             && _menu.top_level()
+				                             && _nic_state.ready()
+				                             && properties.download_url;
+				if (offer_index_update) {
+					_gen_vspacer(xml, "above check");
+					gen_named_node(xml, "float", "check", [&] {
+						gen_named_node(xml, "button", "check", [&] {
+							if (_index_update_in_progress()) {
+								xml.attribute("selected", "yes");
+								xml.attribute("style", "unimportant");
+							}
+							xml.node("label", [&] {
+								auto const text = properties.public_key
+								                ? "  Update Index  "
+								                : "  Update unverfied Index  ";
+								xml.attribute("text", text); });
+						});
 					});
-				});
-
-				_gen_vspacer(xml, "spacer3");
+					_gen_vspacer(xml, "below check");
+				}
 			});
 		});
 
