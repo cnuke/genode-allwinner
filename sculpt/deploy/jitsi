@@ -93,6 +93,7 @@
 			<service name="Pin_state">   <parent/> </service>
 			<service name="Pin_control"> <parent/> </service>
 			<service name="Gui">         <child name="video_bridge"/> </service>
+			<service name="ROM" label_last="pinephone_camera_drv"> <parent/> </service>
 		</route>
 	</start>
 
