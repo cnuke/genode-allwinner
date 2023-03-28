@@ -11,9 +11,14 @@ build {
 	drivers/camera/pinephone
 	drivers/framebuffer/de
 	drivers/pin/a64
-	test/framebuffer
+	drivers/sd_card/a64
 	app/dummy
 	app/top
+
+	test/capture
+	server/part_block
+	lib/vfs
+	lib/vfs_rump
 }
 
 install_config {
@@ -111,6 +116,27 @@ install_config {
 				<device name="pio"/>
 			</policy>
 
+			<device name="sd_card" type="allwinner,sun50i-a64-mmc">
+				<io_mem address="0x01c0f000" size="0x1000"/>
+				<irq number="92"/>
+				<clock name="bus-mmc0" driver_name="ahb"/>
+				<clock name="mmc0" driver_name="mmc"/>
+				<reset-domain name="mmc0"/>
+			</device>
+
+			<device name="emmc" type="allwinner,sun50i-a64-emmc">
+				<io_mem address="0x01c11000" size="0x1000"/>
+				<irq number="94"/>
+				<clock name="bus-mmc2" driver_name="ahb"/>
+				<clock name="mmc2" driver_name="mmc"/>
+				<reset-domain name="mmc2"/>
+			</device>
+
+			<policy label="a64_sd_card_drv -> " info="yes">
+				<device name="sd_card"/>
+				<device name="emmc"/>
+			</policy>
+
 			<policy label="fb_drv -> " info="yes">
 				<device name="dphy"/>
 				<device name="dsi"/>
@@ -144,6 +170,24 @@ install_config {
 
 		</config>
 		<route> <any-service> <parent/> <any-child/> </any-service> </route>
+	</start>
+
+	<start name="a64_sd_card_drv" caps="500">
+		<resource name="RAM" quantum="16M"/>
+		<provides> <service name="Block"/> </provides>
+		<config>
+			<default-policy device="mmcblk0" writeable="yes"/>
+		</config>
+		<route>
+			<service name="ROM" label="dtb">
+				<parent label="sd_card-} [board] {.dtb"/> </service>
+			<service name="ROM"> <parent/> </service>
+			<service name="CPU"> <parent/> </service>
+			<service name="PD">  <parent/> </service>
+			<service name="LOG"> <parent/> </service>
+			<service name="Timer">    <child name="timer"/> </service>
+			<service name="Platform"> <child name="platform_drv"/> </service>
+		</route>
 	</start>
 
 	<start name="a64_pio_drv">
@@ -228,6 +272,36 @@ install_config {
 			<service name="Pin_control" label_last="PD23"> <child name="a64_pio_drv" label="fb_drv -> PD23"/> </service>
 			<service name="Timer">       <child name="timer"/>            </service>
 			<service name="Capture">     <child name="nitpicker"/> </service>
+			<any-service> <parent/> </any-service>
+		</route>
+	</start>
+
+	<start name="part_block">
+		<resource name="RAM" quantum="10M" />
+		<provides><service name="Block" /></provides>
+		<route>
+			<service name="Block"><child name="a64_sd_card_drv"/></service>
+			<any-service><parent/><any-child/></any-service>
+		</route>
+		<config io_buffer="2M">
+			<report partitions="no"/>
+			<default-policy partition="1" writeable="yes" />
+		</config>
+	</start>
+
+	<start name="test-capture" priority="-1" caps="200">
+		<resource name="RAM" quantum="32M"/>
+		<config period_ms="20" width="480" height="640">
+			<view xpos="100" ypos="640"/> <!--view xpos="800" ypos="600"/-->
+			<vfs>
+				 <rump fs="ext2fs" ram="10M"/>
+			</vfs>
+		</config>
+		<route>
+			<service name="Timer"> <child name="timer"/> </service>
+			<service name="Gui"> <child name="nitpicker"/> </service>
+			<service name="Capture"> <child name="nitpicker"/> </service>
+			<service name="Block"> <child name="part_block"/> </service>
 			<any-service> <parent/> </any-service>
 		</route>
 	</start>
@@ -336,7 +410,6 @@ install_config {
 </config>}
 
 build_boot_image {
-	test-framebuffer
 	a64_platform_drv
 	a64_pio_drv
 	de_fb_drv
@@ -345,7 +418,14 @@ build_boot_image {
 	camera-pinephone.dtb
 
 	dummy
-top
+	top
+
+	test-capture
+	rump.lib.so rump_fs.lib.so vfs.lib.so vfs_rump.lib.so
+
+	part_block
+	a64_sd_card_drv
+	sd_card-pinephone.dtb
 }
 
 run_genode_until forever
