@@ -558,11 +558,11 @@ struct genode_gui_refresh_context
 
 	bool convert;
 	bool rotate;
-	bool gray;
+	bool grey;
 };
 
 
-static void _rotate_y_as_gray(unsigned char const *y,
+static void _rotate_y_as_grey(unsigned char const *y,
                               unsigned int width,
                               unsigned int height,
                               unsigned int *dst)
@@ -618,9 +618,9 @@ static void _gui_show(struct genode_gui_refresh_context *ctx,
 		return;
 	}
 
-	/* fast-path for grayish rotate */
-	if (ctx->convert && ctx->rotate && ctx->gray) {
-		_rotate_y_as_gray(y, width, height, p);
+	/* fast-path for greyish rotate */
+	if (ctx->convert && ctx->rotate && ctx->grey) {
+		_rotate_y_as_grey(y, width, height, p);
 		return;
 	}
 
@@ -674,7 +674,7 @@ static void gui_display_image(struct genode_gui             *gui,
 		.height  = config->height,
 		.convert = config->convert,
 		.rotate  = config->rotate,
-		.gray    = config->gray,
+		.grey    = config->grey,
 	};
 
 	genode_gui_refresh(gui, _gui_show, &ctx);
