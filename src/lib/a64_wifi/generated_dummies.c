@@ -667,14 +667,6 @@ int kill_pid(struct pid * pid,int sig,int priv)
 
 #include <linux/slab.h>
 
-int kmem_cache_alloc_bulk(struct kmem_cache * s,gfp_t flags,size_t size,void ** p)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/slab.h>
-
 void kmem_cache_destroy(struct kmem_cache * s)
 {
 	lx_emul_trace_and_stop(__func__);
