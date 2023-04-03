@@ -241,6 +241,20 @@ install_config {
 			</route>
 		</start>
 
+		<start name="devices_report_rom">
+			<binary name="report_rom"/>
+			<resource name="RAM" quantum="2M"/>
+			<provides> <service name="Report"/> <service name="ROM"/> </provides>
+			<config verbose="yes"/>
+			<route>
+				<service name="ROM"> <parent/> </service>
+				<service name="CPU"> <parent/> </service>
+				<service name="PD">  <parent/> </service>
+				<service name="LOG"> <parent/> </service>
+				<service name="Rtc"> <any-child/> </service>
+			</route>
+		</start>
+
 		<start name="config_rom">
 			<binary name="dynamic_rom"/>
 			<resource name="RAM" quantum="4M"/>
@@ -278,7 +292,7 @@ install_config {
 		<start name="a64_wifi_drv" caps="250" priority="-1">
 			<resource name="RAM" quantum="32M"/>
 			<config ld_verbose="yes" dtb="dtb">
-				<report mac_address="false"/>
+				<report mac_address="true"/>
 				<libc stdout="/dev/log" stderr="/dev/log" rtc="/dev/rtc" rng="/dev/urandom"/>
 				<vfs>
 					<dir name="dev"> <log/> <null/> <rtc/>
