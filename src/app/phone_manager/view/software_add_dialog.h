@@ -298,6 +298,13 @@ struct Sculpt::Software_add_dialog : private Index_menu_dialog::Policy
 						auto info = item.attribute_value("info", Component::Info());
 
 						_construction_action.new_construction(path, verify, info);
+
+						/*
+						 * Restrict component to the CPUs 1 and 2 to
+						 * decouple it from the base system on CPU 0.
+						 */
+						_construction_action.apply_to_construction([&] (Component &component) {
+							component.affinity_location = Affinity::Location(1, 0, 2, 1); });
 					},
 
 					[&] /* leave pkg */ { _construction_action.discard_construction(); }
