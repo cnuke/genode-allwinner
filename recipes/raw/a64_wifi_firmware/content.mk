@@ -1,4 +1,4 @@
-PORT_DIR := $(call port_dir,$(REP_DIR)/ports/linux-firmware)
+PORT_DIR := $(call port_dir,$(GENODE_DIR)/repos/dde_linux/ports/linux-firmware)
 
 content: ucode_files LICENSE.wifi_drv
 
