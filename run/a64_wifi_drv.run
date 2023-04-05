@@ -19,6 +19,7 @@ build {
 	server/report_rom
 	lib/vfs_a64_wifi
 	lib/vfs_jitterentropy
+	lib/wifi_firmware
 
 	test/lwip/http_srv
 	lib/vfs_lwip
