@@ -272,7 +272,8 @@ struct Sculpt::Main : Input_event_handler,
 		generate_runtime_config();
 	}
 
-	Pci_info _pci_info { .modem_present = true };
+	Pci_info _pci_info { .wifi_present  = true,
+	                     .modem_present = true };
 
 	Network _network { _env, _heap, *this, _child_states, *this, _runtime_state, _pci_info };
 
