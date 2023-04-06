@@ -910,13 +910,20 @@ struct Sculpt::Main : Input_event_handler,
 		    && _software_update_dialog.dialog.keyboard_needed();
 	}
 
+	bool _network_dialog_has_keyboard_focus() const
+	{
+		return _network_section_dialog.selected()
+		    && _network.dialog.need_keyboard_focus_for_passphrase();
+	}
+
 	/**
 	 * Condition for controlling the visibility of the touch keyboard
 	 */
 	bool touch_keyboard_needed() const
 	{
 		return _software_add_dialog_has_keyboard_focus()
-		    || _software_update_dialog_has_keyboard_focus();
+		    || _software_update_dialog_has_keyboard_focus()
+		    || _network_dialog_has_keyboard_focus();
 	}
 
 
@@ -1131,11 +1138,21 @@ struct Sculpt::Main : Input_event_handler,
 		}
 
 		ev.handle_press([&] (Input::Keycode, Codepoint code) {
+
+			/* detect need for touch keyboard */
+			bool const orig_touch_keyboard_needed = touch_keyboard_needed();
+
 			need_generate_dialog = true;
 			if (_software_add_dialog_has_keyboard_focus())
 				_software_add_dialog.dialog.handle_key(code);
 			else if (_software_update_dialog_has_keyboard_focus())
 				_software_update_dialog.dialog.handle_key(code);
+			else if (_network_dialog_has_keyboard_focus())
+				_network.handle_key_press(code);
+
+			/* enter key might have changed the need for the touch keyboard */
+			if (orig_touch_keyboard_needed != touch_keyboard_needed())
+				_handle_window_layout();
 		});
 
 		if (need_generate_dialog)
