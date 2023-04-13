@@ -1,0 +1,27 @@
+Provide Genode specific MAC address accessor but keep vanilla
+behavior.
+
+--- src/linux/drivers/staging/rtl8723cs/os_dep/linux/sdio_intf.c
++++ src/linux/drivers/staging/rtl8723cs/os_dep/linux/sdio_intf.c
+@@ -817,6 +817,8 @@
+ PADAPTER g_test_adapter = NULL;
+ #endif /* RTW_SUPPORT_PLATFORM_SHUTDOWN */
+ 
++extern char const *lx_emul_get_mac_addr(void);
++
+ _adapter *rtw_sdio_primary_adapter_init(struct dvobj_priv *dvobj)
+ {
+ 	int status = _FAIL;
+@@ -888,7 +890,11 @@
+ 	if (np && (addr = of_get_property(np, "local-mac-address", &len)) && len == ETH_ALEN) {
+ 		memcpy(adapter_mac_addr(padapter), addr, ETH_ALEN);
+ 	} else {
+-		rtw_macaddr_cfg(adapter_mac_addr(padapter),  get_hal_mac_addr(padapter));
++		char const *mac_ptr = lx_emul_get_mac_addr();
++		if (mac_ptr)
++			memcpy(adapter_mac_addr(padapter), mac_ptr, ETH_ALEN);
++		else
++			rtw_macaddr_cfg(adapter_mac_addr(padapter),  get_hal_mac_addr(padapter));
+ 	}
+ 
+ #ifdef CONFIG_MI_WITH_MBSSID_CAM
