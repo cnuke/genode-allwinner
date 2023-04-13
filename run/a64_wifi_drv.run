@@ -111,6 +111,9 @@ install_config {
 					<reset-domain name="mmc1"/>
 					<power-domain name="pmic-wifi"/>
 				</device>
+				<device name="mac_address-wifi">
+					<property name="mac_address" value="02:11:22:33:44:55"/>
+				</device>
 				<device name="wifi_pwrseq" type="mmc-pwrseq-simple">
 					<clock name="dummy"    driver_name="ext_clock"/>
 				</device>
@@ -120,6 +123,7 @@ install_config {
 				<policy label="a64_wifi_drv -> " info="yes">
 					<device name="wifi_pwrseq"/>
 					<device name="mmc1"/>
+					<device name="mac_address-wifi"/>
 				</policy>
 			</config>
 			<route> <any-service> <parent/> </any-service> </route>
