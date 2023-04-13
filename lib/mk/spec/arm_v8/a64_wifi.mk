@@ -28,6 +28,7 @@ SRC_CC  += firmware.cc
 SRC_CC  += socket_call.cc
 SRC_CC  += lx_emul/random.cc
 SRC_CC  += dtb_helper.cc
+SRC_CC  += mac_addr.cc
 
 SRC_C   += clock.c
 SRC_C   += dummies.c
