@@ -1,11 +1,16 @@
 REQUIRES := arm_v8a
 
 ifeq ($(CONTRIB_DIR),)
-PC_REPO_DIR      := $(REP_DIR)/src/lib/pc
+PC_REPO_LIB_DIR  := $(REP_DIR)/src/lib/pc
 ORIGINAL_LIB_DIR := $(REP_DIR)/src/lib/wifi
 else
-PC_REPO_DIR      := $(call select_from_repositories,src/lib/pc)
-ORIGINAL_LIB_DIR := $(PC_REPO_DIR)/../wifi
+# For now use the 'base' repository to look up the 'pc' repository
+# so we do not need to add that in the build.conf. This should be
+# changed back to 'select_from_repositories' when the common parts
+# of the wifi library are moved to 'dde_linux'.
+PC_REPO_DIR      := $(BASE_DIR)/../pc
+PC_REPO_LIB_DIR  := $(PC_REPO_LIB_DIR)/src/lib/pc
+ORIGINAL_LIB_DIR := $(PC_REPO_DIR)/src/lib/wifi
 endif
 
 
@@ -126,7 +131,7 @@ vpath %.cc $(TARGET_LIB_DIR)
 vpath %.c  $(ORIGINAL_LIB_DIR)
 vpath %.cc $(ORIGINAL_LIB_DIR)
 
-vpath %.c $(PC_REPO_DIR)
+vpath %.c $(PC_REPO_LIB_DIR)
 
 $(LIB).lib.so: $(ORIGINAL_LIB_DIR)/symbol.map
 
