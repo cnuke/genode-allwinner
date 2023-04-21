@@ -9,7 +9,7 @@ else
 # changed back to 'select_from_repositories' when the common parts
 # of the wifi library are moved to 'dde_linux'.
 PC_REPO_DIR      := $(BASE_DIR)/../pc
-PC_REPO_LIB_DIR  := $(PC_REPO_LIB_DIR)/src/lib/pc
+PC_REPO_LIB_DIR  := $(PC_REPO_DIR)/src/lib/pc
 ORIGINAL_LIB_DIR := $(PC_REPO_DIR)/src/lib/wifi
 endif
 
