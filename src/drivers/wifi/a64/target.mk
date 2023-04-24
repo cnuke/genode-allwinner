@@ -6,8 +6,12 @@ LIBS    += libc
 LIBS    += wpa_supplicant
 LIBS    += libcrypto libssl wpa_driver_nl80211
 
-PC_REPO_DIR := $(call select_from_repositories,src/lib/pc)
-PC_SRC_DIR  := $(PC_REPO_DIR)/../../drivers/wifi/pc
+# For now use the 'base' repository to look up the 'pc' repository
+# so we do not need to add that in the build.conf. This should be
+# changed when the common parts of the wifi driver are moved to
+# 'dde_linux'.
+PC_REPO_DIR := $(BASE_DIR)/../pc
+PC_SRC_DIR  := $(PC_REPO_DIR)/src/drivers/wifi/pc
 
 INC_DIR += $(PC_SRC_DIR)
 
