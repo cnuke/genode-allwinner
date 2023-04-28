@@ -248,8 +248,14 @@ struct Driver::Ccu : private Attached_mmio
 
 		void _enable()  override
 		{
-			write<Reg::Clk_div_n>(0);
-			write<Reg::Clk_div_m>(7);
+			/* switch to 150 MHz */
+			// write<Reg::Clk_div_n>(0);
+			// write<Reg::Clk_div_m>(7);
+
+			/* switch to 50 Mhz */
+			write<Reg::Clk_div_n>(1);
+			write<Reg::Clk_div_m>(11);
+
 			write<Reg::Clk_src_sel>(Reg::Clk_src_sel::PERIPH0);
 			write<Reg::Sclk_gating>(Reg::Sclk_gating::PASS);
 		}
@@ -353,8 +359,11 @@ struct Driver::Ccu : private Attached_mmio
 	Pll _pll_audio_pattern_48  { _clocks, "pll-audio-pattern-48",  0xc000b852, _regs(), 0x284 };
 	Pll _pll_audio_bias        { _clocks, "pll-audio-bias",        0x10040000, _regs(), 0x224 };
 
-	/* set GPU to 432 MHz */
-	Pll _pll_gpu    { _clocks, "pll-gpu",    0x83006b05, _regs(), 0x38 };
+	/* set GPU to ~200 MHz */
+	Pll _pll_gpu    { _clocks, "pll-gpu",    0x8300640b, _regs(), 0x38 };
+
+	/* set GPU to ~432 MHz */
+	// Pll _pll_gpu    { _clocks, "pll-gpu",    0x83006b05, _regs(), 0x38 };
 
 	Pll _pll_video0 { _clocks, "pll-video0", 0x91003003, _regs(), 0x10 };
 	Pll _pll_mipi   { _clocks, "pll-mipi",   0x90c0042f, _regs(), 0x40 };
