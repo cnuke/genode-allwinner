@@ -25,6 +25,7 @@ struct Sculpt::Feature
 	static constexpr bool STORAGE_DIALOG_HOSTED_IN_GRAPH = false;
 	static constexpr bool INSPECT_VIEW = false;
 	static constexpr bool VISUAL_HOVER = false;
+	static constexpr char const *WIFI_DRV_LIBRARY_NAME = "a64_wifi.lib.so";
 };
 
 #endif /* _FEATURE_H_ */
