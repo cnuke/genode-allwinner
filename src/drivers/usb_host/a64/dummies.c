@@ -34,17 +34,16 @@ int __must_check get_random_bytes_arch(void * buf,int nbytes)
 }
 
 
-void add_device_randomness(const void * buf,unsigned int size)
+void add_device_randomness(const void * buf, size_t size)
 {
 	lx_emul_trace(__func__);
 }
 
 
-void add_interrupt_randomness(int irq,int irq_flags)
+void add_interrupt_randomness(int irq)
 {
 	lx_emul_trace(__func__);
 }
-
 
 
 #include <linux/fs.h>
@@ -216,22 +215,6 @@ bool is_vmalloc_addr(const void * x)
 {
 	lx_emul_trace(__func__);
 	return false;
-}
-
-
-#include <linux/wait_bit.h>
-
-void wake_up_var(void * var)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/wait_bit.h>
-
-void __init wait_bit_init(void)
-{
-	lx_emul_trace(__func__);
 }
 
 

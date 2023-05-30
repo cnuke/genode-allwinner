@@ -42,14 +42,6 @@ long io_schedule_timeout(long timeout)
 }
 
 
-#include <linux/random.h>
-
-void add_interrupt_randomness(int irq,int irq_flags)
-{
-	lx_emul_trace(__func__);
-}
-
-
 #include <linux/fs.h>
 #include <linux/mount.h>
 #include <linux/slab.h>

@@ -51,7 +51,15 @@ struct proc_dir_entry * proc_create_seq_private(const char * name,umode_t mode,s
 
 #include <linux/random.h>
 
-void get_random_bytes(void * buf,int nbytes)
+void get_random_bytes(void * buf, size_t nbytes)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/random.h>
+
+void add_interrupt_randomness(int irq)
 {
 	lx_emul_trace(__func__);
 }
@@ -82,7 +90,7 @@ void cdev_device_del(struct cdev * cdev,struct device * dev)
 }
 
 
-#include <linux/firmware.h>
+struct builtin_fw { unsigned dummy; };
 
 struct builtin_fw __start_builtin_fw[] = { };
 struct builtin_fw __end_builtin_fw[]   = { };
@@ -132,18 +140,26 @@ int reset_control_reset(struct reset_control * rstc)
 }
 
 
-#include <linux/wait_bit.h>
-
-void __init wait_bit_init(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
 #include <linux/mm.h>
 
 bool is_vmalloc_addr(const void * x)
 {
 	lx_emul_trace(__func__);
 	return false;
+}
+
+
+struct goodix_ts_data;
+
+extern int goodix_firmware_check(struct goodix_ts_data * ts);
+int goodix_firmware_check(struct goodix_ts_data * ts)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern bool goodix_handle_fw_request(struct goodix_ts_data * ts);
+bool goodix_handle_fw_request(struct goodix_ts_data * ts)
+{
+	lx_emul_trace_and_stop(__func__);
 }

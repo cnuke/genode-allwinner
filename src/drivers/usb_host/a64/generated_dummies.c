@@ -1,7 +1,7 @@
 /*
  * \brief  Dummy definitions of Linux Kernel functions
  * \author Automatically generated file - do no edit
- * \date   2022-07-13
+ * \date   2023-05-30
  */
 
 #include <lx_emul.h>
@@ -21,6 +21,11 @@ const char * __clk_get_name(const struct clk * clk)
 {
 	lx_emul_trace_and_stop(__func__);
 }
+
+
+#include <linux/cpumask.h>
+
+struct cpumask __cpu_active_mask;
 
 
 #include <linux/serial_core.h>
@@ -46,9 +51,33 @@ int __printk_ratelimit(const char * func)
 }
 
 
+#include <linux/printk.h>
+
+void __printk_safe_enter(void)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/printk.h>
+
+void __printk_safe_exit(void)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/sched/task.h>
 
 void __put_task_struct(struct task_struct * tsk)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/string.h>
+
+int __sysfs_match_string(const char * const * array,size_t n,const char * str)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -62,22 +91,30 @@ void __unregister_chrdev(unsigned int major,unsigned int baseminor,unsigned int 
 }
 
 
-extern unsigned int _parse_integer(const char * s,unsigned int base,unsigned long long * p);
-unsigned int _parse_integer(const char * s,unsigned int base,unsigned long long * p)
+extern noinline unsigned int _parse_integer(const char * s,unsigned int base,unsigned long long * p);
+noinline unsigned int _parse_integer(const char * s,unsigned int base,unsigned long long * p)
 {
 	lx_emul_trace_and_stop(__func__);
 }
 
 
-extern const char * _parse_integer_fixup_radix(const char * s,unsigned int * base);
-const char * _parse_integer_fixup_radix(const char * s,unsigned int * base)
+extern noinline const char * _parse_integer_fixup_radix(const char * s,unsigned int * base);
+noinline const char * _parse_integer_fixup_radix(const char * s,unsigned int * base)
 {
 	lx_emul_trace_and_stop(__func__);
 }
 
 
-extern unsigned int _parse_integer_limit(const char * s,unsigned int base,unsigned long long * p,size_t max_chars);
-unsigned int _parse_integer_limit(const char * s,unsigned int base,unsigned long long * p,size_t max_chars)
+extern noinline unsigned int _parse_integer_limit(const char * s,unsigned int base,unsigned long long * p,size_t max_chars);
+noinline unsigned int _parse_integer_limit(const char * s,unsigned int base,unsigned long long * p,size_t max_chars)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/printk.h>
+
+int _printk_deferred(const char * fmt,...)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -85,7 +122,7 @@ unsigned int _parse_integer_limit(const char * s,unsigned int base,unsigned long
 
 #include <linux/random.h>
 
-void add_bootloader_randomness(const void * buf,unsigned int size)
+void __init add_bootloader_randomness(const void * buf,size_t len)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -152,6 +189,46 @@ void clk_put(struct clk * clk)
 }
 
 
+#include <linux/context_tracking_irq.h>
+
+noinstr void ct_irq_enter(void)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+void ct_irq_enter_irqson(void)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+noinstr void ct_irq_exit(void)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+void ct_irq_exit_irqson(void)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/clk.h>
+
+struct clk * devm_clk_get_optional(struct device * dev,const char * id)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/power_supply.h>
 
 struct power_supply * devm_power_supply_get_by_phandle(struct device * dev,const char * property)
@@ -181,6 +258,14 @@ void dma_pool_destroy(struct dma_pool * pool)
 }
 
 
+#include <asm-generic/softirq_stack.h>
+
+void do_softirq_own_stack(void)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/printk.h>
 
 asmlinkage __visible void dump_stack(void)
@@ -197,17 +282,17 @@ int extcon_set_state_sync(struct extcon_dev * edev,unsigned int id,bool state)
 }
 
 
-#include <linux/kobject.h>
+#include <linux/rcuwait.h>
 
-struct kobject *firmware_kobj;
-
-
-#include <linux/property.h>
-
-void fwnode_remove_software_node(struct fwnode_handle * fwnode)
+void finish_rcuwait(struct rcuwait * w)
 {
 	lx_emul_trace_and_stop(__func__);
 }
+
+
+#include <linux/kobject.h>
+
+struct kobject *firmware_kobj;
 
 
 #include <linux/genalloc.h>
@@ -228,7 +313,7 @@ void gen_pool_free_owner(struct gen_pool * pool,unsigned long addr,size_t size,v
 
 #include <linux/random.h>
 
-void get_random_bytes(void * buf,int nbytes)
+void get_random_bytes(void * buf,size_t len)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -267,6 +352,14 @@ int insert_resource(struct resource * parent,struct resource * new)
 
 #include <linux/sched.h>
 
+void __sched io_schedule(void)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/sched.h>
+
 void io_schedule_finish(int token)
 {
 	lx_emul_trace_and_stop(__func__);
@@ -289,6 +382,11 @@ long __sched io_schedule_timeout(long timeout)
 }
 
 
+#include <linux/swiotlb.h>
+
+struct io_tlb_mem io_tlb_default_mem;
+
+
 #include <linux/ioport.h>
 
 struct resource iomem_resource;
@@ -297,6 +395,14 @@ struct resource iomem_resource;
 #include <linux/ioport.h>
 
 struct resource ioport_resource;
+
+
+#include <asm-generic/io.h>
+
+void __iomem * ioremap_prot(phys_addr_t phys_addr,size_t size,unsigned long prot)
+{
+	lx_emul_trace_and_stop(__func__);
+}
 
 
 extern bool irq_wait_for_poll(struct irq_desc * desc);
@@ -327,6 +433,14 @@ bool is_software_node(const struct fwnode_handle * fwnode)
 struct kobject *kernel_kobj;
 
 
+#include <linux/slab.h>
+
+void * kmem_cache_alloc_lru(struct kmem_cache * cachep,struct list_lru * lru,gfp_t flags)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/kobject.h>
 
 int kobject_synth_uevent(struct kobject * kobj,const char * buf,size_t count)
@@ -345,7 +459,7 @@ int kobject_uevent_env(struct kobject * kobj,enum kobject_action action,char * e
 
 #include <linux/kstrtox.h>
 
-int kstrtobool(const char * s,bool * res)
+noinline int kstrtobool(const char * s,bool * res)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -353,7 +467,7 @@ int kstrtobool(const char * s,bool * res)
 
 #include <linux/kstrtox.h>
 
-int kstrtoint(const char * s,unsigned int base,int * res)
+noinline int kstrtoint(const char * s,unsigned int base,int * res)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -361,7 +475,7 @@ int kstrtoint(const char * s,unsigned int base,int * res)
 
 #include <linux/kstrtox.h>
 
-int kstrtoll(const char * s,unsigned int base,long long * res)
+noinline int kstrtoll(const char * s,unsigned int base,long long * res)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -369,7 +483,7 @@ int kstrtoll(const char * s,unsigned int base,long long * res)
 
 #include <linux/kstrtox.h>
 
-int kstrtouint(const char * s,unsigned int base,unsigned int * res)
+noinline int kstrtouint(const char * s,unsigned int base,unsigned int * res)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -388,6 +502,19 @@ unsigned long logic_pio_trans_hwaddr(struct fwnode_handle * fwnode,resource_size
 unsigned long lpj_fine;
 
 
+#include <linux/string.h>
+
+int match_string(const char * const * array,size_t n,const char * string)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/memblock.h>
+
+struct memblock memblock;
+
+
 #include <linux/memblock.h>
 
 int __init_memblock memblock_add(phys_addr_t base,phys_addr_t size)
@@ -398,23 +525,15 @@ int __init_memblock memblock_add(phys_addr_t base,phys_addr_t size)
 
 #include <linux/memblock.h>
 
+void __init memblock_cap_memory_range(phys_addr_t base,phys_addr_t size)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/memblock.h>
+
 int __init_memblock memblock_clear_nomap(phys_addr_t base,phys_addr_t size)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/memblock.h>
-
-phys_addr_t __init_memblock memblock_find_in_range(phys_addr_t start,phys_addr_t end,phys_addr_t size,phys_addr_t align)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/memblock.h>
-
-int __init_memblock memblock_free(phys_addr_t base,phys_addr_t size)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -446,6 +565,30 @@ int __init_memblock memblock_mark_nomap(phys_addr_t base,phys_addr_t size)
 
 #include <linux/memblock.h>
 
+bool __init_memblock memblock_overlaps_region(struct memblock_type * type,phys_addr_t base,phys_addr_t size)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/memblock.h>
+
+phys_addr_t __init memblock_phys_alloc_range(phys_addr_t size,phys_addr_t align,phys_addr_t start,phys_addr_t end)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/memblock.h>
+
+int __init_memblock memblock_phys_free(phys_addr_t base,phys_addr_t size)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/memblock.h>
+
 int __init_memblock memblock_reserve(phys_addr_t base,phys_addr_t size)
 {
 	lx_emul_trace_and_stop(__func__);
@@ -455,6 +598,14 @@ int __init_memblock memblock_reserve(phys_addr_t base,phys_addr_t size)
 #include <linux/string.h>
 
 ssize_t memory_read_from_buffer(void * to,size_t count,loff_t * ppos,const void * from,size_t available)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <net/net_namespace.h>
+
+void __init net_ns_init(void)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -555,9 +706,17 @@ void power_supply_unreg_notifier(struct notifier_block * nb)
 }
 
 
-#include <linux/printk.h>
+#include <linux/sysctl.h>
 
-int printk_deferred(const char * fmt,...)
+int proc_dointvec_minmax(struct ctl_table * table,int write,void * buffer,size_t * lenp,loff_t * ppos)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/sysctl.h>
+
+struct ctl_table_header * register_sysctl(const char * path,struct ctl_table * table)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -611,6 +770,14 @@ int reset_control_assert(struct reset_control * rstc)
 }
 
 
+#include <linux/random.h>
+
+bool rng_is_initialized(void)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/seq_file.h>
 
 void seq_vprintf(struct seq_file * m,const char * f,va_list args)
@@ -643,9 +810,32 @@ u64 siphash_1u64(const u64 first,const siphash_key_t * key)
 }
 
 
+#include <linux/string.h>
+
+char * skip_spaces(const char * str)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/smp.h>
+
+void smp_call_function_many(const struct cpumask * mask,smp_call_func_t func,void * info,bool wait)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 #include <linux/smp.h>
 
 int smp_call_function_single(int cpu,smp_call_func_t func,void * info,int wait)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+extern void software_node_notify_remove(struct device * dev);
+void software_node_notify_remove(struct device * dev)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -672,9 +862,30 @@ int string_escape_mem(const char * src,size_t isz,char * dst,size_t osz,unsigned
 }
 
 
+#include <linux/string.h>
+
+char * strreplace(char * s,char old,char new)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/sysctl.h>
+
+const int sysctl_vals[] = {};
+
+
 #include <linux/sysfs.h>
 
 void sysfs_notify(struct kobject * kobj,const char * dir,const char * attr)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
+#include <linux/string.h>
+
+bool sysfs_streq(const char * s1,const char * s2)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -754,18 +965,3 @@ void wake_q_add_safe(struct wake_q_head * head,struct task_struct * task)
 	lx_emul_trace_and_stop(__func__);
 }
 
-
-#include <linux/rcutree.h>
-
-void rcu_irq_enter_irqson(void)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/rcutree.h>
-
-void rcu_irq_exit_irqson(void)
-{
-	lx_emul_trace_and_stop(__func__);
-}

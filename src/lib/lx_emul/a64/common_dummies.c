@@ -74,14 +74,6 @@ int __cpuhp_setup_state(enum cpuhp_state state,const char * name,bool invoke,
 }
 
 
-#include <linux/sched/loadavg.h>
-
-void calc_global_load(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
 #include <linux/timekeeper_internal.h>
 
 void update_vsyscall(struct timekeeper * tk)
@@ -332,6 +324,6 @@ void register_handler_proc(unsigned int irq,struct irqaction * action)
 }
 
 
-#include <linux/genhd.h>
+#include <linux/blkdev.h>
 
 struct device_type part_type;

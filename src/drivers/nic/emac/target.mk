@@ -1,7 +1,7 @@
 DRIVER  := emac
 TARGET   = $(DRIVER)_nic_drv
 REQUIRES = arm_v8a
-LIBS     = base a64_lx_emul
+LIBS     = base a64_lx_emul jitterentropy
 SRC_CC  += main.cc
 SRC_C    = lx_user.c pmic.c
 SRC_C   += lx_emul/shadow/drivers/clk/clk.c
