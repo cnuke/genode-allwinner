@@ -30,23 +30,6 @@ struct kernfs_node * kernfs_find_and_get_ns(struct kernfs_node * parent,const ch
 }
 
 
-#include <linux/random.h>
-
-void get_random_bytes(void * buf,int nbytes)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/random.h>
-
-int __must_check get_random_bytes_arch(void * buf,int nbytes)
-{
-	lx_emul_trace(__func__);
-	return 0;
-}
-
-
 #include <linux/proc_fs.h>
 
 struct proc_dir_entry { int dummy; };
@@ -178,14 +161,6 @@ int task_work_add(struct task_struct * task,struct callback_head * work,enum tas
 }
 
 
-#include <linux/random.h>
-
-void add_interrupt_randomness(int irq,int irq_flags)
-{
-	lx_emul_trace(__func__);
-}
-
-
 #include <linux/prandom.h>
 
 u32 prandom_u32(void)
@@ -297,19 +272,11 @@ int __cpuhp_state_add_instance(enum cpuhp_state state,struct hlist_node * node,b
 }
 
 
-#include <linux/genhd.h>
+#include <linux/blkdev.h>
 
 void rand_initialize_disk(struct gendisk * disk)
 {
 	lx_emul_trace(__func__);
-}
-
-
-#include <linux/wait_bit.h>
-
-void __init wait_bit_init(void)
-{
-       lx_emul_trace(__func__);
 }
 
 
@@ -319,4 +286,68 @@ bool is_vmalloc_addr(const void * x)
 {
 	lx_emul_trace(__func__);
 	return false;
+}
+
+
+#include <linux/skbuff.h>
+
+void __init skb_init(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <net/net_namespace.h>
+
+void __init net_ns_init(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+noinstr void ct_irq_enter(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+void ct_irq_enter_irqson(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+noinstr void ct_irq_exit(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+void ct_irq_exit_irqson(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/random.h>
+
+void add_interrupt_randomness(int irq)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/random.h>
+
+void add_device_randomness(const void * buf,size_t len)
+{
+	lx_emul_trace(__func__);
 }

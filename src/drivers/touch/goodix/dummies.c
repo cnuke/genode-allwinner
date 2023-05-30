@@ -28,15 +28,6 @@ struct kernfs_node * kernfs_find_and_get_ns(struct kernfs_node * parent,const ch
 }
 
 
-#include <linux/random.h>
-
-int __must_check get_random_bytes_arch(void * buf,int nbytes)
-{
-	lx_emul_trace(__func__);
-	return 0;
-}
-
-
 #include <linux/proc_fs.h>
 
 struct proc_dir_entry { int dummy; };
@@ -51,7 +42,7 @@ struct proc_dir_entry * proc_create_seq_private(const char * name,umode_t mode,s
 
 #include <linux/random.h>
 
-void get_random_bytes(void * buf,int nbytes)
+void add_interrupt_randomness(int irq)
 {
 	lx_emul_trace(__func__);
 }
@@ -82,7 +73,7 @@ void cdev_device_del(struct cdev * cdev,struct device * dev)
 }
 
 
-#include <linux/firmware.h>
+struct builtin_fw { unsigned dummy; };
 
 struct builtin_fw __start_builtin_fw[] = { };
 struct builtin_fw __end_builtin_fw[]   = { };
@@ -132,18 +123,93 @@ int reset_control_reset(struct reset_control * rstc)
 }
 
 
-#include <linux/wait_bit.h>
-
-void __init wait_bit_init(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
 #include <linux/mm.h>
 
 bool is_vmalloc_addr(const void * x)
 {
 	lx_emul_trace(__func__);
 	return false;
+}
+
+
+struct goodix_ts_data;
+
+extern int goodix_firmware_check(struct goodix_ts_data * ts);
+int goodix_firmware_check(struct goodix_ts_data * ts)
+{
+	lx_emul_trace(__func__);
+
+	/* needs to return the good case, otherwise probing will fail */
+	return 0;
+}
+
+
+extern bool goodix_handle_fw_request(struct goodix_ts_data * ts);
+bool goodix_handle_fw_request(struct goodix_ts_data * ts)
+{
+	lx_emul_trace(__func__);
+	return false;
+}
+
+
+#include <linux/skbuff.h>
+
+void __init skb_init(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <net/net_namespace.h>
+
+void __init net_ns_init(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
+{
+    lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+noinstr void ct_irq_enter(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+void ct_irq_enter_irqson(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+noinstr void ct_irq_exit(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+void ct_irq_exit_irqson(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/regulator/consumer.h>
+
+int regulator_disable(struct regulator * regulator)
+{
+	lx_emul_trace(__func__);
+	return 0;
 }

@@ -16,7 +16,7 @@
 
 #include <linux/random.h>
 
-void add_interrupt_randomness(int irq,int irq_flags)
+void add_interrupt_randomness(int irq)
 {
 	lx_emul_trace(__func__);
 }
@@ -218,7 +218,7 @@ unsigned int full_name_hash(const void * salt,const char * name,unsigned int len
 
 #include <linux/random.h>
 
-void add_device_randomness(const void * buf,unsigned int size)
+void add_device_randomness(const void * buf, size_t size)
 {
 	lx_emul_trace(__func__);
 }
@@ -319,18 +319,56 @@ int rhashtable_init(struct rhashtable * ht,const struct rhashtable_params * para
 }
 
 
-#include <linux/wait_bit.h>
-
-void __init wait_bit_init(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
 #include <linux/regulator/consumer.h>
 
 int regulator_enable(struct regulator * regulator)
 {
 	lx_emul_trace(__func__);
 	return 0;
+}
+
+
+#include <linux/filter.h>
+
+DEFINE_STATIC_KEY_FALSE(bpf_master_redirect_enabled_key);
+EXPORT_SYMBOL_GPL(bpf_master_redirect_enabled_key);
+
+
+#include <net/gen_stats.h>
+
+void gnet_stats_basic_sync_init(struct gnet_stats_basic_sync * b)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+noinstr void ct_irq_enter(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+void ct_irq_enter_irqson(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+noinstr void ct_irq_exit(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+void ct_irq_exit_irqson(void)
+{
+	lx_emul_trace(__func__);
 }

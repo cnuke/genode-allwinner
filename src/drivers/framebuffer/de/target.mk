@@ -1,7 +1,7 @@
 DRIVER  := de
 TARGET   = $(DRIVER)_fb_drv
 REQUIRES = arm_v8a
-LIBS     = base blit a64_lx_emul
+LIBS     = base blit a64_lx_emul jitterentropy
 SRC_CC  += main.cc
 SRC_C   += fb.c lx_user.c clock.c reset.c
 SRC_C   += lx_emul/pin.c

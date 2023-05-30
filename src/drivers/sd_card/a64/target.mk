@@ -1,7 +1,7 @@
 TARGET   := a64_sd_card_drv
 DRIVER   := sd_card
 REQUIRES := arm_v8a
-LIBS     := base a64_lx_emul
+LIBS     := base a64_lx_emul jitterentropy
 
 INC_DIR := $(PRG_DIR)
 

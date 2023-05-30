@@ -25,26 +25,32 @@ void sysfs_remove_bin_file(struct kobject * kobj,const struct bin_attribute * at
 }
 
 
-#include <linux/random.h>
+#include <linux/sysfs.h>
 
-int __must_check get_random_bytes_arch(void * buf,int nbytes)
-{
-	printk("get_random_bytes_arch: leaving buffer unmodified\n");
-	return 0;
-}
-
-
-void add_device_randomness(const void * buf,unsigned int size)
+void sysfs_remove_file_from_group(struct kobject * kobj,const struct attribute * attr,const char * group)
 {
 	lx_emul_trace(__func__);
 }
 
 
-void add_interrupt_randomness(int irq,int irq_flags)
+#include <linux/sysfs.h>
+
+void sysfs_unmerge_group(struct kobject * kobj,const struct attribute_group * grp)
 {
 	lx_emul_trace(__func__);
 }
 
+
+void add_device_randomness(const void * buf, size_t size)
+{
+	lx_emul_trace(__func__);
+}
+
+
+void add_interrupt_randomness(int irq)
+{
+	lx_emul_trace(__func__);
+}
 
 
 #include <linux/fs.h>
@@ -219,22 +225,6 @@ bool is_vmalloc_addr(const void * x)
 }
 
 
-#include <linux/wait_bit.h>
-
-void wake_up_var(void * var)
-{
-	lx_emul_trace(__func__);
-}
-
-
-#include <linux/wait_bit.h>
-
-void __init wait_bit_init(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
 #include <linux/fs.h>
 
 struct timespec64 current_time(struct inode * inode)
@@ -264,6 +254,61 @@ void __put_cred(struct cred * cred)
 #include <linux/thread_info.h>
 
 void __check_object_size(const void * ptr,unsigned long n,bool to_user)
+{
+	lx_emul_trace(__func__);
+}
+
+
+void skb_init(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <net/net_namespace.h>
+
+void __init net_ns_init(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/clk.h>
+
+struct clk * devm_clk_get_optional(struct device * dev,const char * id)
+{
+	lx_emul_trace(__func__);
+	return NULL;
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+noinstr void ct_irq_enter(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+void ct_irq_enter_irqson(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+noinstr void ct_irq_exit(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+void ct_irq_exit_irqson(void)
 {
 	lx_emul_trace(__func__);
 }

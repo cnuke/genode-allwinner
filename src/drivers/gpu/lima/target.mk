@@ -1,7 +1,7 @@
 DRIVER  := lima
 TARGET   = $(DRIVER)_gpu_drv
 REQUIRES = arm_v8a
-LIBS     = base a64_lx_emul
+LIBS     = base a64_lx_emul jitterentropy
 INC_DIR += $(PRG_DIR)/include/lx_emul/shadow
 SRC_CC  += main.cc
 SRC_CC  += emul.cc

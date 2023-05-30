@@ -7,3 +7,4 @@ base
 blit
 os
 genode_c_api
+jitterentropy

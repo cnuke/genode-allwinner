@@ -74,14 +74,6 @@ int __cpuhp_setup_state(enum cpuhp_state state,const char * name,bool invoke,
 }
 
 
-#include <linux/sched/loadavg.h>
-
-void calc_global_load(void)
-{
-	lx_emul_trace(__func__);
-}
-
-
 #include <linux/timekeeper_internal.h>
 
 void update_vsyscall(struct timekeeper * tk)
@@ -161,6 +153,8 @@ int sysfs_create_file_ns(struct kobject * kobj,const struct attribute * attr,con
 
 
 #include <linux/random.h>
+
+struct random_ready_callback;
 
 int add_random_ready_callback(struct random_ready_callback * rdy)
 {
@@ -332,6 +326,347 @@ void register_handler_proc(unsigned int irq,struct irqaction * action)
 }
 
 
-#include <linux/genhd.h>
+#include <linux/blkdev.h>
 
 struct device_type part_type;
+
+
+extern void software_node_notify_remove(struct device * dev);
+void software_node_notify_remove(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/sysctl.h>
+
+struct ctl_table_header * register_sysctl(const char * path,struct ctl_table * table)
+{
+	lx_emul_trace(__func__);
+	return NULL;
+}
+
+
+void __init __register_sysctl_init(const char * path,struct ctl_table * table,const char * table_name)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/sysfs.h>
+
+int sysfs_add_file_to_group(struct kobject * kobj,const struct attribute * attr,const char * group)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+/*
+ * Power-management related dummies that became needed because the
+ * the sun6i-csi driver requires the PM option. Since they are not
+ * required by the other drivers, implement them all here.
+ *
+ * FIXME eventually extended 'lx_emul/shadow/drivers/base/power/runtime.c'
+ *       and make use of the compilation unit.
+ */
+
+#include <linux/pm_runtime.h>
+
+void __pm_runtime_disable(struct device * dev,bool check_resume)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/pm_runtime.h>
+
+int __pm_runtime_idle(struct device * dev,int rpmflags)
+{
+	lx_emul_trace(__func__);
+	return -ENOSYS;
+}
+
+
+#include <linux/pm_runtime.h>
+
+int __pm_runtime_resume(struct device * dev,int rpmflags)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/pm_runtime.h>
+
+int __pm_runtime_set_status(struct device * dev,unsigned int status)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/pm_runtime.h>
+
+int __pm_runtime_suspend(struct device * dev,int rpmflags)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/pm_runtime.h>
+
+void __pm_runtime_use_autosuspend(struct device * dev,bool use)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/pm_domain.h>
+
+int dev_pm_domain_attach(struct device * dev,bool power_on)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+#include <linux/pm_domain.h>
+
+void dev_pm_domain_detach(struct device * dev,bool power_off)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/pm_qos.h>
+
+int dev_pm_qos_add_request(struct device * dev,struct dev_pm_qos_request * req,enum dev_pm_qos_req_type type,s32 value)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/pm_qos.h>
+
+int dev_pm_qos_expose_flags(struct device * dev,s32 val)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/pm_qos.h>
+
+enum pm_qos_flags_status dev_pm_qos_flags(struct device * dev,s32 mask)
+{
+	lx_emul_trace(__func__);
+	return PM_QOS_FLAGS_UNDEFINED;
+}
+
+
+#include <linux/pm_qos.h>
+
+int dev_pm_qos_remove_request(struct dev_pm_qos_request * req)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/pm_wakeirq.h>
+
+void dev_pm_clear_wake_irq(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/pm_wakeirq.h>
+
+int dev_pm_set_dedicated_wake_irq(struct device *dev, int irq)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/pm_wakeirq.h>
+
+int dev_pm_set_wake_irq(struct device *dev, int irq)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+extern int dpm_sysfs_add(struct device * dev);
+int dpm_sysfs_add(struct device * dev)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+extern void dpm_sysfs_remove(struct device * dev);
+void dpm_sysfs_remove(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/pm_runtime.h>
+
+int pm_generic_runtime_resume(struct device * dev)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/pm_runtime.h>
+
+int pm_generic_runtime_suspend(struct device * dev)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/pm_runtime.h>
+
+void pm_runtime_allow(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/pm_runtime.h>
+
+int pm_runtime_barrier(struct device * dev)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/pm_runtime.h>
+
+void pm_runtime_drop_link(struct device_link * link)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/pm_runtime.h>
+
+void pm_runtime_enable(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/pm_runtime.h>
+
+void pm_runtime_forbid(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/pm_runtime.h>
+
+void pm_runtime_get_suppliers(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+extern void pm_runtime_init(struct device * dev);
+void pm_runtime_init(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/pm_runtime.h>
+
+void pm_runtime_new_link(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/pm_runtime.h>
+
+void pm_runtime_no_callbacks(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/pm_runtime.h>
+
+void pm_runtime_put_suppliers(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+extern void pm_runtime_reinit(struct device * dev);
+void pm_runtime_reinit(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/pm_runtime.h>
+
+void pm_runtime_release_supplier(struct device_link * link)
+{
+	lx_emul_trace(__func__);
+}
+
+
+extern void pm_runtime_remove(struct device * dev);
+void pm_runtime_remove(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/pm_runtime.h>
+
+void pm_runtime_set_autosuspend_delay(struct device * dev,int delay)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/pm_runtime.h>
+
+void pm_runtime_set_memalloc_noio(struct device *dev, bool enable)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/pm_runtime.h>
+
+int pm_runtime_get_if_active(struct device *dev, bool ign_usage_count)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+
+#include <linux/sysfs.h>
+
+int sysfs_merge_group(struct kobject * kobj,const struct attribute_group * grp)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}
+
+

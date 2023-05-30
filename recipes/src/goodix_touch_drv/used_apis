@@ -6,3 +6,4 @@ platform_session
 base
 os
 genode_c_api
+jitterentropy
