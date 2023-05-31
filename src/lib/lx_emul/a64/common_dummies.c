@@ -343,3 +343,18 @@ struct ctl_table_header * register_sysctl(const char * path,struct ctl_table * t
 	lx_emul_trace(__func__);
 	return NULL;
 }
+
+
+void __init __register_sysctl_init(const char * path,struct ctl_table * table,const char * table_name)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/sysfs.h>
+
+int sysfs_add_file_to_group(struct kobject * kobj,const struct attribute * attr,const char * group)
+{
+	lx_emul_trace(__func__);
+	return 0;
+}

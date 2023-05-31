@@ -11,6 +11,7 @@ LX_ENABLE += BINFMT_ELF BLK_DEV_INITRD
 
 # SoC
 LX_ENABLE += ARCH_SUNXI
+LX_ENABLE += COMMON_CLK
 
 # UART device
 LX_ENABLE += SERIAL_8250 $(addprefix SERIAL_8250_,16550A_VARIANTS DW CONSOLE)
@@ -41,7 +42,7 @@ LX_ENABLE += DRM_LIMA
 
 # determined by bisecting kernel configuration options (needed by fb driver)
 LX_ENABLE += CMA DMA_CMA
-LX_ENABLE += MFD_AXP20X_RSB REGULATOR REGULATOR_AXP20X
+LX_ENABLE += MFD_AXP20X_RSB REGULATOR REGULATOR_AXP20X MFD_SUN6I_PRCM
 LX_ENABLE += PROC_FS SYSFS
 
 # to automatically set up screen mode at boot time

@@ -52,7 +52,6 @@ SRC_CC  += lx_kit/memory_dma.cc
 
 # Turn off some warnings
 CC_OPT_drivers/gpu/drm/drm_plane_helper += -Wno-uninitialized
-CC_OPT_drivers/gpu/drm/sun4i/sun4i_frontend += -DPHYS_OFFSET=0
 
 #
 # Generate driver-specific device-tree binary data

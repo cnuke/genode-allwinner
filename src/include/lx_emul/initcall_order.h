@@ -244,6 +244,7 @@ static const char * lx_emul_initcall_order[] = {
 	"__initcall_lima_platform_driver_init6",
 	"__initcall_topology_sysfs_init6",
 	"__initcall_cacheinfo_sysfs_init6",
+	"__initcall_sun6i_prcm_driver_init6",
 	"__initcall_axp20x_rsb_driver_init6",
 	"__initcall_blackhole_netdev_init6",
 	"__initcall_phylink_init6",
