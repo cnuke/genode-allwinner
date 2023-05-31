@@ -25,15 +25,6 @@ void sysfs_remove_bin_file(struct kobject * kobj,const struct bin_attribute * at
 }
 
 
-#include <linux/random.h>
-
-int __must_check get_random_bytes_arch(void * buf,int nbytes)
-{
-	printk("get_random_bytes_arch: leaving buffer unmodified\n");
-	return 0;
-}
-
-
 void add_device_randomness(const void * buf, size_t size)
 {
 	lx_emul_trace(__func__);
@@ -247,6 +238,77 @@ void __put_cred(struct cred * cred)
 #include <linux/thread_info.h>
 
 void __check_object_size(const void * ptr,unsigned long n,bool to_user)
+{
+	lx_emul_trace(__func__);
+}
+
+
+void skb_init(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <net/net_namespace.h>
+
+void __init net_ns_init(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/sysctl.h>
+
+struct ctl_table_header * register_sysctl(const char * path,struct ctl_table * table)
+{
+	lx_emul_trace(__func__);
+	return NULL;
+}
+
+
+#include <linux/clk.h>
+
+struct clk * devm_clk_get_optional(struct device * dev,const char * id)
+{
+	lx_emul_trace(__func__);
+	return NULL;
+}
+
+
+extern void software_node_notify_remove(struct device * dev);
+void software_node_notify_remove(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+noinstr void ct_irq_enter(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+void ct_irq_enter_irqson(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+noinstr void ct_irq_exit(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+void ct_irq_exit_irqson(void)
 {
 	lx_emul_trace(__func__);
 }

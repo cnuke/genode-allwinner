@@ -75,14 +75,6 @@ void __put_task_struct(struct task_struct * tsk)
 }
 
 
-#include <linux/string.h>
-
-int __sysfs_match_string(const char * const * array,size_t n,const char * str)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/fs.h>
 
 void __unregister_chrdev(unsigned int major,unsigned int baseminor,unsigned int count,const char * name)
@@ -160,22 +152,6 @@ void amba_device_put(struct amba_device * dev)
 }
 
 
-#include <linux/async.h>
-
-async_cookie_t async_schedule_node(async_func_t func,void * data,int node)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/async.h>
-
-void async_synchronize_full(void)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/init.h>
 
 char __initdata boot_command_line[] = {};
@@ -184,46 +160,6 @@ char __initdata boot_command_line[] = {};
 #include <linux/clk.h>
 
 void clk_put(struct clk * clk)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/context_tracking_irq.h>
-
-noinstr void ct_irq_enter(void)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/context_tracking_irq.h>
-
-void ct_irq_enter_irqson(void)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/context_tracking_irq.h>
-
-noinstr void ct_irq_exit(void)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/context_tracking_irq.h>
-
-void ct_irq_exit_irqson(void)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/clk.h>
-
-struct clk * devm_clk_get_optional(struct device * dev,const char * id)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -253,14 +189,6 @@ int dma_mmap_attrs(struct device * dev,struct vm_area_struct * vma,void * cpu_ad
 #include <linux/dmapool.h>
 
 void dma_pool_destroy(struct dma_pool * pool)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <asm-generic/softirq_stack.h>
-
-void do_softirq_own_stack(void)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -306,14 +234,6 @@ void * gen_pool_dma_alloc(struct gen_pool * pool,size_t size,dma_addr_t * dma)
 #include <linux/genalloc.h>
 
 void gen_pool_free_owner(struct gen_pool * pool,unsigned long addr,size_t size,void ** owner)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/random.h>
-
-void get_random_bytes(void * buf,size_t len)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -502,14 +422,6 @@ unsigned long logic_pio_trans_hwaddr(struct fwnode_handle * fwnode,resource_size
 unsigned long lpj_fine;
 
 
-#include <linux/string.h>
-
-int match_string(const char * const * array,size_t n,const char * string)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/memblock.h>
 
 struct memblock memblock;
@@ -598,14 +510,6 @@ int __init_memblock memblock_reserve(phys_addr_t base,phys_addr_t size)
 #include <linux/string.h>
 
 ssize_t memory_read_from_buffer(void * to,size_t count,loff_t * ppos,const void * from,size_t available)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <net/net_namespace.h>
-
-void __init net_ns_init(void)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -714,14 +618,6 @@ int proc_dointvec_minmax(struct ctl_table * table,int write,void * buffer,size_t
 }
 
 
-#include <linux/sysctl.h>
-
-struct ctl_table_header * register_sysctl(const char * path,struct ctl_table * table)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/regulator/consumer.h>
 
 int regulator_disable(struct regulator * regulator)
@@ -770,14 +666,6 @@ int reset_control_assert(struct reset_control * rstc)
 }
 
 
-#include <linux/random.h>
-
-bool rng_is_initialized(void)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/seq_file.h>
 
 void seq_vprintf(struct seq_file * m,const char * f,va_list args)
@@ -810,14 +698,6 @@ u64 siphash_1u64(const u64 first,const siphash_key_t * key)
 }
 
 
-#include <linux/string.h>
-
-char * skip_spaces(const char * str)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/smp.h>
 
 void smp_call_function_many(const struct cpumask * mask,smp_call_func_t func,void * info,bool wait)
@@ -829,13 +709,6 @@ void smp_call_function_many(const struct cpumask * mask,smp_call_func_t func,voi
 #include <linux/smp.h>
 
 int smp_call_function_single(int cpu,smp_call_func_t func,void * info,int wait)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-extern void software_node_notify_remove(struct device * dev);
-void software_node_notify_remove(struct device * dev)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -854,22 +727,6 @@ void sort(void * base,size_t num,size_t size,cmp_func_t cmp_func,swap_func_t swa
 bool static_key_initialized;
 
 
-#include <linux/string_helpers.h>
-
-int string_escape_mem(const char * src,size_t isz,char * dst,size_t osz,unsigned int flags,const char * only)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/string.h>
-
-char * strreplace(char * s,char old,char new)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/sysctl.h>
 
 const int sysctl_vals[] = {};
@@ -878,14 +735,6 @@ const int sysctl_vals[] = {};
 #include <linux/sysfs.h>
 
 void sysfs_notify(struct kobject * kobj,const char * dir,const char * attr)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/string.h>
-
-bool sysfs_streq(const char * s1,const char * s2)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -964,4 +813,3 @@ void wake_q_add_safe(struct wake_q_head * head,struct task_struct * task)
 {
 	lx_emul_trace_and_stop(__func__);
 }
-
