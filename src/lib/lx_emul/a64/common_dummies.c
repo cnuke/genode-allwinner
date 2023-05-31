@@ -327,3 +327,19 @@ void register_handler_proc(unsigned int irq,struct irqaction * action)
 #include <linux/blkdev.h>
 
 struct device_type part_type;
+
+
+extern void software_node_notify_remove(struct device * dev);
+void software_node_notify_remove(struct device * dev)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/sysctl.h>
+
+struct ctl_table_header * register_sysctl(const char * path,struct ctl_table * table)
+{
+	lx_emul_trace(__func__);
+	return NULL;
+}

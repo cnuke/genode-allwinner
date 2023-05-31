@@ -257,28 +257,12 @@ void __init net_ns_init(void)
 }
 
 
-#include <linux/sysctl.h>
-
-struct ctl_table_header * register_sysctl(const char * path,struct ctl_table * table)
-{
-	lx_emul_trace(__func__);
-	return NULL;
-}
-
-
 #include <linux/clk.h>
 
 struct clk * devm_clk_get_optional(struct device * dev,const char * id)
 {
 	lx_emul_trace(__func__);
 	return NULL;
-}
-
-
-extern void software_node_notify_remove(struct device * dev);
-void software_node_notify_remove(struct device * dev)
-{
-	lx_emul_trace(__func__);
 }
 
 
