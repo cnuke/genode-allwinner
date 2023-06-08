@@ -206,7 +206,7 @@ void synchronize_rcu_expedited(void)
 
 #include <linux/netdevice.h>
 
-int dev_ioctl(struct net *net, unsigned int cmd, struct ifreq *ifr, bool *need_copyout)
+int dev_ioctl(struct net * net,unsigned int cmd,struct ifreq * ifr,void __user * data,bool * need_copyout)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -234,7 +234,7 @@ void rcu_barrier(void)
 
 #include <linux/random.h>
 
-void add_device_randomness(const void * buf,unsigned int size)
+void add_device_randomness(const void * buf,size_t size)
 {
 	lx_emul_trace(__func__);
 }
@@ -242,7 +242,7 @@ void add_device_randomness(const void * buf,unsigned int size)
 
 #include <linux/random.h>
 
-void add_interrupt_randomness(int irq,int irq_flags)
+void add_interrupt_randomness(int irq)
 {
 	lx_emul_trace(__func__);
 }
@@ -593,6 +593,12 @@ void kernel_sigaction(int sig,__sighandler_t action)
 }
 
 
+u8 get_random_u8(void)
+{
+	lx_emul_trace_and_stop(__func__);
+}
+
+
 /////////////////////////////////////////////////////////////
 // XXX move below to lx_emul.c for a64
 /////////////////////////////////////////////////////////////
@@ -630,3 +636,47 @@ void yield()
 }
 
 
+#include <linux/filter.h>
+
+DEFINE_STATIC_KEY_FALSE(bpf_master_redirect_enabled_key);
+EXPORT_SYMBOL_GPL(bpf_master_redirect_enabled_key);
+
+
+#include <net/gen_stats.h>
+
+void gnet_stats_basic_sync_init(struct gnet_stats_basic_sync * b)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+noinstr void ct_irq_enter(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+void ct_irq_enter_irqson(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+noinstr void ct_irq_exit(void)
+{
+	lx_emul_trace(__func__);
+}
+
+
+#include <linux/context_tracking_irq.h>
+
+void ct_irq_exit_irqson(void)
+{
+	lx_emul_trace(__func__);
+}
