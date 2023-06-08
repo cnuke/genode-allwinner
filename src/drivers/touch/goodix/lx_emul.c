@@ -154,3 +154,14 @@ int regulator_enable(struct regulator * regulator)
 }
 
 
+#include <linux/interrupt.h>
+
+void do_softirq_own_stack(void)
+{
+	/*
+	 * We have no IRQ stack to switch to anyway,
+	 * so we stay here in contrast to the original
+	 * implementation
+	 */
+	__do_softirq();
+}

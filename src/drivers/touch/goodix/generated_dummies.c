@@ -1,7 +1,7 @@
 /*
  * \brief  Dummy definitions of Linux Kernel functions
  * \author Automatically generated file - do no edit
- * \date   2023-05-30
+ * \date   2023-06-08
  */
 
 #include <lx_emul.h>
@@ -94,22 +94,6 @@ void __printk_safe_exit(void)
 #include <linux/sched/task.h>
 
 void __put_task_struct(struct task_struct * tsk)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/sysctl.h>
-
-void __init __register_sysctl_init(const char * path,struct ctl_table * table,const char * table_name)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/rtmutex.h>
-
-void __sched __rt_mutex_init(struct rt_mutex * lock,const char * name,struct lock_class_key * key)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -240,38 +224,6 @@ void console_verbose(void)
 }
 
 
-#include <linux/context_tracking_irq.h>
-
-noinstr void ct_irq_enter(void)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/context_tracking_irq.h>
-
-void ct_irq_enter_irqson(void)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/context_tracking_irq.h>
-
-noinstr void ct_irq_exit(void)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/context_tracking_irq.h>
-
-void ct_irq_exit_irqson(void)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/property.h>
 
 int device_add_software_node(struct device * dev,const struct software_node * node)
@@ -291,14 +243,6 @@ void device_remove_software_node(struct device * dev)
 #include <linux/dma-map-ops.h>
 
 bool dma_default_coherent;
-
-
-#include <asm-generic/softirq_stack.h>
-
-void do_softirq_own_stack(void)
-{
-	lx_emul_trace_and_stop(__func__);
-}
 
 
 #include <linux/semaphore.h>
@@ -396,14 +340,6 @@ bool initcall_debug;
 #include <linux/input.h>
 
 struct input_dev * input_allocate_device(void)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/input.h>
-
-void input_copy_abs(struct input_dev * dst,unsigned int dst_axis,const struct input_dev * src,unsigned int src_axis)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -568,14 +504,6 @@ unsigned long logic_pio_trans_hwaddr(struct fwnode_handle * fwnode,resource_size
 unsigned long lpj_fine;
 
 
-#include <linux/string.h>
-
-int match_string(const char * const * array,size_t n,const char * string)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/memblock.h>
 
 struct memblock memblock;
@@ -669,14 +597,6 @@ ssize_t memory_read_from_buffer(void * to,size_t count,loff_t * ppos,const void 
 }
 
 
-#include <net/net_namespace.h>
-
-void __init net_ns_init(void)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/irq.h>
 
 struct irq_chip no_irq_chip;
@@ -758,14 +678,6 @@ void put_unused_fd(unsigned int fd)
 enum reboot_mode reboot_mode;
 
 
-#include <linux/sysctl.h>
-
-struct ctl_table_header * register_sysctl(const char * path,struct ctl_table * table)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/regulator/consumer.h>
 
 int regulator_bulk_register_supply_alias(struct device * dev,const char * const * id,struct device * alias_dev,const char * const * alias_id,int num_id)
@@ -782,14 +694,6 @@ void regulator_bulk_unregister_supply_alias(struct device * dev,const char * con
 }
 
 
-#include <linux/regulator/consumer.h>
-
-int regulator_disable(struct regulator * regulator)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/ioport.h>
 
 int release_resource(struct resource * old)
@@ -801,38 +705,6 @@ int release_resource(struct resource * old)
 #include <linux/reset.h>
 
 int reset_control_assert(struct reset_control * rstc)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/random.h>
-
-bool rng_is_initialized(void)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/rtmutex.h>
-
-void __sched rt_mutex_lock(struct rt_mutex * lock)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/rtmutex.h>
-
-int __sched rt_mutex_trylock(struct rt_mutex * lock)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/rtmutex.h>
-
-void __sched rt_mutex_unlock(struct rt_mutex * lock)
 {
 	lx_emul_trace_and_stop(__func__);
 }
@@ -870,14 +742,6 @@ u64 siphash_1u64(const u64 first,const siphash_key_t * key)
 }
 
 
-#include <linux/string.h>
-
-char * skip_spaces(const char * str)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/smp.h>
 
 void smp_call_function_many(const struct cpumask * mask,smp_call_func_t func,void * info,bool wait)
@@ -902,32 +766,9 @@ void smp_send_stop(void)
 }
 
 
-extern void software_node_notify_remove(struct device * dev);
-void software_node_notify_remove(struct device * dev)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
 #include <linux/jump_label.h>
 
 bool static_key_initialized;
-
-
-#include <linux/string_helpers.h>
-
-int string_escape_mem(const char * src,size_t isz,char * dst,size_t osz,unsigned int flags,const char * only)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/string.h>
-
-char * strreplace(char * s,char old,char new)
-{
-	lx_emul_trace_and_stop(__func__);
-}
 
 
 #include <linux/printk.h>
@@ -938,22 +779,6 @@ int suppress_printk;
 #include <linux/sysctl.h>
 
 const int sysctl_vals[] = {};
-
-
-#include <linux/sysfs.h>
-
-int sysfs_add_file_to_group(struct kobject * kobj,const struct attribute * attr,const char * group)
-{
-	lx_emul_trace_and_stop(__func__);
-}
-
-
-#include <linux/string.h>
-
-bool sysfs_streq(const char * s1,const char * s2)
-{
-	lx_emul_trace_and_stop(__func__);
-}
 
 
 #include <linux/clockchips.h>
@@ -1013,4 +838,3 @@ void wake_q_add_safe(struct wake_q_head * head,struct task_struct * task)
 {
 	lx_emul_trace_and_stop(__func__);
 }
-
