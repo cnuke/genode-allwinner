@@ -1,7 +1,7 @@
 TARGET   := pinephone_camera_drv
 DRIVER   := camera
 REQUIRES := arm_v8a
-LIBS     := base a64_lx_emul
+LIBS     := base a64_lx_emul jitterentropy
 
 INC_DIR := $(PRG_DIR)
 INC_DIR += $(PRG_DIR)/include/lx_emul/shadow
@@ -21,6 +21,8 @@ SRC_CC += gui.cc
 SRC_CC += lx_emul/pin.cc
 SRC_CC += lx_emul/shared_dma_buffer.cc
 SRC_CC += main.cc
+
+CC_OPT_drivers/media/i2c/ov5640 += -Wno-unused-function
 
 # MBUS address quirk
 CC_OPT_drivers/media/common/videobuf2/videobuf2-dma-contig += -Ddma_alloc_attrs=quirk_dma_alloc_attrs
