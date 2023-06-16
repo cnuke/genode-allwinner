@@ -116,7 +116,7 @@ struct Main
 	void handle_signal()
 	{
 		lx_user_handle_io();
-		Lx_kit::env().scheduler.schedule();
+		Lx_kit::env().scheduler.execute();
 	}
 
 	Main(Env & env) : env(env)
