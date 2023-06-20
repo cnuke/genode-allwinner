@@ -102,6 +102,7 @@ install_config {
 
 	<start name="goodix_touch_drv" caps="250">
 		<resource name="RAM" quantum="40M"/>
+		<config ld_verbose="yes"/>
 		<route>
 			<service name="ROM" label="dtb"> <parent label="goodix-pinephone.dtb"/> </service>
 			<service name="RM">          <parent/> </service>

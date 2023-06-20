@@ -185,6 +185,8 @@ static void sunxi_pinctrl_create_irq_mapping(struct sunxi_pinctrl *pctl, int pin
 {
 	int const irqno = irq_create_mapping(pctl->domain, pin_number);
 
+	printk("%s:%d pin_number: %d irqno: %d\n", __func__, __LINE__, pin_number, irqno);
+
 	irq_set_chip_and_handler(irqno, &sunxi_pinctrl_edge_irq_chip,
 	                         handle_edge_irq);
 	irq_set_chip_data(irqno, pctl);
@@ -200,6 +202,7 @@ static void sunxi_pinctrl_irq_handler(struct irq_desc *desc)
 
 	{
 		int pin_irq = irq_find_mapping(pctl->domain, lx_emul_pin_last_irq());
+	// printk("%s:%d pin_irq: %d\n", __func__, __LINE__, pin_irq);
 
 		generic_handle_irq(pin_irq);
 	}
@@ -259,6 +262,8 @@ static int a64_pinctrl_probe(struct platform_device *pdev)
 	 * occurs.
 	 */
 	pctl->global_irq = platform_get_irq(pdev, 0);
+
+	printk("%s:%d global_irq: %d\n", __func__, __LINE__, pctl->global_irq);
 
 	irq_set_chained_handler_and_data(pctl->global_irq,
 	                                 sunxi_pinctrl_irq_handler, pctl);
