@@ -1,0 +1,30 @@
+--- src/linux/drivers/gpu/drm/drm_vblank.c
++++ src/linux/drivers/gpu/drm/drm_vblank.c
+@@ -159,7 +159,7 @@ drm_get_last_vbltimestamp(struct drm_device *dev, unsigned int pipe,
+ 
+ static unsigned int drm_timestamp_precision = 20;  /* Default to 20 usecs. */
+ 
+-static int drm_vblank_offdelay = 5000;    /* Default to 5000 msecs. */
++static int drm_vblank_offdelay = 0000;    /* Default to 5000 msecs. */
+ 
+ module_param_named(vblankoffdelay, drm_vblank_offdelay, int, 0600);
+ module_param_named(timestamp_precision_usec, drm_timestamp_precision, int, 0600);
+--- src/linux/drivers/gpu/drm/sun4i/sun4i_tcon.c
++++ src/linux/drivers/gpu/drm/sun4i/sun4i_tcon.c
+@@ -791,6 +791,8 @@ static void sun4i_tcon_finish_page_flip(struct drm_device *dev,
+ 	spin_unlock_irqrestore(&dev->event_lock, flags);
+ }
+ 
++extern void lx_emul_framebuffer_vblank(void);
++
+ static irqreturn_t sun4i_tcon_handler(int irq, void *private)
+ {
+ 	struct sun4i_tcon *tcon = private;
+@@ -807,6 +809,7 @@ static irqreturn_t sun4i_tcon_handler(int irq, void *private)
+ 		return IRQ_NONE;
+ 
+ 	drm_crtc_handle_vblank(&scrtc->crtc);
++	lx_emul_framebuffer_vblank();
+ 	sun4i_tcon_finish_page_flip(drm, scrtc);
+ 
+ 	/* Acknowledge the interrupt */

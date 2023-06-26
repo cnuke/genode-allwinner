@@ -70,6 +70,13 @@ struct Framebuffer::Driver
 
 	void handle_timer()
 	{
+#if 0
+		static Genode::Milliseconds last_ms = timer.curr_time().trunc_to_plain_ms();
+		Genode::Milliseconds ms = timer.curr_time().trunc_to_plain_ms();
+		Genode::error(__func__, ": diff: ", ms.value - last_ms.value);
+		last_ms = ms;
+#endif
+
 		if (fb.constructed()) { fb->paint(); }
 	}
 
@@ -88,9 +95,6 @@ struct Framebuffer::Driver
 
 		lx_emul_start_kernel(dtb_rom.local_addr<void>());
 		log("returned from lx_emul_start_kernel");
-
-		timer.sigh(timer_handler);
-		timer.trigger_periodic(20*1000);
 	}
 };
 
@@ -99,6 +103,13 @@ static Framebuffer::Driver & driver(Genode::Env & env)
 {
 	static Framebuffer::Driver driver(env);
 	return driver;
+}
+
+
+extern "C" void lx_emul_framebuffer_vblank(void)
+{
+	Genode::Env & env = Lx_kit::env().env;
+	driver(env).handle_timer();
 }
 
 
@@ -111,6 +122,7 @@ extern "C" void lx_emul_framebuffer_ready(void * base, unsigned long,
 {
 	Genode::Env & env = Lx_kit::env().env;
 	driver(env).fb.construct(env, base, xres, yres);
+	driver(env).handle_timer();
 
 	Genode::log("--- framebuffer driver initialized ---");
 }
