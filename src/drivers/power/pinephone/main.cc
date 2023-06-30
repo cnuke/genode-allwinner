@@ -156,6 +156,7 @@ struct Power::Pmic_info
 				if (discharge_current > 0) {
 					xml.attribute("discharge_current", discharge_current);
 					xml.attribute("power_draw", discharge_current*voltage);
+					log("power_draw: ", discharge_current*voltage);
 				}
 			});
 		}
