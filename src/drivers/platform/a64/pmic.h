@@ -45,12 +45,12 @@ struct Driver::Pmic : private Noncopyable
 		{ }
 
 		void _on()  override { _scp.execute(_scp_on);  }
-		void _off() override { _scp.execute(_scp_off); }
+		void _off() override { if (_scp_off) _scp.execute(_scp_off); }
 	};
 
 	Power gpio0_ldo { _powers, "pmic-gpio0", _scp,
 	                  "3 90 pmic!",
-	                  "7 90 pmic!" };
+	                  nullptr };
 
 	Power csi_power { _powers, "pmic-csi", _scp,
 	                  /* ALDO1, set bit 5 in output control 3 */
