@@ -332,11 +332,23 @@ struct Power::Main
 		});
 	}
 
+	static constexpr unsigned MAX_HIST = 32;
+	float _power_draw_hist[MAX_HIST] { 0.f };
+	unsigned _power_draw_hist_idx { 0 };
+
+
 	void _handle_timer()
 	{
 		Pmic_info orig_pmic_info = _pmic_info;
 
 		_pmic_info = Pmic_info::from_scp(_scp);
+
+		if (_power_draw_hist_idx < MAX_HIST) {
+			_power_draw_hist[_power_draw_hist_idx] = _pmic_info.discharge_current*_pmic_info.voltage;
+			_power_draw_hist_idx++;
+			for(unsigned int i = 0; i < _power_draw_hist_idx; i++)
+				Genode::log(i, ": ", _power_draw_hist[i]);
+		}
 
 		_update_power_report();
 
