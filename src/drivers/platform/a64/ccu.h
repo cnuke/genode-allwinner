@@ -366,11 +366,14 @@ struct Driver::Ccu : private Attached_mmio
 	Pll _pll_audio_pattern_48  { _clocks, "pll-audio-pattern-48",  0xc000b852, _regs(), 0x284, Pll::Locked_check::NO };
 	Pll _pll_audio_bias        { _clocks, "pll-audio-bias",        0x10040000, _regs(), 0x224, Pll::Locked_check::NO };
 
-	/* set GPU to 432 MHz */
+	/* 432 MHz */
 	Pll _pll_gpu    { _clocks, "pll-gpu",    0x83006b05, _regs(), 0x38 };
 
+	/* 297 MHz */
 	Pll _pll_video0 { _clocks, "pll-video0", 0x83006207, _regs(), 0x10 };
+	/* 432 MHz */
 	Pll _pll_mipi   { _clocks, "pll-mipi",   0x80c0071a, _regs(), 0x40 };
+	/* 297 MHz */
 	Pll _pll_de     { _clocks, "pll-de",     0x83006207, _regs(), 0x48 };
 
 
