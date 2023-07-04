@@ -55,7 +55,7 @@ struct Driver::Pmic : private Noncopyable
 	                  "3a98 udelay ",
 	                  /* DLDO2 to 3.3V */
 	                  "1a 16 pmic! "
-	                  "7 90 pmic! " };
+	                  /* "7 90 pmic! " */ };
 
 	Power csi_power { _powers, "pmic-csi", _scp,
 	                  /* ALDO1, set bit 5 in output control 3 */
