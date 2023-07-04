@@ -304,7 +304,7 @@
 			<service name="ROM" label="system"> <parent label="system"/> </service>
 			<any-service> <parent/> </any-service>
 		</route>
-		<config period_ms="10000" system_rom="system"/>
+		<config period_ms="2000" system_rom="system"/>
 	</start>
 
 	<start name="button">
@@ -467,6 +467,7 @@
 			<service name="Pin_control"> <child name="a64_pio_drv"/>  </service>
 			<service name="IRQ">         <child name="a64_pio_drv"/>  </service>
 			<service name="Event"> <child name="event_filter" label="touch"/> </service>
+			<service name="LOG">         <parent label="on-target"/>  </service>
 			<any-service> <parent/> </any-service>
 		</route>
 	</start>
