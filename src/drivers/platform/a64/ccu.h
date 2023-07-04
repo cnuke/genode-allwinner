@@ -333,12 +333,25 @@ struct Driver::Ccu : private Attached_mmio
 
 		uint32_t _value = 0;
 
-		Pll(Clocks &clocks, Name name, uint32_t value, void *ccu_regs, addr_t reg_offset)
+		enum class Locked_check : unsigned { NO, YES };
+		Locked_check _locked_check { Locked_check::NO };
+
+		Pll(Clocks &clocks, Name name, uint32_t value, void *ccu_regs, addr_t reg_offset,
+		    Locked_check locked_check = Locked_check::YES)
 		:
-			Clock(clocks, name), Mmio((addr_t)ccu_regs + reg_offset), _value(value)
+			Clock(clocks, name), Mmio((addr_t)ccu_regs + reg_offset), _value(value),
+			_locked_check(locked_check)
 		{ }
 
-		void _enable()  override { write<Reg>(_value); }
+		void _enable()  override
+		{
+			write<Reg>(_value);
+			if (_locked_check == Locked_check::NO)
+				return;
+
+			enum : unsigned int { PLL_LOCKED = 1u << 28 };
+			while (!(read<Reg>() & PLL_LOCKED)) { continue; }
+		}
 		void _disable() override { write<Reg>(0); }
 	};
 
@@ -348,10 +361,10 @@ struct Driver::Ccu : private Attached_mmio
 	 * 67737600 for 3*22579200 for 44.1KHz (pll=0x91020702, pattern=0xc000ef35)
 	 */
 	Pll _pll_audio_441         { _clocks, "pll-audio-441",         0x91020702, _regs(), 0x08  };
-	Pll _pll_audio_pattern_441 { _clocks, "pll-audio-pattern-441", 0xc000ef35, _regs(), 0x284 };
+	Pll _pll_audio_pattern_441 { _clocks, "pll-audio-pattern-441", 0xc000ef35, _regs(), 0x284, Pll::Locked_check::NO };
 	Pll _pll_audio_48          { _clocks, "pll-audio-48",          0x91020e04, _regs(), 0x08  };
-	Pll _pll_audio_pattern_48  { _clocks, "pll-audio-pattern-48",  0xc000b852, _regs(), 0x284 };
-	Pll _pll_audio_bias        { _clocks, "pll-audio-bias",        0x10040000, _regs(), 0x224 };
+	Pll _pll_audio_pattern_48  { _clocks, "pll-audio-pattern-48",  0xc000b852, _regs(), 0x284, Pll::Locked_check::NO };
+	Pll _pll_audio_bias        { _clocks, "pll-audio-bias",        0x10040000, _regs(), 0x224, Pll::Locked_check::NO };
 
 	/* set GPU to 432 MHz */
 	Pll _pll_gpu    { _clocks, "pll-gpu",    0x83006b05, _regs(), 0x38 };
