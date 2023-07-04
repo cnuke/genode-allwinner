@@ -49,8 +49,13 @@ struct Driver::Pmic : private Noncopyable
 	};
 
 	Power gpio0_ldo { _powers, "pmic-gpio0", _scp,
-	                  "3 90 pmic!",
-	                  "7 90 pmic!" };
+	                  "3 90 pmic! "
+	                  /* DLDO2 to 1.8V */
+	                  "b 16 pmic! "
+	                  "3a98 udelay ",
+	                  /* DLDO2 to 3.3V */
+	                  "1a 16 pmic! "
+	                  "7 90 pmic! " };
 
 	Power csi_power { _powers, "pmic-csi", _scp,
 	                  /* ALDO1, set bit 5 in output control 3 */
