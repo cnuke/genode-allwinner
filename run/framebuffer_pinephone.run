@@ -10,6 +10,7 @@ build {
 	drivers/framebuffer/de
 	drivers/pin/a64
 	test/framebuffer
+	server/black_hole
 }
 
 install_config {
@@ -31,6 +32,14 @@ install_config {
 	<start name="timer">
 		<resource name="RAM" quantum="1M"/>
 		<provides><service name="Timer"/></provides>
+	</start>
+
+	<start name="black_hole">
+		<resource name="RAM" quantum="1M"/>
+		<provides><service name="LOG"/></provides>
+		<config>
+			<log/>
+		</config>
 	</start>
 
 	<start name="platform_drv" caps="200" managing_system="yes">
@@ -201,6 +210,7 @@ install_config {
 				<child name="a64_pio_drv" label="fb_drv -> PD23"/> </service>
 			<service name="Timer">       <child name="timer"/>            </service>
 			<service name="Capture">     <child name="test-framebuffer"/> </service>
+			<service name="LOG">     <child name="black_hole"/> </service>
 			<any-service> <parent/> </any-service>
 		</route>
 	</start>
@@ -219,6 +229,7 @@ build_boot_image {
 	a64_pio_drv
 	de_fb_drv
 	de-pinephone.dtb
+	black_hole
 }
 
 run_genode_until forever
