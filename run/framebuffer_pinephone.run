@@ -189,7 +189,7 @@ install_config {
 						</parent-provides>
 					</config>
 				</inline>
-				<sleep milliseconds="10000" />
+				<sleep milliseconds="5000" />
 			</rom>
 		</config>
 	</start>
