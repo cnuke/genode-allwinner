@@ -21,4 +21,4 @@ BOARDS := pinephone
 DTS_EXTRACT(pinephone) := --select /backlight --select de --select dsi
 
 # for using a64_linux on target
-#DTS_EXTRACT(pinephone) += --select /aliases --select /chosen --select /timer
+DTS_EXTRACT(pinephone) += --select /aliases --select /chosen --select /timer
