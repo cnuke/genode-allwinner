@@ -252,7 +252,7 @@ struct Sculpt::Main : Input_event_handler,
 		_leitzentrale_visible = _leitzentrale_rom.xml().attribute_value("enabled", false);
 
 		/* disable automatic blanking while the application runtime is visible */
-		_screensaver.blank_after_some_time(_leitzentrale_visible);
+		_screensaver.blank_after_some_time(false);
 
 		_handle_window_layout();
 	}
