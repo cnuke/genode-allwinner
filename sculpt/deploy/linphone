@@ -89,17 +89,21 @@
 		<route> <service name="RM"> <parent/> </service> </route>
 	</start>
 
+	<start name="mesa_gpu-cpu" pkg="mesa_gpu-cpu">
+		<route> <service name="RM"> <parent/> </service> </route>
+	</start>
+
 	<start name="terminal_crosslink" pkg="terminal_crosslink" priority="-2">
 		<route/>
 	</start>
 
 	<start name="linphone_gui" pkg="linphone-simple">
 		<route>
-			<service name="Gui"> <child name="themed_wm"/> </service>
+			<service name="Gui"> <parent label="focus"/> </service>
 			<service name="RM"> <parent/> </service>
 			<service name="Gpu"> <child name="gpu_drv"/> </service>
 			<service name="ROM" label="mesa_gpu_drv.lib.so">
-				<child name="mesa_gpu-lima"/>
+				<child name="mesa_gpu-cpu"/>
 			</service>
 			<service name="Terminal"> <child name="terminal_crosslink"/> </service>
 		</route>
