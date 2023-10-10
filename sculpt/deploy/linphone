@@ -62,6 +62,7 @@
 		<affinity xpos="0" width="1"/>
 		<route>
 			<service name="Platform"> <parent label="gpu"/> </service>
+			<service name="ROM" label_last="lima_gpu_drv"> <parent/> </service>
 		</route>
 	</start>
 
@@ -103,9 +104,10 @@
 			<service name="RM"> <parent/> </service>
 			<service name="Gpu"> <child name="gpu_drv"/> </service>
 			<service name="ROM" label="mesa_gpu_drv.lib.so">
-				<child name="mesa_gpu-cpu"/>
+				<child name="mesa_gpu-lima"/>
 			</service>
 			<service name="Terminal"> <child name="terminal_crosslink"/> </service>
+			<service name="ROM" label_last="libdrm.lib.so"> <parent/> </service>
 		</route>
 	</start>
 

@@ -1371,6 +1371,7 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 		Gpu::Sequence_number execute(Gpu::Vram_id id,
 		                             Genode::off_t) override
 		{
+			log(__func__, ": id: ", id.value);
 			Gpu::Request r = Gpu::Request::create(this, Gpu::Operation::Type::EXEC);
 			r.operation.id = id;
 			r.operation.ctx_id = _ctx_id;
@@ -1387,6 +1388,7 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 			};
 			_schedule_request(r, success, fail);
 
+			log(__func__, ": id: ", id.value, " seqno:", seqno.value);
 			return seqno;
 		}
 
@@ -1432,6 +1434,7 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 			};
 			_schedule_request(r, success, fail, Blocking_request::NO);
 
+			log(__func__, ": seqno:", seqno.value, " completed: ", completed);
 			return completed;
 		}
 
@@ -1501,6 +1504,8 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 				error("Allocation of buffers > 4G not supported!");
 				return false;
 			}
+
+			log(this, " ", __func__, ": id: ", id.value, " va: ", Hex(va.value), " size: ", size);
 
 			Gpu::Request r = Gpu::Request::create(this, Gpu::Operation::Type::ALLOC);
 			r.operation.id   = id;
@@ -1638,6 +1643,8 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 					if (v->import_name.valid())
 						return;
 
+					log(this, " ", __func__, ": id: ", id.value, " export: ", export_name.value, " import: ", export_name.value);
+
 					/* set global name used for import later on */
 					v->import_name =
 						Gpu_vram::Import_name { .value = export_name.value,
@@ -1674,6 +1681,7 @@ struct Gpu::Session_component : public Genode::Session_object<Gpu::Session>
 						vl.import_handle =
 							Vram_local::Import_handle { request.operation.handle,
 							                            true };
+						log(this, " ", __func__, ": id: ", id.value, " import: ", r.operation.name, " import_handle: ", request.operation.handle);
 					};
 					auto fail = [&] () { };
 					_schedule_request(r, success, fail);
