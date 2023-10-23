@@ -61,7 +61,7 @@ proc run_image { } {
 	set gpt_start_blocks   2048
 	set tailroom_kb        64
 	set content_size_bytes [expr [regsub {\s.*} [exec du -b [run_dir]/ext2] {}]]
-	set part_size_kb       [expr ($content_size_bytes / 1024) + 1800]
+	set part_size_kb       [expr ($content_size_bytes / 1024) + 3600]
 	set part_start_bytes   [expr $part_start_kb*1024]
 	set part_blocks        [expr ($part_size_kb*1024) / $bytes_per_block]
 	set part_first_block   [expr $part_start_bytes / $bytes_per_block]
