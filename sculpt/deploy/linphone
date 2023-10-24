@@ -101,6 +101,15 @@
 			<service name="ROM" label="mesa_gpu_drv.lib.so">
 				<child name="mesa_gpu-lima"/>
 			</service>
+			<service name="ROM" label_last="linphone-simple_qml.tar">
+				<parent/>
+			</service>
+			<service name="ROM" label_last="linphone-simple-linphone-plugin.tar">
+				<parent/>
+			</service>
+			<service name="ROM" label_last="liblinphoneplugin.lib.so">
+				<parent/>
+			</service>
 			<service name="Terminal"> <child name="terminal_crosslink"/> </service>
 			<service name="File_system"> <child name="linphone_recall_fs"/> </service>
 		</route>
