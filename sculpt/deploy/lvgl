@@ -1,0 +1,21 @@
+<config arch="" info="LVGL widgets demo">
+
+	<common_routes>
+		<service name="ROM" label_last="ld.lib.so"> <parent/> </service>
+		<service name="ROM" label_last="init">      <parent/> </service>
+		<service name="CPU">   <parent/> </service>
+		<service name="PD">    <parent/> </service>
+		<service name="LOG">   <parent/> </service>
+		<service name="Timer"> <parent/> </service>
+		<service name="TRACE"> <parent/> </service>
+	</common_routes>
+
+	<start name="lvgl-demo-widgets" pkg="lvgl-demo-widgets">
+		<route>
+			<service name="Gui"> <parent label="focus"/> </service>
+			<service name="ROM" label_last="test-lvgl-widgets"> <parent/> </service>
+			<any-service> <parent/> <any-child/> </any-service>
+		</route>
+	</start>
+
+</config>
