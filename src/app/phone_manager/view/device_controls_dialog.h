@@ -17,6 +17,7 @@
 #include <view/dialog.h>
 #include <model/power_state.h>
 #include <model/mic_state.h>
+#include <model/speaker_state.h>
 #include <model/audio_volume.h>
 
 namespace Sculpt { struct Device_controls_dialog; }
@@ -106,16 +107,50 @@ struct Sculpt::Device_controls_dialog : Widget<Vbox>
 
 	Hosted<Vbox, Mic_choice> _mic_choice { Id { "Microphone" } };
 
-	void view(Scope<Vbox> &s,
-	          Power_state  const &power,
-	          Mic_state    const &mic,
-	          Audio_volume const &audio) const
+	struct Speaker_choice : Widget<Frame>
+	{
+		using Speaker_button = Hosted<Frame, Right_floating_hbox, Select_button<Speaker_state> >;
+
+		Speaker_button _off  { Id { " Off " },  Speaker_state::OFF  },
+		               _ring { Id { " Ring " }, Speaker_state::RING },
+		               _on   { Id { " On " },   Speaker_state::ON   };
+
+		void view(Scope<Frame> &s, Speaker_state state) const
+		{
+			s.attribute("style", "important");
+
+			s.sub_scope<Left_floating_text>(s.id.value);
+			s.sub_scope<Right_floating_hbox>([&] (Scope<Frame, Right_floating_hbox> &s) {
+				s.widget(_off,  state);
+				s.widget(_ring, state);
+				s.widget(_on,   state);
+			});
+		}
+
+		template <typename FN>
+		void click(Clicked_at const &at, FN const &fn)
+		{
+			_off .propagate(at, [&] { fn(Speaker_state::OFF);  });
+			_ring.propagate(at, [&] { fn(Speaker_state::RING); });
+			_on  .propagate(at, [&] { fn(Speaker_state::ON);   });
+		}
+	};
+
+	Hosted<Vbox, Speaker_choice> _speaker_choice { Id { "Speaker" } };
+
+	void view(Scope<Vbox>  &s,
+	          Power_state   const &power,
+	          Mic_state     const &mic,
+	          Speaker_state const &speaker,
+	          Audio_volume  const &audio) const
 	{
 		s.widget(_brightness, power.brightness);
 		s.sub_scope<Vgap>();
 		s.widget(_volume, audio.value);
 		s.sub_scope<Vgap>();
 		s.widget(_mic_choice, mic);
+		s.sub_scope<Vgap>();
+		s.widget(_speaker_choice, speaker);
 	}
 
 	struct Action : Interface
@@ -123,6 +158,7 @@ struct Sculpt::Device_controls_dialog : Widget<Vbox>
 		virtual void select_brightness_level(unsigned) = 0;
 		virtual void select_volume_level(unsigned) = 0;
 		virtual void select_mic_policy(Mic_state const &) = 0;
+		virtual void select_speaker_policy(Speaker_state const &) = 0;
 	};
 
 	void _click_or_drag(Clicked_at const &at, Action &action)
@@ -140,6 +176,9 @@ struct Sculpt::Device_controls_dialog : Widget<Vbox>
 
 		_mic_choice.propagate(at, [&] (Mic_state policy) {
 			action.select_mic_policy(policy); });
+
+		_speaker_choice.propagate(at, [&] (Speaker_state policy) {
+			action.select_speaker_policy(policy); });
 	}
 
 	void drag(Dragged_at const &at, Action &action)
