@@ -740,7 +740,7 @@ struct Sculpt::Main : Input_event_handler,
 				_device_title_bar.view_status(s, _power_state.summary()); });
 
 			s.widget(_device_controls_dialog, _device_title_bar.selected(),
-			         _power_state, _mic_state, _audio_volume);
+			         _power_state, _mic_state, _speaker_state, _audio_volume);
 
 			s.widget(_device_power_dialog, _device_title_bar.selected(), _power_state);
 
@@ -1516,7 +1516,8 @@ struct Sculpt::Main : Input_event_handler,
 	 ** Audio **
 	 ***********/
 
-	Mic_state _mic_state = Mic_state::PHONE;
+	Mic_state     _mic_state     = Mic_state::PHONE;
+	Speaker_state _speaker_state = Speaker_state::RING;
 
 	Audio_volume _audio_volume { .value = 75 };
 
@@ -1568,12 +1569,22 @@ struct Sculpt::Main : Input_event_handler,
 			return false;
 		};
 
+		auto speaker_enabled = [&]
+		{
+			switch (_speaker_state) {
+			case Speaker_state::OFF:  return false;
+			case Speaker_state::RING: return !_current_call.active();
+			case Speaker_state::ON:   return true;
+			}
+			return false;
+		};
+
 		Audio_config const new_config {
 
 			.earpiece = true,
 
 			/* enable speaker for the ring tone when no call is active */
-			.speaker  = !_current_call.active() || _current_call.speaker,
+			.speaker  = speaker_enabled() || _current_call.speaker,
 
 			/* enable microphone during call */
 			.mic = mic_enabled(),
@@ -1606,6 +1617,15 @@ struct Sculpt::Main : Input_event_handler,
 	void select_mic_policy(Mic_state const &policy) override
 	{
 		_mic_state = policy;
+		_generate_audio_config();
+	}
+
+	/**
+	 * Device_controls_dialog::Action interface
+	 */
+	void select_speaker_policy(Speaker_state const &policy) override
+	{
+		_speaker_state = policy;
 		_generate_audio_config();
 	}
 
