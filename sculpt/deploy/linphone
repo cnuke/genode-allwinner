@@ -113,7 +113,7 @@
 		<config> <default-policy path="/recall/linphone" writeable="yes"/> </config>
 	</start>
 
-	<start name="linphone_daemon" pkg="cnuke/pkg/linphonec_daemon/2023-10-24">
+	<start name="linphone_daemon" pkg="cnuke/pkg/linphonec_daemon/2023-11-02">
 		<route>
 			<service name="Nic"> <child name="nic_router"/> </service>
 			<service name="Audio_in"> <child name="audio_drv"/> </service>
