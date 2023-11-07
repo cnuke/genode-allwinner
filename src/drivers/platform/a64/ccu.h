@@ -355,6 +355,10 @@ struct Driver::Ccu : private Attached_mmio
 
 	/* set GPU to 432 MHz */
 	Pll _pll_gpu    { _clocks, "pll-gpu",    0x83006b05, _regs(), 0x38 };
+	/* set GPU to ~200 MHz */
+	// Pll _pll_gpu    { _clocks, "pll-gpu",    0x8300640b, _regs(), 0x38 };
+	/* set GPU to 120 MHz */
+	// Pll _pll_gpu    { _clocks, "pll-gpu",    0x83004f0f, _regs(), 0x38 };
 
 	Pll _pll_video0 { _clocks, "pll-video0", 0x91003003, _regs(), 0x10 };
 	Pll _pll_mipi   { _clocks, "pll-mipi",   0x90c0042f, _regs(), 0x40 };
