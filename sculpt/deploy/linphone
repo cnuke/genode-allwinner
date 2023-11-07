@@ -9,39 +9,9 @@
 		<service name="Timer"> <parent/> </service>
 	</common_routes>
 
-	<start ram="16M" name="log_terminal" pkg="terminal">
-		<config>
-			<initial width="720" initial_height="960"/>
-			<palette>
-				<color index="0" value="#171c29"/>
-				<color index="8" value="#171c29"/>
-			</palette>
-			<vfs>
-				<rom name="VeraMono.ttf"/>
-				<dir name="fonts">
-					<dir name="monospace">
-						<ttf name="regular" path="/VeraMono.ttf" size_px="10"/>
-					</dir>
-				</dir>
-			</vfs>
-		</config>
+	<start name="linphone_loading_backdrop" pkg="linphone_loading_backdrop">
 		<route>
-			<service name="ROM" label_last="VeraMono.ttf"> <parent/> </service>
-			<service name="Gui"> <parent/> </service>
-		</route>
-	</start>
-
-	<start name="log" pkg="stdin2out">
-		<config>
-			<libc stdin="/report/log" stdout="/dev/terminal"/>
-			<vfs>
-				<dir name="dev"> <terminal/> </dir>
-				<dir name="report"> <fs label="report"/> </dir>
-			</vfs>
-		</config>
-		<route>
-			<service name="File_system"> <parent label="report"/> </service>
-			<service name="Terminal"> <child name="log_terminal"/> </service>
+			<service name="Gui"> <parent label="backdrop"/> </service>
 		</route>
 	</start>
 
