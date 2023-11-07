@@ -28,7 +28,7 @@ proc run_image { } {
 	set load_addr [lindex [regexp -inline -all -- {\S+} $load_addr] 3]
 
 	exec [cross_dev_prefix]objcopy -O binary $elf_img $bin_img
-	exec gzip --best --force $bin_img
+	exec pigz --best --force $bin_img
 	exec [installed_command mkimage] -A arm64 -O linux -T kernel -C gzip \
 	     -a $load_addr -e $entrypoint -d $bin_img.gz $uboot_img
 	exec rm -rf $bin_img.gz $elf_img
