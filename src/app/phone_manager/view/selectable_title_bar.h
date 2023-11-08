@@ -1,5 +1,5 @@
 /*
- * \brief  Section dialog
+ * \brief  Section widget
  * \author Norman Feske
  * \date   2022-05-20
  */
@@ -32,8 +32,7 @@ struct Sculpt::Selectable_title_bar : Widget<Vbox>
 	Selectable_title_bar(ENUM const &selected_value, ENUM value)
 	: _selected_value(selected_value), value(value) { }
 
-	template <typename STATUS_FN>
-	void view(Scope<Vbox> &s, STATUS_FN const &status_fn) const
+	void view(Scope<Vbox> &s, auto const &status_fn) const
 	{
 		Id const &id = s.id;
 
@@ -70,11 +69,9 @@ struct Sculpt::Selectable_title_bar : Widget<Vbox>
 		});
 	}
 
-	template <typename FN>
-	void click(Clicked_at const &, FN const &fn) { fn(); }
+	void click(Clicked_at const &, auto const &fn) { fn(); }
 
-	template <typename SCOPE, typename TEXT>
-	void view_status(SCOPE &s, TEXT const &text) const
+	void view_status(auto &s, auto const &text) const
 	{
 		s.template sub_scope<Dialog::Label>(text, [&] (auto &s) {
 			if (_minimized())

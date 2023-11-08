@@ -1,5 +1,5 @@
 /*
- * \brief  SIM PIN entry dialog
+ * \brief  SIM PIN entry widget
  * \author Norman Feske
  * \date   2022-05-20
  */
@@ -11,16 +11,16 @@
  * under the terms of the GNU Affero General Public License version 3.
  */
 
-#ifndef _VIEW__PIN_DIALOG_H_
-#define _VIEW__PIN_DIALOG_H_
+#ifndef _VIEW__PIN_WIDGET_H_
+#define _VIEW__PIN_WIDGET_H_
 
 #include <view/dialog.h>
 #include <model/sim_pin.h>
 
-namespace Sculpt { struct Pin_dialog; }
+namespace Sculpt { struct Pin_widget; }
 
 
-struct Sculpt::Pin_dialog : Widget<Centered_dialog_vbox>
+struct Sculpt::Pin_widget : Widget<Centered_dialog_vbox>
 {
 	Hosted<Centered_dialog_vbox, Pin_row>
 		_rows[3] { { Id { "r1" }, "1", "2", "3" },
@@ -85,4 +85,4 @@ struct Sculpt::Pin_dialog : Widget<Centered_dialog_vbox>
 	}
 };
 
-#endif /* _VIEW__PIN_DIALOG_H_ */
+#endif /* _VIEW__PIN_WIDGET_H_ */

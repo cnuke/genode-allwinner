@@ -1,5 +1,5 @@
 /*
- * \brief  Dialpad dialog
+ * \brief  Dialpad widget
  * \author Norman Feske
  * \date   2022-06-29
  */
@@ -11,16 +11,16 @@
  * under the terms of the GNU Affero General Public License version 3.
  */
 
-#ifndef _VIEW__DIALPAD_DIALOG_H_
-#define _VIEW__DIALPAD_DIALOG_H_
+#ifndef _VIEW__DIALPAD_WIDGET_H_
+#define _VIEW__DIALPAD_WIDGET_H_
 
 #include <view/dialog.h>
 #include <model/dialed_number.h>
 
-namespace Sculpt { struct Dialpad_dialog; }
+namespace Sculpt { struct Dialpad_widget; }
 
 
-struct Sculpt::Dialpad_dialog : Widget<Centered_dialog_vbox>
+struct Sculpt::Dialpad_widget : Widget<Centered_dialog_vbox>
 {
 	Hosted<Centered_dialog_vbox, Pin_row>
 		_rows[4] { { Id { "r1" }, "1", "2", "3" },
@@ -79,4 +79,4 @@ struct Sculpt::Dialpad_dialog : Widget<Centered_dialog_vbox>
 	}
 };
 
-#endif /* _VIEW__DIALPAD_DIALOG_H_ */
+#endif /* _VIEW__DIALPAD_WIDGET_H_ */
