@@ -92,6 +92,8 @@
 			<service name="Rtc"> <child name="sntp_dummy_rtc"/> </service>
 			<service name="File_system"> <child name="linphone_recall_fs"/> </service>
 			<service name="RM"> <parent/> </service>
+			<service name="ROM" label_last="vfs_resolvconf.lib.so"> <parent/> </service>
+			<service name="ROM" label_last="vfs_lxip.lib.so"> <parent/> </service>
 		</route>
 	</start>
 
