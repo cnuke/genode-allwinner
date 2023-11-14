@@ -24,7 +24,7 @@ struct Sculpt::Component_info_widget : Widget<Vbox>
 	void view(Scope<Vbox> &s, Component const &component) const
 	{
 		if (component.info.length() > 1) {
-			s.sub_scope<Dialog::Label>(Component::Info(" ", component.info, " "));
+			s.sub_scope<Label>(Component::Info(" ", component.info, " "));
 			s.sub_scope<Small_vgap>();
 		}
 		s.sub_scope<Annotation>(component.path);

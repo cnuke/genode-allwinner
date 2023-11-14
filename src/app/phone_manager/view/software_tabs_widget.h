@@ -39,7 +39,7 @@ struct Sculpt::Software_tabs_widget : Widget<Frame>
 			if (hovered)  s.attribute("hovered",  "yes");
 			if (!ready)   s.attribute("style",    "unimportant");
 
-			s.sub_scope<Dialog::Label>(s.id.value);
+			s.sub_scope<Label>(s.id.value);
 		}
 	};
 

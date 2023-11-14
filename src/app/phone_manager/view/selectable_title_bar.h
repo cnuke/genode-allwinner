@@ -53,7 +53,7 @@ struct Sculpt::Selectable_title_bar : Widget<Vbox>
 				s.sub_scope<Hbox>([&] (Scope<Vbox, Float, Button, Hbox> &s) {
 					s.sub_scope<Vbox>(id, [&] (Scope<Vbox, Float, Button, Hbox, Vbox> &s) {
 						s.sub_scope<Min_ex>(12);
-						s.sub_scope<Dialog::Label>(id.value, [&] (auto &s) {
+						s.sub_scope<Label>(id.value, [&] (auto &s) {
 						if (_minimized())
 								s.attribute("font", "annotation/regular");
 							else
@@ -73,7 +73,7 @@ struct Sculpt::Selectable_title_bar : Widget<Vbox>
 
 	void view_status(auto &s, auto const &text) const
 	{
-		s.template sub_scope<Dialog::Label>(text, [&] (auto &s) {
+		s.template sub_scope<Label>(text, [&] (auto &s) {
 			if (_minimized())
 				s.attribute("font", "annotation/regular"); });
 	}

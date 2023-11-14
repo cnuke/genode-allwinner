@@ -40,7 +40,7 @@ struct Sculpt::Device_controls_widget : Widget<Vbox>
 						else
 							s.attribute("style", "unimportant");
 
-						s.sub_scope<Dialog::Label>(" ");
+						s.sub_scope<Label>(" ");
 					});
 				}
 			}

@@ -36,14 +36,14 @@ struct Sculpt::Index_menu_widget : Widget<Vbox>
 
 				s.sub_scope<Icon>("back", Icon::Attr { .hovered  = hovered,
 				                                       .selected = true });
-				s.sub_scope<Dialog::Label>(" ");
-				s.sub_scope<Dialog::Label>(text, [&] (auto &s) {
+				s.sub_scope<Label>(" ");
+				s.sub_scope<Label>(text, [&] (auto &s) {
 					s.attribute("font", "title/regular"); });
 
 				/* inflate vertical space to button size */
 				s.sub_scope<Button>([&] (Scope<Left_floating_hbox, Button> &s) {
 					s.attribute("style", "invisible");
-					s.sub_scope<Dialog::Label>(""); });
+					s.sub_scope<Label>(""); });
 			}
 
 			void click(Clicked_at const &, auto const &fn) const { fn(); }

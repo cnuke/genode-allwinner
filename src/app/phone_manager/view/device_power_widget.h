@@ -23,8 +23,6 @@ namespace Sculpt { struct Device_power_widget; }
 
 struct Sculpt::Device_power_widget : Widget<Vbox>
 {
-	using Label = Dialog::Label;
-
 	enum class Option { UNKNOWN, PERFORMANCE, ECONOMIC, REBOOT, OFF };
 
 	Option _selected_option { Option::UNKNOWN };

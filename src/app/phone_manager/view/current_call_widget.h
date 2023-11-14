@@ -71,8 +71,8 @@ struct Sculpt::Current_call_widget : Widget<Frame>
 
 			s.sub_scope<Vbox>([&] (Scope<Hbox, Vbox> &s) {
 				s.sub_scope<Min_ex>(15);
-				s.sub_scope<Dialog::Label>(padded(message(call.state)));
-				s.sub_scope<Dialog::Label>(padded(call.number));
+				s.sub_scope<Label>(padded(message(call.state)));
+				s.sub_scope<Label>(padded(call.number));
 			});
 
 			s.sub_scope<Right_floating_hbox>([&] (Scope<Hbox, Right_floating_hbox> &s) {
@@ -111,7 +111,7 @@ struct Sculpt::Current_call_widget : Widget<Frame>
 				Action_button::view(s, [&] (Scope<Button> &s) {
 					if (!ready)
 						s.attribute("style", "unimportant");
-					s.sub_scope<Dialog::Label>(text);
+					s.sub_scope<Label>(text);
 				});
 			}
 		};

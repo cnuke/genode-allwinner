@@ -27,17 +27,17 @@ struct Sculpt::Outbound_widget : Widget<Frame>
 
 			s.sub_scope<Button>([&] (Scope<Frame, Hbox, Button> &s) {
 				s.attribute("style", "unimportant");
-				s.sub_scope<Dialog::Label>("History");
+				s.sub_scope<Label>("History");
 			});
 
 			s.sub_scope<Button>([&] (Scope<Frame, Hbox, Button> &s) {
 				s.attribute("style", "unimportant");
-				s.sub_scope<Dialog::Label>("Contacts");
+				s.sub_scope<Label>("Contacts");
 			});
 
 			s.sub_scope<Button>([&] (Scope<Frame, Hbox, Button> &s) {
 				s.attribute("selected", "yes");
-				s.sub_scope<Dialog::Label>("Dial");
+				s.sub_scope<Label>("Dial");
 			});
 		});
 	}

@@ -45,7 +45,7 @@ struct Sculpt::Index_pkg_widget : Widget<Float>
 				s.sub_scope<Small_vgap>();
 				s.sub_scope<Annotation>(component.path);
 				s.sub_scope<Small_vgap>();
-				s.sub_scope<Dialog::Label>("installed but incomplete");
+				s.sub_scope<Label>("installed but incomplete");
 
 				if (nic_state.ready()) {
 					s.sub_scope<Small_vgap>();
@@ -56,7 +56,7 @@ struct Sculpt::Index_pkg_widget : Widget<Float>
 
 					s.sub_scope<Float>([&] (Scope<Float, Vbox, Float> &s) {
 						s.widget(_install, [&] (Scope<Button> &s) {
-							s.sub_scope<Dialog::Label>(text); }); });
+							s.sub_scope<Label>(text); }); });
 				}
 				s.sub_scope<Small_vgap>();
 			}
@@ -75,7 +75,7 @@ struct Sculpt::Index_pkg_widget : Widget<Float>
 				s.sub_scope<Vgap>();
 				s.sub_scope<Float>([&] (Scope<Float, Vbox, Float> &s) {
 					s.widget(_install, [&] (Scope<Button> &s) {
-						s.sub_scope<Dialog::Label>(text); }); });
+						s.sub_scope<Label>(text); }); });
 				s.sub_scope<Vgap>();
 			}
 
@@ -86,7 +86,7 @@ struct Sculpt::Index_pkg_widget : Widget<Float>
 				s.sub_scope<Vgap>();
 				s.sub_scope<Annotation>(component.path);
 				s.sub_scope<Vgap>();
-				s.sub_scope<Dialog::Label>("not installed");
+				s.sub_scope<Label>("not installed");
 				s.sub_scope<Vgap>();
 			}
 		});

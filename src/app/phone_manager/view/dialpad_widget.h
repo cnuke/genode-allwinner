@@ -44,18 +44,18 @@ struct Sculpt::Dialpad_widget : Widget<Centered_dialog_vbox>
 			s.attribute("style", "invisible");
 			s.sub_scope<Float>([&] (auto &s) {
 				s.attribute("west", "yes");
-				s.template sub_scope<Dialog::Label>("    Dial", [&] (auto &s) {
+				s.template sub_scope<Label>("    Dial", [&] (auto &s) {
 					s.attribute("font", "title/regular");
 					if (digits.length() > 12)
 						s.attribute("style", "invisible");
 				});
 			});
 			s.sub_scope<Float>([&] (auto &s) {
-				s.template sub_scope<Dialog::Label>(Text("   ", digits), [&] (auto &s) {
+				s.template sub_scope<Label>(Text("   ", digits), [&] (auto &s) {
 					s.attribute("min_ex", 15);
 					if (digits.length() < 20)
 						s.attribute("font", "title/regular"); });
-				s.template sub_scope<Dialog::Label>(" ", [&] (auto &s) {
+				s.template sub_scope<Label>(" ", [&] (auto &s) {
 					s.attribute("font", "title/regular"); });
 			});
 		});

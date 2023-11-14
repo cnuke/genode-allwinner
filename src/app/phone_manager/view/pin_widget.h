@@ -33,11 +33,11 @@ struct Sculpt::Pin_widget : Widget<Centered_dialog_vbox>
 		s.sub_scope<Min_ex>(20);
 		s.sub_scope<Vgap>();
 		s.sub_scope<Hbox>([&] (Scope<Centered_dialog_vbox, Hbox> &s) {
-			s.sub_scope<Dialog::Label>(" Enter SIM PIN ", [&] (auto &s) {
+			s.sub_scope<Label>(" Enter SIM PIN ", [&] (auto &s) {
 				s.attribute("min_ex", 5);
 				s.attribute("font", "title/regular");
 			});
-			s.sub_scope<Dialog::Label>(String<64>(" ", sim_pin, " "), [&] (auto &s) {
+			s.sub_scope<Label>(String<64>(" ", sim_pin, " "), [&] (auto &s) {
 				s.attribute("min_ex", 5);
 				s.attribute("font", "title/regular");
 			});
