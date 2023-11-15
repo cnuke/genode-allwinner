@@ -40,23 +40,27 @@ struct Sculpt::Dialpad_widget : Widget<Centered_dialog_vbox>
 
 		s.sub_scope<Min_ex>(20);
 		s.sub_scope<Vgap>();
-		s.sub_scope<Button>([&] (auto &) {
+		s.sub_scope<Button>([&] (Scope<Centered_dialog_vbox, Button> &s) {
 			s.attribute("style", "invisible");
-			s.sub_scope<Float>([&] (auto &s) {
+			s.sub_scope<Float>([&] (Scope<Centered_dialog_vbox, Button, Float> &s) {
 				s.attribute("west", "yes");
-				s.template sub_scope<Label>("    Dial", [&] (auto &s) {
+				s.sub_scope<Label>("   Dial", [&] (auto &s) {
 					s.attribute("font", "title/regular");
 					if (digits.length() > 12)
 						s.attribute("style", "invisible");
 				});
 			});
-			s.sub_scope<Float>([&] (auto &s) {
-				s.template sub_scope<Label>(Text("   ", digits), [&] (auto &s) {
-					s.attribute("min_ex", 15);
-					if (digits.length() < 20)
+			s.sub_scope<Hbox>([&] (Scope<Centered_dialog_vbox, Button, Hbox> &s) {
+				if (digits.length() <= 12)
+					s.sub_scope<Min_ex>(16);
+				s.sub_scope<Float>([&] (Scope<Centered_dialog_vbox, Button, Hbox, Float> &s) {
+					s.sub_scope<Label>(Text(digits), [&] (auto &s) {
+						s.attribute("min_ex", 15);
+						if (digits.length() < 20)
+							s.attribute("font", "title/regular"); });
+					s.sub_scope<Label>(" ", [&] (auto &s) {
 						s.attribute("font", "title/regular"); });
-				s.template sub_scope<Label>(" ", [&] (auto &s) {
-					s.attribute("font", "title/regular"); });
+				});
 			});
 		});
 		s.sub_scope<Vgap>();

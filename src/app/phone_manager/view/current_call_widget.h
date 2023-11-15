@@ -121,7 +121,9 @@ struct Sculpt::Current_call_widget : Widget<Frame>
 
 		void view(Scope<Hbox> &s, Dialed_number const &number) const
 		{
-			s.sub_scope<Button_vgap>();
+			s.sub_scope<Vbox>([&] (Scope<Hbox, Vbox> &s) {
+				s.sub_scope<Vgap>();
+				s.sub_scope<Vgap>(); });
 			s.sub_scope<Float>([&] (Scope<Hbox, Float> &s) {
 				s.sub_scope<Hbox>([&] (Scope<Hbox, Float, Hbox> &s) {
 					s.widget(_clear, number.at_least_one_digit(), " Clear ");
