@@ -63,7 +63,7 @@
 		<route/>
 	</start>
 
-	<start name="linphone_gui" pkg="cnuke/pkg/linphone-simple/2023-11-08">
+	<start name="linphone_gui" pkg="cnuke/pkg/linphone-simple/2023-11-20">
 		<route>
 			<service name="Gui"> <parent label="focus"/> </service>
 			<service name="RM"> <parent/> </service>
@@ -83,7 +83,7 @@
 		<config> <default-policy path="/recall/linphone" writeable="yes"/> </config>
 	</start>
 
-	<start name="linphone_daemon" pkg="cnuke/pkg/linphonec_daemon/2023-11-08">
+	<start name="linphone_daemon" pkg="cnuke/pkg/linphonec_daemon/2023-11-20">
 		<route>
 			<service name="Nic"> <child name="nic_router"/> </service>
 			<service name="Audio_in"> <child name="audio_drv"/> </service>
