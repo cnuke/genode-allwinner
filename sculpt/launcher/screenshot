@@ -1,4 +1,4 @@
-<launcher name="screenshot" pkg="cnuke/pkg/screenshot/2023-11-20" priority="-2">
+<launcher name="screenshot" pkg="cnuke/pkg/screenshot/2023-11-20-a" priority="-2">
 	<route>
 		<service name="Gui" label="trigger"> <parent label="overlay"/> </service>
 		<service name="Gui"> <parent/> </service>
