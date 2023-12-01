@@ -3,3 +3,4 @@ os
 platform_session
 report_session
 scp_session
+timer_session

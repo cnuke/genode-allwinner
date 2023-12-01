@@ -19,11 +19,14 @@
 #include <common.h>
 #include <scp.h>
 
+#include <timer_session/connection.h>
+
 namespace Driver { struct Main; };
 
 struct Driver::Main
 {
 	Env                  & _env;
+	// Timer::Connection      _timer          { _env };
 	Attached_rom_dataspace _config_rom     { _env, "config"        };
 	Common                 _common         { _env, _config_rom     };
 	Signal_handler<Main>   _config_handler { _env.ep(), *this,
@@ -50,6 +53,7 @@ struct Driver::Main
 		_config_rom.sigh(_config_handler);
 		_handle_config();
 		_load_scp_firmware();
+		// _timer.msleep(1000);
 		_common.announce_service();
 	}
 };
@@ -67,6 +71,8 @@ void Driver::Main::_load_scp_firmware()
 	char const *firmware[] = {
 
 		/* testing ground for SCP firmware customizations */
+		// "1 1 + "
+		"7a120 udelay "
 	};
 
 	for (char const *command : firmware) {
