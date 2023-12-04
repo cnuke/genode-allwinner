@@ -258,6 +258,8 @@ struct Scp::Local_connection : Noncopyable
 	{
 		Response response { };
 
+		// Genode::error(__func__, ": '", command, "'");
+
 		_session.local_execute(
 
 			[&] (char *buf, size_t buf_len) {
@@ -495,6 +497,7 @@ struct Scp::Driver : private Scheduler
 	{
 		_irq.sigh(_irq_handler);
 		_handle_irq();
+		error(__func__, ":", __LINE__, ": announce Scp service");
 		_env.parent().announce(_env.ep().manage(_root));
 	}
 };

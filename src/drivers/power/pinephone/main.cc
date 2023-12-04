@@ -47,7 +47,12 @@ struct Power::Scp : Noncopyable
 	{
 		Response response { };
 
+		return response;
+
 		using Execute_error = ::Scp::Execute_error;
+
+		// Thread::trace(command);
+		// error(__func__, ": '", command, "'");
 
 		_connection.execute(
 
@@ -73,6 +78,7 @@ struct Power::Scp : Noncopyable
 					break;
 				case Execute_error::RESPONSE_TOO_LARGE:
 					error("unable to retrieve too large SCP response");
+					error("command: '", command, "'");
 					break;
 				}
 			}
@@ -451,6 +457,7 @@ struct Power::Main
 
 	Main(Env &env) : _env(env)
 	{
+		error(__func__, ":", __LINE__);
 		/*
 		 * Configure TS pin function as external input (bit 2 in register 0x84).
 		 * Otherwise, charging won't be activated when connecting A/C.
@@ -502,10 +509,13 @@ struct Power::Main
 		_scp.execute(": o 0 pmic@ .bits space 1 pmic@ .bits ;");
 		_scp.execute(": p power_info ;");
 
-		_timer.sigh(_timer_handler);
+		// _timer.sigh(_timer_handler);
+
+		error(__func__, ":", __LINE__);
 
 		_config.sigh(_config_handler);
 		_handle_config();
+		error(__func__, ":", __LINE__);
 	}
 };
 
