@@ -436,14 +436,22 @@ struct Scp::Driver : private Scheduler
 	enum class Retrieve_error { CAPACITY };
 	using Retrieve_result = Attempt<Retrieval, Retrieve_error>;
 
+	char error_buffer[4096] { };
+
 	Retrieve_result _retrieve_from_scp(char *dst, size_t dst_size)
 	{
 		size_t const len = _mob.count;
 		bool   const mob_saturated = (len >= 1000u);
 
 		/* consider fully saturated mob as overflown */
-		if (mob_saturated || len > dst_size)
+		if (mob_saturated || len > dst_size) {
+			unsigned i = 0;
+			for (i = 0; i < Genode::min(len, sizeof(error_buffer)-1); i++)
+				error_buffer[i] = _mob.chars[_swizzled_index(i)];
+			error_buffer[i] = '\0';
+			Genode::error(__func__, ": len: ", len, " dst_size: ", dst_size, " error_buffer: '", (char const*)error_buffer, "'");
 			return Retrieve_error::CAPACITY;
+		}
 
 		for (unsigned i = 0; i < len; i++)
 			dst[i] = _mob.chars[_swizzled_index(i)];
