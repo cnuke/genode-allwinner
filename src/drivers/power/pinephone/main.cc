@@ -488,8 +488,9 @@ struct Power::Main
 			"  7a pmic@ 10 * 7b pmic@ + .decimal " /* charge current */
 			"  7c pmic@ 10 * 7d pmic@ + .decimal " /* discharge current */
 			"  b9 pmic@ 7f and .decimal "          /* battery capacity (percent) */
-			"; "
+			"; ");
 
+		_scp.execute(
 			/* clear all PMIC interrupt status bits */
 			": clear_pmic_irqs 48 4 FOR dup ff swap pmic! 1 + NEXT drop ; "
 		);
