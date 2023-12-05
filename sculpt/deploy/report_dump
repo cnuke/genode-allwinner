@@ -1,0 +1,32 @@
+<config arch="">
+
+	<common_routes>
+		<service name="ROM" label_last="ld.lib.so"> <parent/> </service>
+		<service name="ROM" label_last="init">      <parent/> </service>
+		<service name="CPU">   <parent/> </service>
+		<service name="PD">    <parent/> </service>
+		<service name="LOG">   <parent/> </service>
+		<service name="Timer"> <parent/> </service>
+	</common_routes>
+
+	<start name="trace_logger" pkg="trace_logger">
+		<route>
+			<service name="TRACE"> <parent/> </service>
+		</route>
+		<config verbose="yes"
+		        session_ram="90M"
+		        session_arg_buffer="1M"
+		        session_parent_levels="3"
+		        period_sec="30"
+		        default_policy="null"
+		        default_buffer="32K">
+			<policy label_prefix="init -> drivers -> power"/>
+			<!--<policy label_prefix="kernel" thread="idle"/>-->
+		</config>
+	</start>
+
+	<start name="system_clock-dummy" pkg="system_clock-dummy"/>
+
+	<start name="report_dump"/>
+
+</config>
