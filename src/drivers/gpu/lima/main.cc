@@ -1704,6 +1704,9 @@ struct Gpu::Root : Gpu::Root_component
 		{
 			Session::Label const label  { session_label_from_args(args) };
 
+			Genode::error(__func__, ":", __LINE__, ": "
+			              "ram: ", _env.pd().used_ram().value, "/", _env.pd().ram_quota().value, " "
+			              "cap: ", _env.pd().used_caps().value, "/", _env.pd().cap_quota().value);
 			Session_component *sc =
 				new (_alloc) Session_component(_env, _env.ep(),
 			                                   session_resources_from_args(args),
@@ -1722,6 +1725,9 @@ struct Gpu::Root : Gpu::Root_component
 		void _destroy_session(Session_component *sc) override
 		{
 			Genode::destroy(md_alloc(), sc);
+			Genode::error(__func__, ":", __LINE__, ": "
+			              "ram: ", _env.pd().used_ram().value, "/", _env.pd().ram_quota().value, " "
+			              "cap: ", _env.pd().used_caps().value, "/", _env.pd().cap_quota().value);
 		}
 
 	public:
