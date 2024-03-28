@@ -4,7 +4,7 @@
 #
 
 build {
-	core lib/ld init timer lib/libc lib/vfs lib/posix lib/vfs_oss
+	core lib/ld init timer lib/libc lib/vfs lib/posix lib/vfs_legacy_oss
 	drivers/platform/a64 drivers/pin/a64
 	drivers/audio_control/pinephone
 	drivers/audio/a64
@@ -119,7 +119,7 @@ install_config {
 				<vfs>
 					<dir name="dev">
 						<log/>
-						<oss name="dsp"/>
+						<legacy_oss name="dsp"/>
 					</dir>
 				</vfs>
 				<libc stdout="/dev/log" stderr="/dev/log"/>
