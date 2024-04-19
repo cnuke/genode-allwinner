@@ -1,0 +1,52 @@
+<config arch="" info="simple oscilloscope for audio">
+
+	<common_routes>
+		<service name="ROM" label_last="ld.lib.so"> <parent/> </service>
+		<service name="ROM" label_last="init">      <parent/> </service>
+		<service name="CPU">   <parent/> </service>
+		<service name="PD">    <parent/> </service>
+		<service name="LOG">   <parent/> </service>
+		<service name="Timer"> <parent/> </service>
+	</common_routes>
+
+	<start name="audio_drv" pkg="a64_audio_drv" priority="0" cpu="40">
+		<resource name="CPU" quantum="20"/>
+		<affinity xpos="0" ypos="0" width="1" height="1"/>
+		<config record_play="yes"/>
+		<route>
+			<service name="Play">   <child name="mixer"/> </service>
+			<service name="Record"> <child name="mixer"/> </service>
+			<service name="Platform"> <parent label="audio_drv"/> </service>
+		</route>
+	</start>
+
+	<start name="mixer" pkg="record_play_mixer" priority="0">
+		<resource name="CPU" quantum="20"/>
+		<affinity xpos="0" ypos="0" width="1" height="1"/>
+		<config jitter_ms="10">
+
+			<mix name="left">  <play label="waveform_player -> left" /> </mix>
+			<mix name="right"> <play label="waveform_player -> right"/> </mix>
+
+			<policy label="audio_drv -> left"  record="left"  volume="0.6"/>
+			<policy label="audio_drv -> right" record="right" volume="0.0"/>
+		</config>
+		<route>
+			<service name="Report"> <parent/> </service>
+		</route>
+	</start>
+
+	<start name="waveform_player" pkg="waveform_player" priority="0">
+		<affinity xpos="0" ypos="0" width="1" height="1"/>
+		<resource name="RAM" quantum="1M"/>
+		<config period_ms="11">
+			<play label="left"  wave="sine"   hz="1000" sample_rate_hz="44100"/>
+			<play label="right" wave="square" hz="1000" sample_rate_hz="44100"/>
+		</config>
+		<route>
+			<service name="Play">   <child name="mixer"/> </service>
+			<any-service> <parent/> <any-child/> </any-service>
+		</route>
+	</start>
+
+</config>
