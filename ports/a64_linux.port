@@ -2,9 +2,9 @@ LICENSE   := GPLv2
 VERSION   := git
 DOWNLOADS := a64_linux.archive
 
-REV(a64_linux) := 40561fa3c8b8467fc74ead6cbb409c90dbb01fdb
+REV(a64_linux) := 43fde49dafd23b7acff7d17ca10a83bbbf26fcca
 URL(a64_linux) := https://github.com/cnuke/a64_linux/archive/${REV(a64_linux)}.tar.gz
-SHA(a64_linux) := 6b2d09492df402fb96fd9d0e504f942f1cd3e9e84fe3a853ead791b3d5cfd394
+SHA(a64_linux) := ddf9fdf6197f05571ea5f187a97e6cfc669c69934d49e250ee40d65b0e8cc879
 DIR(a64_linux) := src/linux
 
 PATCHES := \

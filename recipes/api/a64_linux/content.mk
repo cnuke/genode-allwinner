@@ -67,6 +67,7 @@ LX_FILES += Makefile \
             scripts/Makefile.asm-generic \
             scripts/Makefile.build \
             scripts/Makefile.compiler \
+            scripts/Makefile.defconf \
             scripts/Makefile.extrawarn \
             scripts/Makefile.host \
             scripts/Makefile.lib \

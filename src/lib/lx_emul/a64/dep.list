@@ -81,6 +81,7 @@ arch/arm64/include/asm/string.h
 arch/arm64/include/asm/syscall_wrapper.h
 arch/arm64/include/asm/sysreg.h
 arch/arm64/include/asm/thread_info.h
+arch/arm64/include/asm/tlbbatch.h
 arch/arm64/include/asm/timex.h
 arch/arm64/include/asm/tlbflush.h
 arch/arm64/include/asm/topology.h
@@ -205,6 +206,11 @@ include/asm-generic/topology.h
 include/asm-generic/trace_clock.h
 include/asm-generic/unaligned.h
 include/asm-generic/user.h
+include/kunit/assert.h
+include/kunit/resource.h
+include/kunit/test.h
+include/kunit/test-bug.h
+include/kunit/try-catch.h
 include/clocksource/arm_arch_timer.h
 include/dt-bindings/clock/sun50i-a64-ccu.h
 include/dt-bindings/clock/sun6i-rtc.h
@@ -223,6 +229,7 @@ include/linux/alarmtimer.h
 include/linux/align.h
 include/linux/amba/bus.h
 include/linux/arch_topology.h
+include/linux/args.h
 include/linux/arm-smccc.h
 include/linux/assoc_array.h
 include/linux/async.h
@@ -259,6 +266,7 @@ include/linux/cdev.h
 include/linux/cgroup-defs.h
 include/linux/cgroup.h
 include/linux/cgroup_api.h
+include/linux/cleanup.h
 include/linux/circ_buf.h
 include/linux/clk-provider.h
 include/linux/clk.h
@@ -266,6 +274,7 @@ include/linux/clk/clk-conf.h
 include/linux/clockchips.h
 include/linux/clocksource.h
 include/linux/clocksource_ids.h
+include/linux/compaction.h
 include/linux/cma.h
 include/linux/compat.h
 include/linux/compiler-gcc.h
@@ -282,6 +291,7 @@ include/linux/context_tracking.h
 include/linux/context_tracking_irq.h
 include/linux/context_tracking_state.h
 include/linux/cpu.h
+include/linux/cpu_smt.h
 include/linux/cpufreq.h
 include/linux/cpuhotplug.h
 include/linux/cpumask.h
@@ -345,6 +355,7 @@ include/linux/hardirq.h
 include/linux/hash.h
 include/linux/hashtable.h
 include/linux/hashtable_api.h
+include/linux/hex.h
 include/linux/highmem-internal.h
 include/linux/highmem.h
 include/linux/highuid.h
@@ -368,7 +379,6 @@ include/linux/instrumentation.h
 include/linux/instrumented.h
 include/linux/interrupt.h
 include/linux/io.h
-include/linux/ioasid.h
 include/linux/iocontext.h
 include/linux/iommu.h
 include/linux/iopoll.h
@@ -381,6 +391,7 @@ include/linux/irq_work.h
 include/linux/irqchip.h
 include/linux/irqdesc.h
 include/linux/irqdomain.h
+include/linux/irqdomain_defs.h
 include/linux/irqflags.h
 include/linux/irqhandler.h
 include/linux/irqnr.h
@@ -406,6 +417,7 @@ include/linux/kernel_stat.h
 include/linux/kernfs.h
 include/linux/kexec.h
 include/linux/key.h
+include/linux/kfence.h
 include/linux/kfifo.h
 include/linux/kgdb.h
 include/linux/klist.h
@@ -436,6 +448,7 @@ include/linux/list_bl.h
 include/linux/list_lru.h
 include/linux/list_nulls.h
 include/linux/livepatch.h
+include/linux/livepatch_sched.h
 include/linux/llist.h
 include/linux/local_lock.h
 include/linux/local_lock_internal.h
@@ -452,6 +465,7 @@ include/linux/mdio.h
 include/linux/mem_encrypt.h
 include/linux/memblock.h
 include/linux/memcontrol.h
+include/linux/memory.h
 include/linux/memory_hotplug.h
 include/linux/mempolicy.h
 include/linux/mempool.h
@@ -471,9 +485,11 @@ include/linux/mmzone.h
 include/linux/mnt_idmapping.h
 include/linux/mod_devicetable.h
 include/linux/module.h
+include/linux/module_symbol.h
 include/linux/moduleparam.h
 include/linux/mount.h
 include/linux/msi.h
+include/linux/msi_api.h
 include/linux/mutex.h
 include/linux/mutex_api.h
 include/linux/net.h
@@ -575,9 +591,11 @@ include/linux/rculist.h
 include/linux/rculist_bl.h
 include/linux/rculist_nulls.h
 include/linux/rcupdate.h
+include/linux/rcuref.h
 include/linux/rcutree.h
 include/linux/rcuwait.h
 include/linux/reboot.h
+include/linux/reciprocal_div.h
 include/linux/ref_tracker.h
 include/linux/refcount.h
 include/linux/regulator/consumer.h
@@ -651,6 +669,7 @@ include/linux/siphash.h
 include/linux/sizes.h
 include/linux/skbuff.h
 include/linux/slab.h
+include/linux/slub_def.h
 include/linux/smp.h
 include/linux/smp_types.h
 include/linux/smpboot.h
@@ -664,6 +683,7 @@ include/linux/spinlock_api_smp.h
 include/linux/spinlock_types.h
 include/linux/spinlock_types_raw.h
 include/linux/splice.h
+include/linux/sprintf.h
 include/linux/srcu.h
 include/linux/srcutree.h
 include/linux/stackdepot.h
@@ -676,6 +696,7 @@ include/linux/stdarg.h
 include/linux/stddef.h
 include/linux/stop_machine.h
 include/linux/string.h
+include/linux/string_choices.h
 include/linux/string_helpers.h
 include/linux/stringhash.h
 include/linux/stringify.h
@@ -807,7 +828,10 @@ include/net/timewait_sock.h
 include/net/xdp.h
 include/trace/define_trace.h
 include/trace/events/irq.h
+include/trace/events/kmem.h
 include/trace/events/lock.h
+include/trace/events/mmflags.h
+include/trace/events/maple_tree.h
 include/trace/events/power.h
 include/trace/events/sched.h
 include/trace/events/timer.h
@@ -858,6 +882,7 @@ include/uapi/linux/elf-em.h
 include/uapi/linux/elf.h
 include/uapi/linux/errno.h
 include/uapi/linux/ethtool.h
+include/uapi/linux/eventfd.h
 include/uapi/linux/eventpoll.h
 include/uapi/linux/fcntl.h
 include/uapi/linux/fib_rules.h
@@ -887,6 +912,8 @@ include/uapi/linux/limits.h
 include/uapi/linux/magic.h
 include/uapi/linux/major.h
 include/uapi/linux/mdio.h
+include/uapi/linux/mei.h
+include/uapi/linux/mei_uuid.h
 include/uapi/linux/membarrier.h
 include/uapi/linux/mempolicy.h
 include/uapi/linux/mii.h
@@ -997,6 +1024,7 @@ kernel/time/timekeeping_internal.h
 kernel/workqueue_internal.h
 lib/crc32defs.h
 lib/kstrtox.h
+lib/radix-tree.h
 mm/internal.h
 mm/slab.h
 mm/swap.h
