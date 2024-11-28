@@ -8,15 +8,18 @@ INC_DIR := $(PRG_DIR)
 SRC_C += lx_emul/shadow/mm/page_alloc.c
 SRC_C += lx_emul/a64/common_dummies.c
 SRC_C += lx_emul/a64/pmic.c
+SRC_C += lx_emul/a64/r_pio.c
 
 SRC_C  += block.c
 SRC_C  += clock.c
+SRC_C  += pinctrl.c
 SRC_CC += main.cc
 SRC_CC += lx_emul/shared_dma_buffer.cc
 SRC_CC += lx_emul/random_dummy.cc
 
 vpath lx_emul/a64/common_dummies.c $(REP_DIR)/src/lib
 vpath lx_emul/a64/pmic.c           $(REP_DIR)/src/lib
+vpath lx_emul/a64/r_pio.c          $(REP_DIR)/src/lib
 vpath lx_emul/a64/sched.c          $(REP_DIR)/src/lib
 
 #
