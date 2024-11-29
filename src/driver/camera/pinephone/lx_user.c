@@ -41,6 +41,8 @@ struct Buffer
 	unsigned char *base;
 	size_t         size;
 
+	struct vm_area_struct *vma;
+
 	unsigned vma_flags;
 	unsigned vma_pgoff;
 };
@@ -212,8 +214,8 @@ static int _setup_link(struct cdev              *media,
 	/* rear camera */
 	memset(&arg, 0, sizeof (arg));
 	arg.flags = front_camera ? 0 : MEDIA_LNK_FL_ENABLED;
-	arg.source.entity = pads[1].entity_id;
-	arg.source.index  = pads[1].index;
+	arg.source.entity = pads[2].entity_id;
+	arg.source.index  = pads[2].index;
 	arg.sink.entity   = pads[0].entity_id;
 	arg.sink.index    = pads[0].index;
 	err = media->ops->unlocked_ioctl(&media_filp, MEDIA_IOC_SETUP_LINK,
@@ -224,8 +226,8 @@ static int _setup_link(struct cdev              *media,
 	/* front camera */
 	memset(&arg, 0, sizeof (arg));
 	arg.flags = front_camera ? MEDIA_LNK_FL_ENABLED : 0;
-	arg.source.entity = pads[2].entity_id;
-	arg.source.index  = pads[2].index;
+	arg.source.entity = pads[3].entity_id;
+	arg.source.index  = pads[3].index;
 	arg.sink.entity   = pads[0].entity_id;
 	arg.sink.index    = pads[0].index;
 	err = media->ops->unlocked_ioctl(&media_filp, MEDIA_IOC_SETUP_LINK,
@@ -362,7 +364,7 @@ static int _setup_video_fmt(struct Camera *camera)
 	                                 VIDIOC_S_FMT,
 	                                 (unsigned long)&arg);
 	if (err) {
-		printk("Could not query video device: %d\n", err);
+		printk("Could not set video format: %d\n", err);
 		return err;
 	}
 
@@ -402,7 +404,26 @@ static int _request_buffers(struct Camera *camera)
 			.memory = V4L2_MEMORY_MMAP,
 			.index  = i,
 		};
+
+		/*
+		 * Here be dragons: we only need the VMA object to mmap
+		 * the V4L2 buffer in this function but the infrastructure to
+		 * properly allocate it is not there (e.g., we omit kernel/fork.c).
+		 *
+		 * So prepare everything 'vm_set_flags()' needs as it is also
+		 * called within 'video->ops->mmap()'.
+		 */
 		struct vm_area_struct vma;
+		struct vma_lock vm_lock;
+		struct mm_struct mm;
+		memset(&vma, 0, sizeof(vma));
+		memset(&vm_lock, 0, sizeof(vm_lock));
+		memset(&mm, 0, sizeof(mm));
+		vma.vm_lock = &vm_lock;
+		vma.vm_mm = &mm;
+
+		init_rwsem(&vma.vm_lock->lock);
+		vma.vm_lock_seq = -1;
 
 		err = video->ops->unlocked_ioctl(&camera->video_filp,
 		                                 VIDIOC_QUERYBUF,
@@ -412,9 +433,8 @@ static int _request_buffers(struct Camera *camera)
 			return err;
 		}
 
-		memset(&vma, 0, sizeof(vma));
 		vma.vm_pgoff = arg.m.offset >> PAGE_SHIFT;
-		vma.vm_flags = VM_SHARED | VM_READ;
+		vm_flags_set(&vma, VM_SHARED | VM_READ);
 
 		err = video->ops->mmap(&camera->video_filp, &vma);
 		if (err) {
@@ -800,7 +820,7 @@ static bool setup_camera(struct Camera *camera)
 	}
 
 	media0            = lx_emul_get_cdev(MEDIA0_MAJOR, 0);
-	video0            = lx_emul_get_cdev(VIDEO_MAJOR,  0);
+	video0            = lx_emul_get_cdev(VIDEO_MAJOR,  3);
 	v4l_subdev_ov5640 = lx_emul_get_cdev(VIDEO_MAJOR,  1);
 	v4l_subdev_gc2145 = lx_emul_get_cdev(VIDEO_MAJOR,  2);
 
@@ -905,6 +925,7 @@ void lx_user_handle_io(void) { }
 void lx_user_init(void)
 {
 	int pid = kernel_thread(capture_task_function, capture_task_args,
+	                        "capture_task",
 	                        CLONE_FS | CLONE_FILES);
 	capture_task = find_task_by_pid_ns(pid, NULL);
 }
