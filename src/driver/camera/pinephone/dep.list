@@ -12,7 +12,6 @@ drivers/gpio/gpiolib.h
 drivers/i2c/i2c-core.h
 drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h
 drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_reg.h
-drivers/media/platform/sunxi/sun6i-csi/sun6i_video.h
 drivers/media/v4l2-core/v4l2-ctrls-priv.h
 drivers/pinctrl/core.h
 drivers/pinctrl/devicetree.h
@@ -20,7 +19,6 @@ drivers/pinctrl/pinconf.h
 drivers/pinctrl/pinctrl-utils.h
 drivers/pinctrl/pinmux.h
 include/asm-generic/export.h
-include/asm-generic/gpio.h
 include/dt-bindings/i2c/i2c.h
 include/dt-bindings/input/input.h
 include/dt-bindings/input/linux-event-codes.h
